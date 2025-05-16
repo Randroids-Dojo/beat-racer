@@ -1,5 +1,7 @@
 # Story 002: Vehicle Spawning System
 
+**Status: COMPLETED**
+
 ## Short Description
 Implement a system to spawn vehicles at the track's starting position. Vehicles should be properly positioned in the center lane and ready for player control.
 

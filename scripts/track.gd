@@ -125,3 +125,24 @@ func draw_start_finish_line():
 	$StartFinishLine.add_point(Vector2(0, TRACK_WIDTH/2 - 10))
 	$StartFinishLine.width = 20
 	$StartFinishLine.default_color = COLOR_RACE_RED
+
+func get_spawn_position() -> Vector2:
+	# Spawn at the start/finish line in the center lane
+	return Vector2(TRACK_RADIUS_X, 0)
+
+func get_spawn_rotation() -> float:
+	# Face upward (negative Y direction) on the track
+	return -PI/2
+
+func get_lane_position(lane: int) -> Vector2:
+	# Return position for a specific lane at the spawn point
+	var base_pos = get_spawn_position()
+	match lane:
+		0:  # Left lane
+			return base_pos + Vector2(-LANE_WIDTH, 0)
+		1:  # Center lane
+			return base_pos
+		2:  # Right lane
+			return base_pos + Vector2(LANE_WIDTH, 0)
+		_:
+			return base_pos
