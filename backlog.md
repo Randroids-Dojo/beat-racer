@@ -22,7 +22,7 @@
 Establish the fundamental track environment and vehicle control system that forms the foundation of the game.
 
 ### Stories:
-- [Story 001: Track Environment Setup](./stories/001-track-environment-setup.md)
+- [Story 001: Track Environment Setup](./stories/001-track-environment-setup.md) ✅ COMPLETED
 - [Story 002: Vehicle Spawning System](./stories/002-vehicle-spawning-system.md)
 - [Story 003: Three-Lane System Implementation](./stories/003-three-lane-system.md)
 - [Story 004: Basic Vehicle Physics](./stories/004-basic-vehicle-physics.md)
