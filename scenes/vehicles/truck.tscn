@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://dmj4tx0kn2vqp"]
-
-[ext_resource type="PackedScene" uid="uid://d4g4wnogx08oq" path="res://scenes/vehicle.tscn" id="1_m7tyh"]
-
-[node name="Truck" instance=ExtResource("1_m7tyh")]
-vehicle_type = 4

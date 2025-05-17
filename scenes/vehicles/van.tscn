@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bqt3w7yx8r5kn"]
-
-[ext_resource type="PackedScene" uid="uid://d4g4wnogx08oq" path="res://scenes/vehicle.tscn" id="1_m7tyh"]
-
-[node name="Van" instance=ExtResource("1_m7tyh")]
-vehicle_type = 2

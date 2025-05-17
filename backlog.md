@@ -1,80 +1,217 @@
-# Beat Racer - Development Backlog
+# BEAT RACER - DEVELOPMENT BACKLOG
 
-## Table of Contents
+## Overview
 
-1. [Epic 1: Core Track & Vehicle System](#epic-1-core-track--vehicle-system)
-2. [Epic 2: Lane-Based Sound Generation](#epic-2-lane-based-sound-generation)
-3. [Epic 3: Loop Recording & Playback](#epic-3-loop-recording--playback)
-4. [Epic 4: Audio Engine Foundation](#epic-4-audio-engine-foundation)
-5. [Epic 5: Vehicle Instrument Implementation](#epic-5-vehicle-instrument-implementation)
-6. [Epic 6: Multi-Vehicle Layering System](#epic-6-multi-vehicle-layering-system)
-7. [Epic 7: User Interface & HUD](#epic-7-user-interface--hud)
-8. [Epic 8: Mixing & Audio Controls](#epic-8-mixing--audio-controls)
-9. [Epic 9: Game Modes Implementation](#epic-9-game-modes-implementation)
-10. [Epic 10: Save/Load & Export System](#epic-10-saveload--export-system)
-11. [Epic 11: Visual Effects & Polish](#epic-11-visual-effects--polish)
-12. [Epic 12: Platform-Specific Features](#epic-12-platform-specific-features)
+Beat Racer is a game where players create music by driving vehicles on a track. Lane position determines sound generation, creating musical loops that build into complete tracks. This backlog prioritizes:
+
+1. Desktop as primary platform
+2. Basic sound generation first, then driving mechanics
+3. Single vehicle implementation for the MVP
+4. Clear, achievable tasks focused on the core game loop
 
 ---
 
-## Epic 1: Core Track & Vehicle System
-**Priority: 1**
-Establish the fundamental track environment and vehicle control system that forms the foundation of the game.
+## EPIC 1: AUDIO ENGINE FOUNDATION
+**Priority: 1** 
+Establish the basic audio system that will allow sound generation based on lane position.
 
 ### Stories:
-- [Story 001: Track Environment Setup](./stories/001-track-environment-setup.md) ✅ COMPLETED
-- [Story 002: Vehicle Spawning System](./stories/002-vehicle-spawning-system.md)
-- [Story 003: Three-Lane System Implementation](./stories/003-three-lane-system.md)
-- [Story 004: Basic Vehicle Physics](./stories/004-basic-vehicle-physics.md)
-- [Story 005: Vehicle Control System](./stories/005-vehicle-control-system.md)
-- [Story 006: Top-Down Camera System](./stories/006-top-down-camera-system.md)
-- [Story 007: Vehicle Lane Switching](./stories/007-vehicle-lane-switching.md)
-- [Story 008: Track Boundaries and Constraints](./stories/008-track-boundaries-constraints.md)
+- [ ] **Story 001: Audio Bus Setup**  
+  *Implement audio bus structure with basic effects for different sound types*
+  - Create dedicated buses for melody, bass, percussion tracks
+  - Set up basic effects (reverb, delay) on appropriate buses
+  - Implement global volume controls
 
-## Epic 2: Lane-Based Sound Generation
-**Priority: 2**
-Implement the three-lane system with sound zones, allowing vehicles to trigger sounds based on lane position.
+- [ ] **Story 002: Lane-based Sound Generator**  
+  *Create system to generate different sounds based on lane position*
+  - Implement AudioStreamGenerator for procedural sound
+  - Create sound mapping system for different lanes
+  - Support basic waveforms (sine, square, triangle)
+  - Add basic musical scale support
 
-## Epic 3: Loop Recording & Playback
-**Priority: 3**
-Create the system for recording vehicle paths during a lap and automatically playing them back as loops.
+- [ ] **Story 003: Beat Synchronization System**  
+  *Build a system to keep sounds aligned to a consistent beat*
+  - Implement BPM-based timing controller
+  - Create beat/measure tracking system
+  - Add quantization for aligning sounds to beat grid
+  - Build visual indicators for beat visualization
 
-## Epic 4: Audio Engine Foundation
-**Priority: 4**
-Build the core audio system with beat quantization, sound triggering, and proper timing mechanisms.
-
-## Epic 5: Vehicle Instrument Implementation
-**Priority: 5**
-Implement the five vehicle types (Sedan, Sports Car, Van, Motorcycle, Truck) with their corresponding instrument sounds.
-
-## Epic 6: Multi-Vehicle Layering System
-**Priority: 6**
-Enable multiple vehicles to run simultaneously with their recorded loops, creating layered musical compositions.
-
-## Epic 7: User Interface & HUD
-**Priority: 7**
-Create the main UI elements including vehicle selector, transport controls, and basic HUD displays.
-
-## Epic 8: Mixing & Audio Controls
-**Priority: 8**
-Implement the mixing panel with volume controls, mute/solo functions, and basic effects for each loop.
-
-## Epic 9: Game Modes Implementation
-**Priority: 9**
-Develop Studio Mode, Challenge Mode, and Tutorial Mode with their specific features and constraints.
-
-## Epic 10: Save/Load & Export System
-**Priority: 10**
-Create systems for saving compositions, loading previous work, and exporting finished tracks as audio files.
-
-## Epic 11: Visual Effects & Polish
-**Priority: 11**
-Add vehicle light trails, beat-synced animations, color-coded lane indicators, and other visual enhancements.
-
-## Epic 12: Platform-Specific Features
-**Priority: 12**
-Optimize and adapt the game for different platforms (mobile, PC/Mac, web) with platform-specific controls and features.
+- [ ] **Story 004: Simple Sound Playback Test**  
+  *Create a standalone test for playing sounds through the systems above*
+  - Add keyboard input to trigger lane sounds
+  - Implement visual feedback when sounds play
+  - Support adjustable BPM
+  - Allow for basic sound parameter adjustments
 
 ---
 
-*Note: Each epic will be broken down into specific user stories during sprint planning. The priority order ensures we build a playable core game loop first, then progressively add features and polish.*
+## EPIC 2: TRACK AND VEHICLE CORE
+**Priority: 2**
+Create the fundamental track environment and basic vehicle with functional lane detection.
+
+### Stories:
+- [ ] **Story 005: Basic Track Layout**  
+  *Implement a simple oval track with three lanes*
+  - Create track with clear visual distinction between lanes
+  - Add start/finish line indicator
+  - Implement beat markers along track
+  - Support track boundaries
+
+- [ ] **Story 006: Single Vehicle Implementation**  
+  *Create a basic vehicle that can be driven on the track*
+  - Implement top-down vehicle physics
+  - Add basic steering and acceleration
+  - Create simple vehicle sprite
+  - Add basic collision detection
+
+- [ ] **Story 007: Lane Detection System**  
+  *Implement system to accurately track which lane the vehicle is in*
+  - Create lane boundaries detection
+  - Implement current lane tracking
+  - Add lane transition detection
+  - Create lane position debug visualization
+
+- [ ] **Story 008: Vehicle Control System**  
+  *Implement responsive controls for the vehicle*
+  - Add keyboard input handling
+  - Implement smooth lane switching
+  - Add subtle lane centering assist
+  - Create visual feedback for controls
+
+---
+
+## EPIC 3: CORE GAME LOOP
+**Priority: 3**
+Connect audio and driving systems to create the fundamental gameplay experience.
+
+### Stories:
+- [ ] **Story 009: Lane Position to Sound Mapping**  
+  *Connect lane detection system to sound generator*
+  - Link lane position to sound parameters
+  - Implement continuous sound while in active lanes
+  - Create silence when in center lane
+  - Add transition effects between lanes
+
+- [ ] **Story 010: Lap Recording System**  
+  *Create system to record vehicle path during a lap*
+  - Implement position sampling at regular intervals
+  - Store lane positions during recording
+  - Add lap completion detection
+  - Create recording indicator
+
+- [ ] **Story 011: Path Playback System**  
+  *Create system to automatically replay recorded paths*
+  - Implement path following for recorded vehicles
+  - Create sound triggering during playback
+  - Add visual distinction between recording/playback modes
+  - Support loop repetition
+
+- [ ] **Story 012: Basic UI Elements**  
+  *Add minimal UI elements needed for core game loop*
+  - Implement recording/playback status indicator
+  - Add beat/measure counter
+  - Create BPM display and control
+  - Implement basic vehicle selection
+
+---
+
+## EPIC 4: PLAYABILITY ENHANCEMENTS
+**Priority: 4**
+Add polish features that improve the core gameplay experience.
+
+### Stories:
+- [ ] **Story 013: Sound Visualization**  
+  *Add visual effects that respond to generated sounds*
+  - Implement beat-synced visual pulses
+  - Add lane-specific visual effects
+  - Create vehicle light trails based on sound
+  - Implement environment reactions to music
+
+- [ ] **Story 014: Audio Mixing Controls**  
+  *Add basic controls for adjusting sound parameters*
+  - Implement volume sliders for sound types
+  - Add effect controls (reverb, delay)
+  - Create mute/solo functionality
+  - Support sound preset saving
+
+- [ ] **Story 015: Vehicle Feel Improvements**  
+  *Polish vehicle controls and physics for better feel*
+  - Add subtle drift for smoother turning 
+  - Implement acceleration/deceleration curves
+  - Add screen shake and feedback effects
+  - Create vehicle state machine for different driving modes
+
+- [ ] **Story 016: Camera System**  
+  *Implement a dynamic camera that follows vehicle movement*
+  - Create smooth camera follow
+  - Add subtle zoom based on speed
+  - Implement camera transitions between vehicles
+  - Support overview mode for seeing entire track
+
+---
+
+## EPIC 5: EXTENDED FUNCTIONALITY
+**Priority: 5**
+Expand beyond the core game loop with additional features.
+
+### Stories:
+- [ ] **Story 017: Multiple Sound Banks**  
+  *Create different sound sets for greater variety*
+  - Implement at least 3 different sound banks
+  - Add sound bank selection UI
+  - Create save/load system for custom sound banks
+  - Support runtime sound parameter adjustments
+
+- [ ] **Story 018: Save/Load System**  
+  *Allow players to save and load their compositions*
+  - Create composition data structure
+  - Implement save file format
+  - Add load functionality
+  - Create simple composition browser
+
+- [ ] **Story 019: Audio Export**  
+  *Allow players to export their compositions as audio files*
+  - Implement audio capture during playback
+  - Create WAV export functionality
+  - Add export options (format, quality)
+  - Support metadata in exported files
+
+- [ ] **Story 020: Track Editor**  
+  *Create a basic system for customizing track layouts*
+  - Implement track parameter adjustments
+  - Create beat marker customization
+  - Support track shape variations
+  - Add track theme selection
+
+---
+
+## Development Guidelines
+
+### Godot Project Structure
+- Use `res://assets/` for all visual and audio assets
+- Use `res://scenes/` for scene files, organized by type
+- Use `res://scripts/` for GDScript files
+- Use `res://resources/` for shared resources and presets
+
+### Coding Standards
+- Use static typing in GDScript where practical
+- Follow "Call Down, Signal Up" principle for node communication
+- Use comments for complex algorithms
+- Implement resource-based data where appropriate
+
+### Testing Milestones
+1. **Audio Test**: Keyboard-driven sound generation (Story 004)
+2. **Driving Test**: Vehicle control and lane detection (Story 008)
+3. **Core Loop Test**: Record and playback a simple pattern (Story 011)
+4. **Complete MVP**: Functional composition creation (Story 016)
+
+### Development Process
+1. Focus on one story at a time
+2. Create feature branch for each story
+3. Test thoroughly before moving to next story
+4. Regularly test on target hardware
+5. Maintain documentation alongside code
+
+---
+
+*Note: This backlog represents the minimum viable path to a working prototype. Additional features like multiple vehicles, advanced effects, and additional game modes will be considered after the core functionality is established.*

@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://q2g1bvwogl5v"]
-
-[ext_resource type="Script" uid="uid://c8fso82iotrae" path="res://scripts/vehicle_manager.gd" id="1_u7knr"]
-
-[node name="VehicleManager" type="Node2D"]
-script = ExtResource("1_u7knr")
-
-[node name="VehicleContainer" type="Node2D" parent="."]
