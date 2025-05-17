@@ -11,5 +11,10 @@ config_version=5
 [application]
 
 config/name="beat-racer"
+run/main_scene="res://scenes/test/audio_bus_test.tscn"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+AudioManager="*res://scripts/autoloads/audio_manager.gd"
