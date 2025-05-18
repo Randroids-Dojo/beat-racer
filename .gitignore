@@ -1,3 +1,26 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+
+# Godot files
+*.tmp
+*.import
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# Build files
+export/
+build/
+
+# Test reports
+test_report_*.txt
+
+# Addons (can be installed separately)
+/addons/gut/
