@@ -20,12 +20,23 @@ const PERCUSSION_FREQ = 220.0  # A3 (simulated drum hit)
 const SFX_FREQ = 880.0     # A5
 
 func _ready():
+	print("AudioBusTest: Initializing test interface")
+	
+	# Configure sliders first
+	for slider in [master_slider, melody_slider, bass_slider, percussion_slider, sfx_slider]:
+		slider.min_value = 0.0
+		slider.max_value = 1.0
+		slider.step = 0.01
+	
 	# Set initial slider values from AudioManager
 	master_slider.value = AudioManager.get_bus_volume_linear(AudioManager.MASTER_BUS)
 	melody_slider.value = AudioManager.get_bus_volume_linear(AudioManager.MELODY_BUS)
 	bass_slider.value = AudioManager.get_bus_volume_linear(AudioManager.BASS_BUS)
 	percussion_slider.value = AudioManager.get_bus_volume_linear(AudioManager.PERCUSSION_BUS)
 	sfx_slider.value = AudioManager.get_bus_volume_linear(AudioManager.SFX_BUS)
+	
+	print("AudioBusTest: Initial volumes - Master: %f, Melody: %f, Bass: %f, Percussion: %f, SFX: %f" % 
+		[master_slider.value, melody_slider.value, bass_slider.value, percussion_slider.value, sfx_slider.value])
 	
 	# Connect slider signals
 	master_slider.value_changed.connect(_on_master_slider_changed)
@@ -39,6 +50,8 @@ func _ready():
 	bass_test_button.pressed.connect(_on_bass_test_pressed)
 	percussion_test_button.pressed.connect(_on_percussion_test_pressed)
 	sfx_test_button.pressed.connect(_on_sfx_test_pressed)
+	
+	print("AudioBusTest: Setup complete")
 
 func _on_master_slider_changed(value: float):
 	AudioManager.set_bus_volume_linear(AudioManager.MASTER_BUS, value)
@@ -56,21 +69,26 @@ func _on_sfx_slider_changed(value: float):
 	AudioManager.set_bus_volume_linear(AudioManager.SFX_BUS, value)
 
 func _on_melody_test_pressed():
+	print("AudioBusTest: Melody test button pressed")
 	_play_test_sound(AudioManager.MELODY_BUS, MELODY_FREQ, 0.5)
 
 func _on_bass_test_pressed():
+	print("AudioBusTest: Bass test button pressed")
 	_play_test_sound(AudioManager.BASS_BUS, BASS_FREQ, 0.75)
 
 func _on_percussion_test_pressed():
+	print("AudioBusTest: Percussion test button pressed")
 	_play_percussion_test()
 
 func _on_sfx_test_pressed():
+	print("AudioBusTest: SFX test button pressed")
 	_play_test_sound(AudioManager.SFX_BUS, SFX_FREQ, 0.25)
 
 func _play_test_sound(bus_name: String, frequency: float, duration: float):
 	AudioManager.play_test_tone(bus_name, frequency, duration)
 
 func _play_percussion_test():
+	print("AudioBusTest: Generating percussion sound...")
 	# Create a simple percussive sound
 	var player = AudioStreamPlayer.new()
 	player.bus = AudioManager.PERCUSSION_BUS
@@ -84,16 +102,22 @@ func _play_percussion_test():
 	player.play()
 	
 	var playback = player.get_stream_playback()
+	if playback == null:
+		print("AudioBusTest: ERROR - Failed to get stream playback")
+		player.queue_free()
+		return
+		
 	var frames_to_generate = int(0.1 * generator.mix_rate)  # 100ms percussion hit
 	
-	# Generate a noise burst with envelope
+	# Generate the noise burst immediately
 	for i in range(frames_to_generate):
 		var envelope = exp(-float(i) / float(frames_to_generate) * 5.0)  # Exponential decay
 		var value = (randf() * 2.0 - 1.0) * envelope * 0.7  # White noise with envelope
 		playback.push_frame(Vector2(value, value))
-		
-		if i % int(generator.mix_rate * generator.buffer_length * 0.5) == 0:
-			await get_tree().process_frame
 	
+	print("AudioBusTest: Percussion sound generated, %d frames" % frames_to_generate)
+	
+	# Wait for playback to finish
 	await player.finished
 	player.queue_free()
+	print("AudioBusTest: Percussion player cleaned up")

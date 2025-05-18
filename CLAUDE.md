@@ -713,6 +713,37 @@ UI (CanvasLayer)
    - Connect to game events via signals
    - Avoid direct references to game objects from UI
 
+### Slider Configuration Best Practices
+
+When creating sliders for volume or other continuous controls:
+
+1. **Always set the step property**:
+   ```gdscript
+   # In code
+   slider.step = 0.01  # Allows fine-grained control
+   ```
+   Or in the scene file:
+   ```
+   [node name="HSlider" type="HSlider"]
+   max_value = 1.0
+   step = 0.01
+   value = 1.0
+   ```
+
+2. **Configure sliders programmatically as a failsafe**:
+   ```gdscript
+   func _ready():
+       for slider in [master_slider, melody_slider, bass_slider]:
+           slider.min_value = 0.0
+           slider.max_value = 1.0
+           slider.step = 0.01
+   ```
+
+3. **Use appropriate value mapping**:
+   - For audio: Use `linear_to_db()` and `db_to_linear()` conversions
+   - Store linear values (0-1) in UI, convert to dB for audio
+   - Default linear 0.5 = -6dB is a good standard
+
 Example UI script:
 ```gdscript
 extends Control
@@ -784,6 +815,26 @@ When implementing audio systems in Godot 4, ALWAYS verify effect properties befo
    - Always verify property names using Context7 before implementation
    - Test in small pieces before implementing full systems
 
+### Common Implementation Mistakes
+
+1. **UI Control Issues**:
+   - **Problem**: Sliders only showing 0 or 1 values
+   - **Cause**: Missing `step` property in scene file
+   - **Solution**: Always set `step = 0.01` for continuous controls
+   - **Prevention**: Configure sliders programmatically as failsafe
+
+2. **Audio Stream Generation**:
+   - **Problem**: Test sounds not playing
+   - **Cause**: Incorrect async handling or missing null checks
+   - **Solution**: Generate all audio frames immediately, check stream playback
+   - **Prevention**: Add error checking and status logging
+
+3. **Missing Feedback**:
+   - **Problem**: Issues hard to diagnose from logs
+   - **Cause**: Insufficient logging at critical points
+   - **Solution**: Log all user actions and system responses
+   - **Prevention**: Implement comprehensive logging system from start
+
 ---
 
 ## Build and Testing
@@ -832,6 +883,35 @@ ALWAYS run tests after implementing features to catch errors early:
    - After modifying existing code
    - Before committing changes
 
+### Testing Best Practices
+
+1. **Always Test UI Controls**:
+   - Verify sliders have appropriate step values
+   - Check initial values match expected defaults
+   - Test edge cases (min/max values)
+   - Ensure visual feedback matches internal state
+
+2. **Test Audio Generation**:
+   - Verify all test sounds play correctly
+   - Check audio streams initialize properly
+   - Test rapid button clicks for stability
+   - Monitor logs for generation confirmation
+
+3. **Log-Based Testing Checklist**:
+   ```
+   ✓ All expected initialization logs present
+   ✓ No ERROR messages in output
+   ✓ User actions generate corresponding logs
+   ✓ Values change as expected (not binary)
+   ✓ All test functions complete successfully
+   ```
+
+4. **Common Pitfalls to Avoid**:
+   - Missing `step` property on sliders (causes binary behavior)
+   - Incorrect async handling in audio generation
+   - Missing null checks for stream playback
+   - Assuming default values without explicit setting
+
 ---
 
 ## Debugging Techniques
@@ -859,6 +939,74 @@ func _draw():
         
         # Draw movement vector
         draw_line(Vector2.ZERO, _velocity.normalized() * 50, Color.GREEN, 2.0)
+```
+
+### Comprehensive Logging System
+
+Implement a logging system that makes debugging easier:
+
+1. **Structured Log Messages**:
+```gdscript
+func _log(message: String) -> void:
+    if _debug_logging:
+        var timestamp = Time.get_time_string_from_system()
+        print("[%s] %s: %s" % [timestamp, get_class(), message])
+```
+
+2. **Log Different Operations**:
+```gdscript
+# Log initialization
+_log("=== AudioManager Starting Initialization ===")
+_log("Godot version: " + Engine.get_version_info().string)
+
+# Log operations with parameters
+_log("Playing test tone on bus '%s': frequency=%fHz, duration=%fs" % 
+    [bus_name, frequency, duration])
+
+# Log errors clearly
+_log("ERROR: Failed to get stream playback")
+
+# Log completion
+_log("Operation complete - %d items processed" % count)
+```
+
+3. **Log Analysis Tips**:
+   - Look for missing expected operations (e.g., "Playing test tone" after button press)
+   - Check for sequence errors (initialization happening out of order)
+   - Watch for error messages or unexpected values
+   - Compare initial values with expected defaults
+   - Track user interactions to reproduction steps
+
+### Common Audio Stream Issues
+
+When implementing audio streaming:
+
+1. **Always check stream playback availability**:
+```gdscript
+var playback = player.get_stream_playback()
+if playback == null:
+    print("ERROR: Failed to get stream playback")
+    player.queue_free()
+    return
+```
+
+2. **Generate audio data immediately**:
+```gdscript
+# Don't spread generation across frames with await
+for i in range(frames_to_generate):
+    var value = generate_sample(i)
+    playback.push_frame(Vector2(value, value))
+
+# Then await the finished signal
+await player.finished
+player.queue_free()
+```
+
+3. **Add status logs for debugging**:
+```gdscript
+_log("Generating percussion sound...")
+_log("Percussion sound generated, %d frames" % frames_to_generate)
+_log("Percussion player cleaned up")
 ```
 
 ### Custom Debug Systems
