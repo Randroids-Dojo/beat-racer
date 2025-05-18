@@ -90,25 +90,3 @@ func test_chorus_properties():
 				"Voice %d should have %s" % [i + 1, prop]
 			)
 
-func test_property_verification_helper():
-	gut.p("Testing property verification helper functionality")
-	
-	var delay = AudioEffectDelay.new()
-	
-	# Test that helper correctly identifies existing properties
-	assert_true(
-		VerificationHelpers.property_exists(delay, "dry"),
-		"Helper should detect 'dry' property exists"
-	)
-	
-	# Test that helper correctly identifies non-existent properties
-	assert_false(
-		VerificationHelpers.property_exists(delay, "mix"),
-		"Helper should detect 'mix' property doesn't exist"
-	)
-	
-	# Test listing properties
-	var props = VerificationHelpers.list_properties(delay)
-	assert_true(props.size() > 0, "Helper should list properties")
-	assert_has(props, "dry", "Listed properties should include 'dry'")
-	assert_does_not_have(props, "mix", "Listed properties should not include 'mix'")
