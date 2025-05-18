@@ -29,6 +29,10 @@ func test_slider_step_configuration():
 	# Without proper step, values would jump to 0 or 1
 	slider.value = 0.33
 	assert_almost_eq(slider.value, 0.33, 0.01, "Should set value to 0.33 with precision")
+	
+	# Clean up properly
+	remove_child(slider)
+	slider.queue_free()
 
 func test_vslider_configuration():
 	gut.p("Testing VSlider configuration")
@@ -108,6 +112,10 @@ func test_multiple_slider_configuration():
 		"percussion": HSlider.new()
 	}
 	
+	# Add all sliders as children first
+	for name in sliders:
+		add_child(sliders[name])
+	
 	# Configure all sliders uniformly
 	for name in sliders:
 		var slider = sliders[name]
@@ -119,6 +127,12 @@ func test_multiple_slider_configuration():
 		# Verify configuration
 		assert_eq(slider.step, 0.01, "%s slider should have 0.01 step" % name)
 		assert_eq(slider.value, 0.5, "%s slider should start at 0.5" % name)
+	
+	# Clean up properly
+	for name in sliders:
+		var slider = sliders[name]
+		remove_child(slider)
+		slider.queue_free()
 
 func test_ui_control_initialization_order():
 	gut.p("Testing UI control initialization order")

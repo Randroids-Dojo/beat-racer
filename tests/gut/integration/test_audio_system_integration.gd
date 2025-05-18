@@ -104,8 +104,9 @@ func test_sound_playback_capabilities():
 	test_player.play()
 	assert_true(test_player.playing, "Player should be playing")
 	
-	# Clean up
+	# Clean up properly
 	test_player.stop()
+	remove_child(test_player)
 	test_player.queue_free()
 
 func test_multiple_audio_players():
@@ -118,10 +119,14 @@ func test_multiple_audio_players():
 	for i in range(player_count):
 		var player = AudioStreamPlayer.new()
 		player.bus = "Test"
+		add_child(player)  # Add as child before using
 		players.append(player)
 	
 	assert_eq(players.size(), player_count, "Should create all players successfully")
 	
-	# Clean up
+	# Clean up properly
 	for player in players:
+		if player.playing:
+			player.stop()
+		remove_child(player)
 		player.queue_free()

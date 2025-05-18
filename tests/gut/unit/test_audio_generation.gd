@@ -14,8 +14,8 @@ func test_audio_stream_generator_creation():
 	assert_not_null(generator, "Should create AudioStreamGenerator")
 	
 	# Test default properties
-	assert_gt(generator.mix_rate, 0, "Mix rate should be positive")
-	assert_gt(generator.buffer_length, 0, "Buffer length should be positive")
+	assert_gt(generator.mix_rate, 0.0, "Mix rate should be positive")
+	assert_gt(generator.buffer_length, 0.0, "Buffer length should be positive")
 	
 	# Test setting properties
 	generator.mix_rate = 44100.0
@@ -33,6 +33,9 @@ func test_sound_generator_initialization():
 	# Check default properties if they exist
 	if "sample_rate" in sound_gen:
 		assert_eq(sound_gen.sample_rate, 44100.0, "Default sample rate should be 44100")
+	
+	# Clean up
+	sound_gen.queue_free()
 
 func test_audio_stream_player_setup():
 	gut.p("Testing AudioStreamPlayer setup for generation")
@@ -58,6 +61,9 @@ func test_audio_stream_player_setup():
 	
 	assert_eq(player.volume_db, -6.0, "Volume should be set correctly")
 	assert_eq(player.pitch_scale, 1.5, "Pitch scale should be set correctly")
+	
+	# Clean up properly
+	player.queue_free()
 
 func test_stream_playback_retrieval():
 	gut.p("Testing stream playback retrieval")
@@ -79,6 +85,7 @@ func test_stream_playback_retrieval():
 		assert_not_null(playback, "Should get stream playback when playing")
 	
 	player.stop()
+	remove_child(player)
 	player.queue_free()
 
 func test_audio_frame_generation():
@@ -99,6 +106,7 @@ func test_audio_frame_generation():
 	assert_not_null(player.stream, "Player should have stream assigned")
 	assert_eq(player.stream.mix_rate, 44100.0, "Stream should have correct mix rate")
 	
+	remove_child(player)
 	player.queue_free()
 
 func test_multiple_generator_instances():
