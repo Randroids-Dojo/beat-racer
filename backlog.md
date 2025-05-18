@@ -16,11 +16,26 @@ Beat Racer is a game where players create music by driving vehicles on a track. 
 Establish the basic audio system that will allow sound generation based on lane position.
 
 ### Stories:
-- [ ] **Story 001: Audio Bus Setup**  
+- [x] **Story 001: Audio Bus Setup** ✓ COMPLETE  
   *Implement audio bus structure with basic effects for different sound types*
   - Create dedicated buses for melody, bass, percussion tracks
   - Set up basic effects (reverb, delay) on appropriate buses
   - Implement global volume controls
+  
+  **Implementation Notes:**
+  - Created comprehensive audio bus system with 5 buses: Master, Melody, Bass, Percussion, SFX
+  - Implemented volume controls with both dB and linear value handling
+  - Added mute/solo functionality for each audio bus
+  - Applied appropriate audio effects to each bus:
+    - Melody: Reverb, Chorus
+    - Bass: Distortion, Limiter
+    - Percussion: Delay, Filter
+    - SFX: Chorus, Compressor
+  - Added test tone generation system for each bus
+  - Implemented effect toggle controls for runtime configuration
+  - Created visual feedback for audio bus states
+  - Verified proper signal flow and bus routing
+  - Full GUT test coverage for all audio functionality
 
 - [ ] **Story 002: Lane-based Sound Generator**  
   *Create system to generate different sounds based on lane position*
