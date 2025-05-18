@@ -77,15 +77,23 @@ This is the main documentation index for the Beat Racer project. Documentation h
 
 ### Testing Commands
 ```bash
-# Run all tests
+# Run all tests (with zero-orphan policy)
 ./run_gut_tests.sh
 
-# Run with JUnit report
+# Run with JUnit XML report
 ./run_gut_tests.sh --report
 
 # Test specific category
 godot --headless --path . -s addons/gut/gut_cmdln.gd -gtest=res://tests/gut/unit/
+
+# Run with verbose output for debugging
+./run_gut_tests.sh --verbose
+
+# Find orphan nodes
+godot --headless --path . -s addons/gut/gut_cmdln.gd -gconfig=.gutconfig.json -glog=3
 ```
+
+Note: All tests follow zero-orphan policy. See [Testing and Debugging](docs/testing-debugging.md) for details.
 
 ## Key Reminders
 
