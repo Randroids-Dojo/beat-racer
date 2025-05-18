@@ -25,5 +25,8 @@ test_results.xml
 test_results_*.xml
 /test_results/
 
+# Claude AI integration (keep commands and scripts, ignore temp files)
+.claude/CLAUDE.md
+
 # Addons (can be installed separately)
 /addons/gut/*.xml
