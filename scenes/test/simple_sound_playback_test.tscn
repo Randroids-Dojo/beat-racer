@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cbx42x7kwqmyv"]
 
-[ext_resource type="Script" path="res://scenes/test/simple_sound_playback_test.gd" id="1_tfhk7"]
+[ext_resource type="Script" uid="uid://ddetl3gqc2qge" path="res://scenes/test/simple_sound_playback_test.gd" id="1_tfhk7"]
 
 [node name="SimpleSoundPlaybackTest" type="Node2D"]
 script = ExtResource("1_tfhk7")

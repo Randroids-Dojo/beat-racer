@@ -20,16 +20,14 @@ var _desync_count: int = 0
 var _max_desync_before_correction: int = 3
 
 # Audio players
-var _metronome_player: AudioStreamPlayer
 var _music_players: Dictionary = {}  # Dictionary[String, AudioStreamPlayer]
 var _current_music_player: AudioStreamPlayer = null
 var _fade_duration: float = 0.5
 
-# Metronome sounds
-var _tick_sound: AudioStream
-var _tock_sound: AudioStream
+# Metronome
 var _metronome_enabled: bool = false
 var _metronome_volume: float = -6.0  # dB
+var _metronome_generator: Node  # MetronomeGenerator
 
 # References
 var _beat_manager: Node = null
@@ -67,14 +65,10 @@ func _log(message: String) -> void:
 		print("[%s] PlaybackSync: %s" % [timestamp, message])
 
 func _setup_metronome():
-	# Create metronome audio player
-	_metronome_player = AudioStreamPlayer.new()
-	_metronome_player.bus = "SFX"  # Use SFX bus for metronome
-	_metronome_player.volume_db = _metronome_volume
-	add_child(_metronome_player)
-	
-	# Generate simple metronome sounds if not loaded
-	_generate_metronome_sounds()
+	# Create metronome generator
+	var MetronomeGeneratorClass = preload("res://scripts/components/sound/metronome_generator.gd")
+	_metronome_generator = MetronomeGeneratorClass.new()
+	add_child(_metronome_generator)
 	
 	_log("Metronome setup complete")
 
@@ -84,20 +78,7 @@ func _connect_signals():
 		_beat_manager.connect("measure_completed", _on_measure_completed)
 		_log("Connected to BeatManager signals")
 
-func _generate_metronome_sounds():
-	# Generate simple tick/tock sounds
-	var tick_generator = AudioStreamGenerator.new()
-	tick_generator.mix_rate = 44100.0
-	tick_generator.buffer_length = 0.01
-	
-	var tock_generator = AudioStreamGenerator.new()
-	tock_generator.mix_rate = 44100.0  
-	tock_generator.buffer_length = 0.01
-	
-	# For now, use the generators directly
-	# In production, load actual metronome samples
-	_tick_sound = tick_generator
-	_tock_sound = tock_generator
+# [Function removed - now using MetronomeGenerator]
 
 func start_sync():
 	if not _beat_manager:
@@ -170,12 +151,13 @@ func _on_measure_completed(measure_number: int, measure_time: float):
 	pass
 
 func _play_metronome_tick(is_downbeat: bool):
-	if not _metronome_player:
+	if not _metronome_generator:
 		return
 		
-	_metronome_player.stream = _tick_sound if is_downbeat else _tock_sound
-	_metronome_player.pitch_scale = 1.2 if is_downbeat else 1.0
-	_metronome_player.play()
+	if is_downbeat:
+		_metronome_generator.play_tick(_metronome_volume)
+	else:
+		_metronome_generator.play_tock(_metronome_volume)
 
 # Music player management
 func add_music_track(name: String, stream: AudioStream) -> bool:
@@ -249,8 +231,6 @@ func is_metronome_enabled() -> bool:
 
 func set_metronome_volume(volume_db: float):
 	_metronome_volume = volume_db
-	if _metronome_player:
-		_metronome_player.volume_db = volume_db
 
 func get_metronome_volume() -> float:
 	return _metronome_volume
