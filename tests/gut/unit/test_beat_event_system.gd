@@ -12,12 +12,16 @@ func before_each():
 	# Use singleton BeatManager instead of creating new instance
 	beat_manager = get_tree().root.get_node("/root/BeatManager")
 	if beat_manager:
-		beat_manager._debug_logging = false
-		# Reset BeatManager state for tests
-		beat_manager.stop()
-		beat_manager.current_beat = 0
-		beat_manager.current_measure = 0
-		beat_manager.total_beats = 0
+		# Use the new reset_for_testing method
+		if beat_manager.has_method("reset_for_testing"):
+			beat_manager.reset_for_testing()
+		else:
+			# Fallback to manual reset if method doesn't exist
+			beat_manager._debug_logging = false
+			beat_manager.stop()
+			beat_manager.current_beat = 0
+			beat_manager.current_measure = 0
+			beat_manager.total_beats = 0
 	
 	# Create beat event system
 	beat_event_system = BeatEventSystem.new()

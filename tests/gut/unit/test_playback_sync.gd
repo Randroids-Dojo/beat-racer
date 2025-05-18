@@ -1,7 +1,7 @@
 extends "res://addons/gut/test.gd"
 
-var PlaybackSync = preload("res://scripts/components/sound/playback_sync.gd")
-var BeatManager = preload("res://scripts/autoloads/beat_manager.gd")
+var PlaybackSyncClass = preload("res://scripts/components/sound/playback_sync.gd")
+var BeatManagerClass = preload("res://scripts/autoloads/beat_manager.gd")
 
 var playback_sync
 var beat_manager
@@ -10,15 +10,19 @@ func before_each():
 	# Use singleton BeatManager instead of creating new instance
 	beat_manager = get_tree().root.get_node("/root/BeatManager")
 	if beat_manager:
-		beat_manager._debug_logging = false
-		# Reset BeatManager state for tests
-		beat_manager.stop()
-		beat_manager.current_beat = 0
-		beat_manager.current_measure = 0
-		beat_manager.total_beats = 0
+		# Use the new reset_for_testing method
+		if beat_manager.has_method("reset_for_testing"):
+			beat_manager.reset_for_testing()
+		else:
+			# Fallback to manual reset if method doesn't exist
+			beat_manager._debug_logging = false
+			beat_manager.stop()
+			beat_manager.current_beat = 0
+			beat_manager.current_measure = 0
+			beat_manager.total_beats = 0
 	
 	# Create playback sync
-	playback_sync = PlaybackSync.new()
+	playback_sync = PlaybackSyncClass.new()
 	playback_sync._debug_logging = false
 	add_child_autofree(playback_sync)
 

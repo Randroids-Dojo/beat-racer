@@ -219,6 +219,16 @@ func _enter_game_over_state():
     get_tree().paused = true
     Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
     MusicManager.play_game_over_music()
+
+# Testing utilities
+func reset_for_testing():
+    # Reset state for unit testing
+    current_state = GameState.MENU
+    previous_state = GameState.MENU
+    get_tree().paused = false
+    
+    # Reset any persisted data
+    _clear_session_data()
 ```
 
 ### Vehicle States

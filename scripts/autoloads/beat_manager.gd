@@ -116,6 +116,35 @@ func reset():
 	time_since_last_half_beat = 0.0
 	_log("Beat tracking reset")
 
+func reset_for_testing():
+	# Comprehensive reset method for unit testing
+	# Ensures complete state cleanup between tests
+	stop()
+	
+	# Reset all state variables
+	current_beat = 0
+	current_measure = 0
+	current_half_beat = 0
+	total_beats = 0
+	time_since_last_beat = 0.0
+	time_since_last_half_beat = 0.0
+	_missed_beats = 0
+	
+	# Reset to defaults
+	bpm = DEFAULT_BPM
+	beats_per_measure = DEFAULT_BEATS_PER_MEASURE
+	beat_intensity = 1.0
+	audio_offset = 0.0
+	start_time = 0.0
+	
+	# Recalculate timing
+	_recalculate_timing()
+	
+	# Disable debug logging in tests
+	_debug_logging = false
+	
+	_log("Beat Manager reset for testing")
+
 func _process(delta: float):
 	if not is_playing:
 		return

@@ -442,6 +442,90 @@ func test_example():
     assert_eq(result, expected_value, "Should return expected value")
 ```
 
+### Singleton Testing Pattern
+
+When testing with singletons (autoloads like BeatManager), follow these best practices:
+
+#### Key Principles:
+1. Use existing singleton instances instead of creating new ones
+2. Reset singleton state between tests to ensure independence
+3. Disconnect signals in `after_each()` to prevent test interference
+4. Consider adding a `reset_for_testing()` method to your singletons
+
+```gdscript
+extends GutTest
+
+var beat_manager
+
+func before_each():
+    # Use singleton BeatManager instead of creating new instance
+    beat_manager = get_tree().root.get_node("/root/BeatManager")
+    if beat_manager:
+        beat_manager._debug_logging = false
+        # Reset BeatManager state for tests
+        beat_manager.stop()
+        beat_manager.current_beat = 0
+        beat_manager.current_measure = 0
+        beat_manager.total_beats = 0
+
+func after_each():
+    # Don't remove singleton BeatManager
+    # Just reset its state or disconnect signals if needed
+    if beat_manager:
+        if beat_manager.is_connected("beat_occurred", _on_test_beat):
+            beat_manager.disconnect("beat_occurred", _on_test_beat)
+
+# Better approach: Add reset method to singleton
+func before_each():
+    # If your singleton has a reset method, use it
+    if BeatManager.has_method("reset_for_testing"):
+        BeatManager.reset_for_testing()
+```
+
+#### Why This Pattern?
+- **Test Independence**: Each test starts with clean state
+- **Prevents Memory Leaks**: Signals are properly disconnected
+- **Maintains Singleton Benefits**: No need to recreate complex initialization
+- **Follows Godot Architecture**: Works with autoload system
+
+### Avoiding Global Identifier Shadowing
+
+When loading classes in tests, avoid shadowing global class names:
+
+```gdscript
+# BAD - Shadows the global class name
+var PlaybackSync = preload("res://scripts/components/sound/playback_sync.gd")
+
+# GOOD - Adds 'Class' suffix to avoid shadowing
+var PlaybackSyncClass = preload("res://scripts/components/sound/playback_sync.gd")
+
+# Create instances using the renamed variable
+var playback_sync = PlaybackSyncClass.new()
+```
+
+#### Common Patterns:
+```gdscript
+extends GutTest
+
+# Load classes with 'Class' suffix
+var BeatManagerClass = preload("res://scripts/autoloads/beat_manager.gd")
+var PlaybackSyncClass = preload("res://scripts/components/sound/playback_sync.gd")
+var BeatEventSystemClass = preload("res://scripts/components/sound/beat_event_system.gd")
+
+# Use singleton instances when appropriate
+var beat_manager
+
+func before_each():
+    # For singletons, use the existing instance
+    beat_manager = get_tree().root.get_node("/root/BeatManager")
+    if beat_manager:
+        beat_manager.reset_for_testing()
+    
+    # For non-singletons, create new instances
+    var playback_sync = PlaybackSyncClass.new()
+    add_child_autofree(playback_sync)
+```
+
 ## Comprehensive Logging System
 
 ### Structured Log Messages

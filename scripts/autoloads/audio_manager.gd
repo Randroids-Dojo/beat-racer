@@ -200,12 +200,27 @@ func get_bus_volume_db(bus_name: String) -> float:
 	var bus_idx = AudioServer.get_bus_index(bus_name)
 	if bus_idx != -1:
 		return AudioServer.get_bus_volume_db(bus_idx)
-	return 0.0
+	return -80.0
 
+# Public methods for effect control
+func set_bus_effect_enabled(bus_name: String, effect_idx: int, enabled: bool):
+	var bus_idx = AudioServer.get_bus_index(bus_name)
+	if bus_idx != -1:
+		AudioServer.set_bus_effect_enabled(bus_idx, effect_idx, enabled)
+		_log("Set effect %d on bus '%s' to %s" % [effect_idx, bus_name, "enabled" if enabled else "disabled"])
+
+func is_bus_effect_enabled(bus_name: String, effect_idx: int) -> bool:
+	var bus_idx = AudioServer.get_bus_index(bus_name)
+	if bus_idx != -1:
+		return AudioServer.is_bus_effect_enabled(bus_idx, effect_idx)
+	return false
+
+# Public methods for mute/solo control
 func set_bus_mute(bus_name: String, mute: bool):
 	var bus_idx = AudioServer.get_bus_index(bus_name)
 	if bus_idx != -1:
 		AudioServer.set_bus_mute(bus_idx, mute)
+		_log("Set bus '%s' mute to %s" % [bus_name, "true" if mute else "false"])
 
 func is_bus_muted(bus_name: String) -> bool:
 	var bus_idx = AudioServer.get_bus_index(bus_name)
@@ -217,36 +232,16 @@ func set_bus_solo(bus_name: String, solo: bool):
 	var bus_idx = AudioServer.get_bus_index(bus_name)
 	if bus_idx != -1:
 		AudioServer.set_bus_solo(bus_idx, solo)
+		_log("Set bus '%s' solo to %s" % [bus_name, "true" if solo else "false"])
 
-func is_bus_solo(bus_name: String) -> bool:
+func is_bus_soloed(bus_name: String) -> bool:
 	var bus_idx = AudioServer.get_bus_index(bus_name)
 	if bus_idx != -1:
 		return AudioServer.is_bus_solo(bus_idx)
 	return false
 
-# Convenience methods for linear volume control (0.0 to 1.0)
-func set_bus_volume_linear(bus_name: String, volume_linear: float):
-	var volume_db = linear_to_db(clamp(volume_linear, 0.0, 1.0))
-	set_bus_volume_db(bus_name, volume_db)
-
-func get_bus_volume_linear(bus_name: String) -> float:
-	var volume_db = get_bus_volume_db(bus_name)
-	return db_to_linear(volume_db)
-
-# Effect bypass methods
-func set_effect_enabled(bus_name: String, effect_idx: int, enabled: bool):
-	var bus_idx = AudioServer.get_bus_index(bus_name)
-	if bus_idx != -1:
-		AudioServer.set_bus_effect_enabled(bus_idx, effect_idx, enabled)
-
-func is_effect_enabled(bus_name: String, effect_idx: int) -> bool:
-	var bus_idx = AudioServer.get_bus_index(bus_name)
-	if bus_idx != -1:
-		return AudioServer.is_bus_effect_enabled(bus_idx, effect_idx)
-	return false
-
-# Get effect reference for advanced control
-func get_bus_effect(bus_name: String, effect_idx: int) -> AudioEffect:
+# Access effects by type
+func get_bus_effect(bus_name: String, effect_idx: int):
 	var bus_idx = AudioServer.get_bus_index(bus_name)
 	if bus_idx != -1:
 		return AudioServer.get_bus_effect(bus_idx, effect_idx)
@@ -280,3 +275,33 @@ func play_test_tone(bus_name: String = MELODY_BUS, frequency: float = 440.0, dur
 	
 	await player.finished
 	player.queue_free()
+
+func reset_for_testing():
+	# Comprehensive reset method for unit testing
+	# Resets audio buses to their default state
+	_log("Resetting AudioManager for testing...")
+	
+	# Reset all bus volumes to defaults
+	set_bus_volume_db(MASTER_BUS, DEFAULT_MASTER_VOLUME)
+	set_bus_volume_db(MELODY_BUS, DEFAULT_MELODY_VOLUME)
+	set_bus_volume_db(BASS_BUS, DEFAULT_BASS_VOLUME)
+	set_bus_volume_db(PERCUSSION_BUS, DEFAULT_PERCUSSION_VOLUME)
+	set_bus_volume_db(SFX_BUS, DEFAULT_SFX_VOLUME)
+	
+	# Unmute all buses
+	var buses = [MASTER_BUS, MELODY_BUS, BASS_BUS, PERCUSSION_BUS, SFX_BUS]
+	for bus_name in buses:
+		var bus_idx = AudioServer.get_bus_index(bus_name)
+		if bus_idx != -1:
+			AudioServer.set_bus_mute(bus_idx, false)
+			AudioServer.set_bus_solo(bus_idx, false)
+	
+	# Re-enable effects
+	for i in range(AudioServer.get_bus_count()):
+		for j in range(AudioServer.get_bus_effect_count(i)):
+			AudioServer.set_bus_effect_enabled(i, j, true)
+	
+	# Disable debug logging in tests
+	_debug_logging = false
+	
+	_log("AudioManager reset for testing complete")

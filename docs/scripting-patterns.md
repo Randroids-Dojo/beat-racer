@@ -21,6 +21,7 @@ enum States { IDLE, WALKING, JUMPING }
 # Member variables
 var _current_health: int
 var _state: States = States.IDLE
+var _event_queue: Array[Dictionary] = []  # Type-safe arrays
 
 # Lifecycle methods
 func _ready():
@@ -48,6 +49,26 @@ func _update_animation():
 ## GDScript 2.0 Features
 
 ### Static Typing
+
+Use type annotations for better code clarity and error prevention:
+
+```gdscript
+# Type-safe arrays
+var result: Array[String] = []
+var events: Array[Dictionary] = []
+
+# Function return types
+func get_all_events() -> Array[String]:
+    var result: Array[String] = []
+    for key in _events.keys():
+        result.append(key)
+    return result
+
+# Float operations - use fmod() for modulo
+var interval: float = 0.5
+if fmod(float(beat_number), interval) != 0.0:
+    return
+```
 Use static typing for better performance and error detection:
 
 ```gdscript
@@ -198,6 +219,14 @@ func add_score(points: int):
     if score > high_score:
         high_score = score
         save_high_score()
+
+# Testing utilities
+func reset_for_testing():
+    score = 0
+    # Don't reset high_score as it's persistent data
+    # Disable any active timers or processes
+    set_process(false)
+    set_physics_process(false)
 ```
 
 ## Best Practices

@@ -31,6 +31,23 @@ func _ready():
     
     var compressor = AudioEffectCompressor.new()
     AudioServer.add_bus_effect(sfx_idx, compressor)
+
+# Testing utilities
+func reset_for_testing():
+    # Reset all volumes to defaults
+    AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), 0.0)
+    AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), -10.0)
+    AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), -5.0)
+    
+    # Unmute all buses
+    for i in range(AudioServer.get_bus_count()):
+        AudioServer.set_bus_mute(i, false)
+        AudioServer.set_bus_solo(i, false)
+    
+    # Stop all playing sounds
+    for player in _sfx_players:
+        if player.playing:
+            player.stop()
 ```
 
 ### Audio Pools for Efficient Playback

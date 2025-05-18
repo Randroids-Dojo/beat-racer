@@ -3,17 +3,17 @@ extends Node2D
 # Beat Sync Demo Scene
 # Demonstrates the complete beat synchronization system
 
-var PlaybackSync = preload("res://scripts/components/sound/playback_sync.gd")
-var BeatEventSystem = preload("res://scripts/components/sound/beat_event_system.gd")
-var BeatIndicator = preload("res://scripts/components/visual/beat_indicator.gd")
-var BeatVisualizationPanel = preload("res://scripts/components/visual/beat_visualization_panel.gd")
-var LaneSoundSystem = preload("res://scripts/components/sound/lane_sound_system.gd")
+var PlaybackSyncClass = preload("res://scripts/components/sound/playback_sync.gd")
+var BeatEventSystemClass = preload("res://scripts/components/sound/beat_event_system.gd")
+var BeatIndicatorClass = preload("res://scripts/components/visual/beat_indicator.gd")
+var BeatVisualizationPanelClass = preload("res://scripts/components/visual/beat_visualization_panel.gd")
+var LaneSoundSystemClass = preload("res://scripts/components/sound/lane_sound_system.gd")
 
 # Components
-var playback_sync: PlaybackSync
-var beat_event_system: BeatEventSystem
-var visualization_panel: BeatVisualizationPanel
-var lane_sound_system: LaneSoundSystem
+var playback_sync: PlaybackSyncClass
+var beat_event_system: BeatEventSystemClass
+var visualization_panel: BeatVisualizationPanelClass
+var lane_sound_system: LaneSoundSystemClass
 
 # UI Elements
 var start_button: Button
@@ -37,22 +37,22 @@ func _ready():
 
 func _create_components():
 	# Create playback sync
-	playback_sync = PlaybackSync.new()
+	playback_sync = PlaybackSyncClass.new()
 	playback_sync.name = "PlaybackSync"
 	add_child(playback_sync)
 	
 	# Create beat event system
-	beat_event_system = BeatEventSystem.new()
+	beat_event_system = BeatEventSystemClass.new()
 	beat_event_system.name = "BeatEventSystem"
 	add_child(beat_event_system)
 	
 	# Create lane sound system
-	lane_sound_system = LaneSoundSystem.new()
+	lane_sound_system = LaneSoundSystemClass.new()
 	lane_sound_system.name = "LaneSoundSystem"
 	add_child(lane_sound_system)
 	
 	# Create visualization panel
-	visualization_panel = BeatVisualizationPanel.new()
+	visualization_panel = BeatVisualizationPanelClass.new()
 	visualization_panel.position = Vector2(50, 50)
 	visualization_panel.size = Vector2(300, 400)
 	add_child(visualization_panel)
