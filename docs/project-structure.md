@@ -24,11 +24,19 @@ Organize your project with a clear folder structure to maintain cleanliness as i
     /common/             # Reusable scene components
 /scripts/
     /autoloads/
+        audio_manager.gd    # Global audio system manager
     /resources/          # Custom resource scripts
+        lane_sound_config.gd
+        lane_mapping_resource.gd
     /components/         # Reusable behavior scripts
+        /sound/
+            lane_sound_system.gd
+            sound_generator.gd
+        verification_helpers.gd
 /resources/              # Non-script resources
     /themes/
     /presets/
+    /lane_configs/       # Preset lane sound configurations
 ```
 
 ## Beat Racer Specific Structure
@@ -64,9 +72,13 @@ tests/gut/
 ├── unit/                 # Unit tests for individual components
 │   ├── test_audio_effect_properties.gd
 │   ├── test_audio_generation.gd
+│   ├── test_lane_sound_system.gd
+│   ├── test_resource_validation.gd
+│   ├── test_scale_compatibility.gd
 │   └── test_ui_configuration.gd
 ├── integration/          # Integration tests for system interactions
-│   └── test_audio_system_integration.gd
+│   ├── test_audio_system_integration.gd
+│   └── test_lane_sound_integration.gd
 └── verification/         # Verification tests for framework and assumptions
     └── test_gut_conversion_validation.gd
 ```

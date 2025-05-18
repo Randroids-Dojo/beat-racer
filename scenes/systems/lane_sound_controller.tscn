@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5x3klwr5kf7c"]
+
+[ext_resource type="Script" uid="uid://cu4t4d053muh1" path="res://scripts/components/sound/lane_sound_system.gd" id="1_x42nc"]
+
+[node name="LaneSoundController" type="Node"]
+script = ExtResource("1_x42nc")

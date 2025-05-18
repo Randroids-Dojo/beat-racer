@@ -119,6 +119,48 @@ func set_note(note_frequency: float):
 
 ## Beat Racer Specific Audio
 
+### Lane-Based Sound System
+
+The lane sound system maps vehicle positions to dynamic sound generation:
+
+```gdscript
+# Lane Sound System Implementation
+extends Node
+class_name LaneSoundSystem
+
+enum LaneType {
+    LEFT,
+    CENTER,
+    RIGHT
+}
+
+# Default configurations per lane
+const DEFAULT_WAVEFORMS = {
+    LaneType.LEFT: SoundGenerator.WaveType.SINE,
+    LaneType.CENTER: SoundGenerator.WaveType.SQUARE,
+    LaneType.RIGHT: SoundGenerator.WaveType.TRIANGLE
+}
+
+const DEFAULT_BUSES = {
+    LaneType.LEFT: "Melody",
+    LaneType.CENTER: "Bass",
+    LaneType.RIGHT: "Melody"
+}
+
+# Usage example
+var lane_system = LaneSoundSystem.new()
+lane_system.set_current_lane(LaneSoundSystem.LaneType.LEFT)
+lane_system.start_playback()
+```
+
+Key features:
+- 3-lane system with independent sound generation
+- Configurable waveforms, scales, and parameters per lane
+- Resource-based configuration loading
+- Real-time parameter changes during playback
+- Scale support (Major, Minor, Pentatonic, Blues, Chromatic)
+- BPM property for beat synchronization
+
 ### Music Timing System
 
 ```gdscript
