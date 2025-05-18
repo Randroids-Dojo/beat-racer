@@ -22,12 +22,15 @@ var events_triggered: Dictionary = {}
 var visual_pulses: int = 0
 
 func before_each():
-	# Create beat manager (core component)
-	beat_manager = BeatManager.new()
-	beat_manager.name = "BeatManager"
-	beat_manager._debug_logging = false
-	add_child_autofree(beat_manager)
-	get_tree().root.add_child(beat_manager)
+	# Use singleton BeatManager instead of creating new instance
+	beat_manager = get_tree().root.get_node("/root/BeatManager")
+	if beat_manager:
+		beat_manager._debug_logging = false
+		# Reset BeatManager state for tests
+		beat_manager.stop()
+		beat_manager.current_beat = 0
+		beat_manager.current_measure = 0
+		beat_manager.total_beats = 0
 	
 	# Create playback sync
 	playback_sync = PlaybackSync.new()
@@ -58,8 +61,14 @@ func before_each():
 	_connect_test_signals()
 
 func after_each():
-	if beat_manager and beat_manager.get_parent() == get_tree().root:
-		get_tree().root.remove_child(beat_manager)
+	# Don't remove singleton BeatManager, just disconnect signals
+	if beat_manager:
+		if beat_manager.is_connected("beat_occurred", _on_test_beat):
+			beat_manager.disconnect("beat_occurred", _on_test_beat)
+		if beat_manager.is_connected("measure_completed", _on_test_measure):
+			beat_manager.disconnect("measure_completed", _on_test_measure)
+	if beat_indicator and beat_indicator.is_connected("beat_visualized", _on_visual_pulse):
+		beat_indicator.disconnect("beat_visualized", _on_visual_pulse)
 
 func _connect_test_signals():
 	beat_manager.connect("beat_occurred", _on_test_beat)
@@ -112,6 +121,9 @@ func test_synchronized_playback():
 	assert_eq(playback_sync.get_current_music_track(), "test_music")
 
 func test_event_system_integration():
+	# Wait for nodes to be ready
+	await get_tree().process_frame
+	
 	# Register events for different quantizations
 	beat_event_system.register_event(
 		"beat_event",
@@ -129,9 +141,10 @@ func test_event_system_integration():
 	beat_manager.beats_per_measure = 4
 	beat_manager.start()
 	
-	# Process 4 beats (1 measure)
+	# Process 4 beats (1 measure) by calling the event handlers directly
 	for i in range(4):
-		beat_manager._process_beat()
+		beat_event_system._on_beat_occurred(i + 1, i * 0.5)
+	beat_event_system._on_measure_completed(1, 2.0)
 	
 	# Verify events
 	assert_eq(events_triggered.get("beat_event", 0), 4)

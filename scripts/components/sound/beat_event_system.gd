@@ -172,7 +172,7 @@ func _process_events_for_quantization(quantization: Quantization, beat_number: i
 			
 		# Check if this event should trigger based on its interval
 		var interval = _quantization_intervals[quantization]
-		if beat_number % interval != 0:
+		if fmod(float(beat_number), interval) != 0.0:
 			continue
 			
 		# Avoid double-triggering

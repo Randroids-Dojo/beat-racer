@@ -7,14 +7,15 @@ var playback_sync
 var beat_manager
 
 func before_each():
-	# Create beat manager first (required dependency)
-	beat_manager = BeatManager.new()
-	beat_manager.name = "BeatManager"
-	beat_manager._debug_logging = false
-	add_child_autofree(beat_manager)
-	
-	# Add to root so PlaybackSync can find it
-	get_tree().root.add_child(beat_manager)
+	# Use singleton BeatManager instead of creating new instance
+	beat_manager = get_tree().root.get_node("/root/BeatManager")
+	if beat_manager:
+		beat_manager._debug_logging = false
+		# Reset BeatManager state for tests
+		beat_manager.stop()
+		beat_manager.current_beat = 0
+		beat_manager.current_measure = 0
+		beat_manager.total_beats = 0
 	
 	# Create playback sync
 	playback_sync = PlaybackSync.new()
@@ -22,9 +23,8 @@ func before_each():
 	add_child_autofree(playback_sync)
 
 func after_each():
-	# Clean up root node
-	if beat_manager and beat_manager.get_parent() == get_tree().root:
-		get_tree().root.remove_child(beat_manager)
+	# Don't remove singleton BeatManager
+	pass
 
 func test_initialization():
 	assert_not_null(playback_sync)
