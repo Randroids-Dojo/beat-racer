@@ -786,6 +786,54 @@ When implementing audio systems in Godot 4, ALWAYS verify effect properties befo
 
 ---
 
+## Build and Testing
+
+### Testing Before Committing
+
+ALWAYS run tests after implementing features to catch errors early:
+
+1. **Run Build Script**:
+   ```bash
+   ./build_and_test.sh
+   ```
+
+2. **Test Individual Components**:
+   ```bash
+   godot --headless --path . --script res://tests/test_audio_system.gd
+   ```
+
+3. **Create Custom Tests**:
+   - Write test scripts in `tests/` directory
+   - Test individual features before integration
+   - Document test results in your implementation notes
+
+4. **Example Test Script**:
+   ```gdscript
+   # test_audio_effect.gd
+   extends SceneTree
+   
+   func _init():
+       print("Testing Audio Effect...")
+       var effect = AudioEffectDelay.new()
+       
+       # Test correct properties
+       effect.tap1_active = true  # CORRECT
+       effect.feedback_active = true  # CORRECT
+       
+       # This would error:
+       # effect.mix = 0.5  # WRONG - property doesn't exist
+       
+       print("Test complete")
+       quit()
+   ```
+
+5. **Test After Every Major Change**:
+   - After implementing new features
+   - After modifying existing code
+   - Before committing changes
+
+---
+
 ## Debugging Techniques
 
 ### Built-in Debug Tools

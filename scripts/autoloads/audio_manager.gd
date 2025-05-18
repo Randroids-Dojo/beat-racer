@@ -85,8 +85,18 @@ func _setup_effects():
 	# Add subtle chorus to Bass bus
 	var bass_chorus = AudioEffectChorus.new()
 	bass_chorus.wet = 0.15
-	bass_chorus.depth = 0.2
-	bass_chorus.speed = 0.5
+	bass_chorus.dry = 0.85
+	bass_chorus.voice_count = 2
+	# Configure voice 1
+	bass_chorus.set("voice/1/delay_ms", 20.0)
+	bass_chorus.set("voice/1/rate_hz", 0.5)
+	bass_chorus.set("voice/1/depth_ms", 2.0)
+	bass_chorus.set("voice/1/level_db", 0.0)
+	# Configure voice 2
+	bass_chorus.set("voice/2/delay_ms", 25.0)
+	bass_chorus.set("voice/2/rate_hz", 0.7)
+	bass_chorus.set("voice/2/depth_ms", 3.0)
+	bass_chorus.set("voice/2/level_db", -3.0)
 	AudioServer.add_bus_effect(_bass_idx, bass_chorus)
 	
 	# Add compressor to Percussion bus
@@ -98,8 +108,9 @@ func _setup_effects():
 	
 	# Add EQ to Percussion bus to enhance punch
 	var percussion_eq = AudioEffectEQ.new()
+	# AudioEffectEQ has bands 0-5 (total 6 bands)
 	percussion_eq.set_band_gain_db(1, 3.0)  # Boost low-mids
-	percussion_eq.set_band_gain_db(6, 2.0)  # Boost highs
+	percussion_eq.set_band_gain_db(5, 2.0)  # Boost highs (max band index is 5)
 	AudioServer.add_bus_effect(_percussion_idx, percussion_eq)
 	
 	# Add compressor to SFX bus
