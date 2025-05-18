@@ -26,6 +26,7 @@ var _status_label: Label
 
 # Lane sound system
 var _lane_sound_system: Node
+var _playback_sync: Node
 
 # Current state
 var _current_lane: int = -1
@@ -39,6 +40,7 @@ var _lane_keys: Dictionary = {
 func _ready() -> void:
 	_setup_ui()
 	_setup_lane_sound_system()
+	_setup_playback_sync()
 	_setup_visual_indicators()
 	_connect_signals()
 	
@@ -182,6 +184,12 @@ func _setup_ui() -> void:
 func _setup_lane_sound_system() -> void:
 	_lane_sound_system = preload("res://scripts/components/sound/lane_sound_system.gd").new()
 	add_child(_lane_sound_system)
+
+func _setup_playback_sync() -> void:
+	# Create PlaybackSync for metronome functionality
+	var PlaybackSyncClass = preload("res://scripts/components/sound/playback_sync.gd")
+	_playback_sync = PlaybackSyncClass.new()
+	add_child(_playback_sync)
 
 func _setup_visual_indicators() -> void:
 	# Create beat visualization panel
