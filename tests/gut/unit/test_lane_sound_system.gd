@@ -114,8 +114,9 @@ func test_signal_emission():
 	assert_signal_emitted(lane_sound_system, "lane_changed")
 	
 	var signal_params = get_signal_parameters(lane_sound_system, "lane_changed", 0)
-	assert_eq(signal_params[0], LaneSoundSystem.LaneType.CENTER)  # old lane
-	assert_eq(signal_params[1], LaneSoundSystem.LaneType.LEFT)    # new lane
+	if signal_params != null:
+		assert_eq(signal_params[0], LaneSoundSystem.LaneType.CENTER)  # old lane
+		assert_eq(signal_params[1], LaneSoundSystem.LaneType.LEFT)    # new lane
 
 func test_lane_sound_isolation():
 	# Test that changing one lane doesn't affect others

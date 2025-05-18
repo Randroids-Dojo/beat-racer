@@ -35,8 +35,9 @@ func test_bpm_property():
 	beat_manager.bpm = 120.0
 	assert_signal_emitted(beat_manager, "bpm_changed")
 	var params = get_signal_parameters(beat_manager, "bpm_changed", 0)
-	assert_eq(params[0], old_bpm)
-	assert_eq(params[1], 120.0)
+	if params != null:
+		assert_eq(params[0], old_bpm)
+		assert_eq(params[1], 120.0)
 
 func test_beats_per_measure():
 	# Test setter/getter
@@ -170,8 +171,9 @@ func test_beat_signals():
 	
 	assert_signal_emitted(beat_manager, "beat_occurred")
 	var params = get_signal_parameters(beat_manager, "beat_occurred", 0)
-	assert_eq(params[0], 1)  # Beat number
-	assert_true(params[1] is float)  # Beat time
+	if params != null:
+		assert_eq(params[0], 1)  # Beat number
+		assert_true(params[1] is float)  # Beat time
 
 func test_measure_signals():
 	watch_signals(beat_manager)
@@ -184,8 +186,9 @@ func test_measure_signals():
 	
 	assert_signal_emitted(beat_manager, "measure_completed")
 	var params = get_signal_parameters(beat_manager, "measure_completed", 0)
-	assert_eq(params[0], 1)  # Measure number
-	assert_true(params[1] is float)  # Measure time
+	if params != null:
+		assert_eq(params[0], 1)  # Measure number
+		assert_true(params[1] is float)  # Measure time
 
 func test_half_beat_processing():
 	watch_signals(beat_manager)

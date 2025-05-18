@@ -242,7 +242,7 @@ func _trigger_event(event: BeatEvent, beat_number: int, beat_time: float):
 
 # Utility methods
 func get_events_for_quantization(quantization: Quantization) -> Array[String]:
-	var result = []
+	var result: Array[String] = []
 	
 	for event_name in _events:
 		var event = _events[event_name]
@@ -252,7 +252,10 @@ func get_events_for_quantization(quantization: Quantization) -> Array[String]:
 	return result
 
 func get_all_events() -> Array[String]:
-	return _events.keys()
+	var result: Array[String] = []
+	for key in _events.keys():
+		result.append(key)
+	return result
 
 func clear_all_events():
 	_events.clear()
