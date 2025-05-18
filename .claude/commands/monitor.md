@@ -1,5 +1,22 @@
 Monitor this Beat Racer project for any file changes in real-time. Respond IMMEDIATELY when a change is detected.
 
+## Available Monitoring Scripts:
+
+### 1. `monitor.sh` - Continuous Real-time Monitoring
+**Location:** `.claude/scripts/monitor.sh`
+- Runs continuously, checking every 30 seconds
+- Monitors all file changes and git status
+- Provides detailed analysis of changes
+- **Usage:** `./.claude/scripts/monitor.sh`
+
+### 2. `check-changes.sh` - Quick One-shot Check
+**Location:** `.claude/scripts/check-changes.sh`
+- Runs once and exits immediately
+- Shows current git status
+- Lists recently modified files (last 5 minutes)
+- Displays current story from backlog
+- **Usage:** `./.claude/scripts/check-changes.sh`
+
 ## Real-time Monitoring Process:
 1. Use `find` with `-mmin -0.5` to detect files modified in the last 30 seconds
 2. Check git status for uncommitted changes
@@ -57,4 +74,5 @@ done
 Continue monitoring until explicitly told to stop. Respond in real-time!
 
 ## How to Execute:
-Use the monitoring script at `.claude/scripts/monitor.sh` to track changes and provide immediate feedback based on the analysis.
+- For continuous monitoring: `./.claude/scripts/monitor.sh`
+- For quick status check: `./.claude/scripts/check-changes.sh`
