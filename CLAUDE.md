@@ -746,6 +746,46 @@ func _toggle_pause_menu(is_paused):
 
 ---
 
+## Audio Effect Guidelines
+
+### Verification Before Implementation
+
+When implementing audio systems in Godot 4, ALWAYS verify effect properties before using them:
+
+1. **Use Context7 for Documentation**:
+   - First call `mcp__context7-mcp__resolve-library-id` with `libraryName: "godot"` to get the library ID
+   - Then call `mcp__context7-mcp__get-library-docs` with the library ID and specific class name
+   - Example for AudioEffectDelay: look up its properties in the docs before using them
+
+2. **Property Verification**:
+   - Use the `verification_helpers.gd` script to check if properties exist
+   - Test with `property_exists(effect, "property_name")` before setting properties
+   - List available properties with `list_properties(effect)` if unsure
+
+3. **Use Audio Debugging Tools**:
+   - Initialize with `audio_debugger = preload("res://scripts/components/audio_debugger.gd").new()`
+   - Test effects with `audio_debugger.test_effect("effect_type")`
+
+4. **Context7 Usage Example**:
+   ```
+   # Get the Godot library ID
+   mcp__context7-mcp__resolve-library-id:
+     libraryName: "godot"
+   
+   # Get documentation for specific class
+   mcp__context7-mcp__get-library-docs:
+     context7CompatibleLibraryID: <returned_id>
+     topic: "AudioEffectDelay"
+   ```
+
+5. **Important Notes**:
+   - AudioEffectDelay does NOT have a 'mix' property - use wet/dry instead
+   - Different audio effects have different property names for similar concepts
+   - Always verify property names using Context7 before implementation
+   - Test in small pieces before implementing full systems
+
+---
+
 ## Debugging Techniques
 
 ### Built-in Debug Tools

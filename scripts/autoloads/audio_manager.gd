@@ -67,11 +67,11 @@ func _setup_effects():
 	
 	# Add delay to Melody bus
 	var melody_delay = AudioEffectDelay.new()
-	melody_delay.mix = 0.2
 	melody_delay.tap1_active = true
 	melody_delay.tap1_delay_ms = 250.0
 	melody_delay.tap1_level_db = -6.0
 	melody_delay.feedback_active = true
+	melody_delay.feedback_delay_ms = 250.0
 	melody_delay.feedback_level_db = -12.0
 	AudioServer.add_bus_effect(_melody_idx, melody_delay)
 	
