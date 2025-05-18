@@ -151,25 +151,38 @@ func test_sync_correction():
 func test_fade_functionality():
 	# Test fade duration setter
 	playback_sync._fade_duration = 1.0
+	assert_eq(playback_sync._fade_duration, 1.0, "Fade duration should be set")
 	
 	# Add test track
 	var stream = AudioStreamGenerator.new()
-	playback_sync.add_music_track("test", stream)
+	var result = playback_sync.add_music_track("test", stream)
+	assert_true(result, "Should add music track successfully")
 	
 	# Test fade in/out (visual test - actual fading requires scene tree)
 	playback_sync.play_music_track("test", true)  # With fade
+	assert_not_null(playback_sync._current_music_player, "Should have current music player")
+	
 	playback_sync.stop_all_music(true)  # With fade
+	assert_true(true, "Fade functionality tested without crash")
 
 func test_sync_to_beat():
 	# Add a music player
 	var stream = AudioStreamGenerator.new()
-	playback_sync.add_music_track("test", stream)
-	playback_sync.play_music_track("test", false)
+	var added = playback_sync.add_music_track("test", stream)
+	assert_true(added, "Should add music track")
 	
-	# Test immediate sync
+	playback_sync.play_music_track("test", false)
+	assert_not_null(playback_sync._current_music_player, "Should have current player")
+	
+	# Start sync first
+	playback_sync.start_sync()
+	assert_true(playback_sync._is_synced, "Should be synced after start_sync")
+	
+	# Test immediate sync - this corrects sync without changing sync state
 	playback_sync.sync_to_beat()
 	
 	# Note: Actual sync verification would require mocking AudioStreamPlayer
+	assert_true(true, "Sync to beat tested without crash")
 
 func test_process_function():
 	playback_sync.start_sync()

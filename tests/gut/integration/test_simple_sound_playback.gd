@@ -230,16 +230,18 @@ func test_metronome_toggle() -> void:
 	event.pressed = true
 	_scene._unhandled_key_input(event)
 	
+	assert_true(BeatManager.is_playing, "BeatManager should be playing")
+	
 	# Enable metronome
 	_scene._metronome_check.button_pressed = true
 	_scene._metronome_check.emit_signal("toggled", true)
 	
 	await get_tree().create_timer(0.1).timeout
-	# Note: BeatManager doesn't have is_metronome_enabled method, but metronome should be active
+	assert_true(BeatManager.is_metronome_enabled(), "Metronome should be enabled")
 	
 	# Disable metronome
 	_scene._metronome_check.button_pressed = false
 	_scene._metronome_check.emit_signal("toggled", false)
 	
 	await get_tree().create_timer(0.1).timeout
-	# Note: BeatManager doesn't have is_metronome_enabled method, but metronome should be inactive
+	assert_false(BeatManager.is_metronome_enabled(), "Metronome should be disabled")

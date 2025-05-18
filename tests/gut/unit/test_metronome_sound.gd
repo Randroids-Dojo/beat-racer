@@ -61,18 +61,27 @@ func test_metronome_through_playback_sync():
 	assert_true(playback_sync.is_metronome_enabled())
 
 func test_metronome_with_beat_manager():
+	# Create PlaybackSync so BeatManager can find it
+	var sync = playback_sync  # Use the one created in before_each
+	assert_not_null(sync, "PlaybackSync should exist")
+	
+	# Reset BeatManager
+	beat_manager.reset()
+	beat_manager.bpm = 120
+	
 	# Enable metronome through BeatManager
 	beat_manager.enable_metronome()
 	beat_manager.start()
 	
 	# Let a few beats play
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(2.5).timeout
 	
 	# Stop and disable
+	var beats = beat_manager.current_beat
 	beat_manager.stop()
 	beat_manager.disable_metronome()
 	
-	assert_true(beat_manager.current_beat > 0, "Beats should have occurred")
+	assert_gt(beats, 0, "Beats should have occurred")
 
 func test_metronome_volume_control():
 	# Set different volumes
