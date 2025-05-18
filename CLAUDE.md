@@ -1,5 +1,11 @@
 # Godot 4 Best Practices for 2D Desktop Games
 
+## Important: Critical Audio Implementation Notes
+- AudioEffectDelay does NOT have a 'mix' property - use 'dry' instead (verified in test_comprehensive_audio.gd)
+- Sliders MUST have step = 0.01 for smooth operation (binary behavior otherwise)
+- Always run test_comprehensive_audio.gd before implementing audio effects
+- See [Audio Effect Guidelines](#audio-effect-guidelines) and [Build and Testing](#build-and-testing) sections
+
 ## Table of Contents
 1. [Project Structure](#project-structure)
 2. [Node Organization](#node-organization)
@@ -809,8 +815,8 @@ When implementing audio systems in Godot 4, ALWAYS verify effect properties befo
      topic: "AudioEffectDelay"
    ```
 
-5. **Important Notes**:
-   - AudioEffectDelay does NOT have a 'mix' property - use wet/dry instead
+5. **Important Notes (Verified in test_comprehensive_audio.gd)**:
+   - AudioEffectDelay does NOT have a 'mix' property - use 'dry' instead ✓
    - Different audio effects have different property names for similar concepts
    - Always verify property names using Context7 before implementation
    - Test in small pieces before implementing full systems
@@ -839,54 +845,54 @@ When implementing audio systems in Godot 4, ALWAYS verify effect properties befo
 
 ## Build and Testing
 
-### Testing Before Committing
+### Comprehensive Testing Framework
 
-ALWAYS run tests after implementing features to catch errors early:
+A comprehensive test suite has been implemented to verify critical audio system functionality:
 
-1. **Run Build Script**:
+1. **Run Complete Test Suite**:
    ```bash
    ./build_and_test.sh
+   # or with report generation:
+   ./build_and_test.sh --report
    ```
 
-2. **Test Individual Components**:
+2. **Key Test Areas (test_comprehensive_audio.gd)**:
+   - **Audio Effect Properties**: Verifies AudioEffectDelay lacks 'mix' property ✓
+   - **Audio Bus Setup**: Tests creation of all required buses
+   - **Volume Controls**: Tests dB and linear volume settings
+   - **Effect Verification**: Tests property_exists() helper function
+   - **UI Configuration**: Tests slider step configuration (0.01 critical)
+
+3. **Critical Verification Tests**:
    ```bash
+   # Run comprehensive test
+   godot --headless --path . --script res://tests/test_comprehensive_audio.gd
+   
+   # Test individual components
    godot --headless --path . --script res://tests/test_audio_system.gd
+   godot --headless --path . --script res://tests/test_single_effect.gd
    ```
 
-3. **Create Custom Tests**:
-   - Write test scripts in `tests/` directory
-   - Test individual features before integration
-   - Document test results in your implementation notes
-
-4. **Example Test Script**:
-   ```gdscript
-   # test_audio_effect.gd
-   extends SceneTree
-   
-   func _init():
-       print("Testing Audio Effect...")
-       var effect = AudioEffectDelay.new()
-       
-       # Test correct properties
-       effect.tap1_active = true  # CORRECT
-       effect.feedback_active = true  # CORRECT
-       
-       # This would error:
-       # effect.mix = 0.5  # WRONG - property doesn't exist
-       
-       print("Test complete")
-       quit()
+4. **Example Comprehensive Test Output**:
+   ```
+   [AUDIO_EFFECT_PROPERTIES]
+   Passed: 4 | Failed: 0
+   ✓ AudioEffectDelay has tap1_active
+   ✓ AudioEffectDelay has feedback_active
+   ✓ AudioEffectDelay correctly lacks 'mix' property
+   ✓ AudioEffectDelay has 'dry' property instead
    ```
 
 5. **Test After Every Major Change**:
    - After implementing new features
    - After modifying existing code
    - Before committing changes
+   - When verifying effect properties
 
 ### Testing Best Practices
 
 1. **Always Test UI Controls**:
-   - Verify sliders have appropriate step values
+   - Verify sliders have step = 0.01 (CRITICAL - verified in test_comprehensive_audio.gd)
    - Check initial values match expected defaults
    - Test edge cases (min/max values)
    - Ensure visual feedback matches internal state
@@ -897,17 +903,25 @@ ALWAYS run tests after implementing features to catch errors early:
    - Test rapid button clicks for stability
    - Monitor logs for generation confirmation
 
-3. **Log-Based Testing Checklist**:
+3. **Effect Property Testing**:
+   - Always verify properties exist before using them
+   - Use test_comprehensive_audio.gd as reference
+   - Remember: AudioEffectDelay uses 'dry' not 'mix' ✓
+   - Check property names with verification helpers
+
+4. **Log-Based Testing Checklist**:
    ```
    ✓ All expected initialization logs present
    ✓ No ERROR messages in output
    ✓ User actions generate corresponding logs
    ✓ Values change as expected (not binary)
    ✓ All test functions complete successfully
+   ✓ Audio effect properties verified correctly
    ```
 
-4. **Common Pitfalls to Avoid**:
+5. **Common Pitfalls to Avoid**:
    - Missing `step` property on sliders (causes binary behavior)
+   - Using wrong property names (e.g., 'mix' on AudioEffectDelay)
    - Incorrect async handling in audio generation
    - Missing null checks for stream playback
    - Assuming default values without explicit setting
