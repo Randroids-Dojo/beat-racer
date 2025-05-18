@@ -88,25 +88,25 @@ func _connect_signals():
 	_volume_slider.value_changed.connect(_on_volume_changed)
 
 func _on_tick_pressed():
-	# Create a metronome generator directly
-	var metronome = preload("res://scripts/components/sound/metronome_generator.gd").new()
+	# Create a simple metronome directly
+	var metronome = preload("res://scripts/components/sound/metronome_simple.gd").new()
 	add_child(metronome)
 	metronome.play_tick(_volume_slider.value)
 	
 	# Clean up after sound plays
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.2).timeout
 	metronome.queue_free()
 	
 	_status_label.text = "Played tick sound"
 
 func _on_tock_pressed():
-	# Create a metronome generator directly
-	var metronome = preload("res://scripts/components/sound/metronome_generator.gd").new()
+	# Create a simple metronome directly
+	var metronome = preload("res://scripts/components/sound/metronome_simple.gd").new()
 	add_child(metronome)
 	metronome.play_tock(_volume_slider.value)
 	
 	# Clean up after sound plays
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.2).timeout
 	metronome.queue_free()
 	
 	_status_label.text = "Played tock sound"

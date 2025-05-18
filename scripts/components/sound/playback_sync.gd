@@ -65,9 +65,9 @@ func _log(message: String) -> void:
 		print("[%s] PlaybackSync: %s" % [timestamp, message])
 
 func _setup_metronome():
-	# Create metronome generator
-	var MetronomeGeneratorClass = preload("res://scripts/components/sound/metronome_generator.gd")
-	_metronome_generator = MetronomeGeneratorClass.new()
+	# Create simple metronome
+	var MetronomeClass = preload("res://scripts/components/sound/metronome_simple.gd")
+	_metronome_generator = MetronomeClass.new()
 	add_child(_metronome_generator)
 	
 	_log("Metronome setup complete")
@@ -154,10 +154,7 @@ func _play_metronome_tick(is_downbeat: bool):
 	if not _metronome_generator:
 		return
 		
-	if is_downbeat:
-		_metronome_generator.play_tick(_metronome_volume)
-	else:
-		_metronome_generator.play_tock(_metronome_volume)
+	_metronome_generator.play_metronome_beat(is_downbeat, _metronome_volume)
 
 # Music player management
 func add_music_track(name: String, stream: AudioStream) -> bool:
