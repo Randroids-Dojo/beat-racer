@@ -304,9 +304,22 @@ func _get_playback_sync():
 		var nodes = get_tree().get_nodes_in_group("playback_sync")
 		if nodes.size() > 0:
 			_playback_sync = nodes[0]
+			_log("Found PlaybackSync in group")
 		else:
 			# Try to find it by type
-			for node in get_tree().get_nodes_in_group(""):
-				if node.has_method("set_metronome_enabled") and node.has_method("is_metronome_enabled"):
-					_playback_sync = node
+			_log("Looking for PlaybackSync by type...")
+			for node in get_tree().get_root().get_children():
+				_find_playback_sync_recursive(node)
+				if _playback_sync:
 					break
+
+func _find_playback_sync_recursive(node: Node):
+	if node.has_method("set_metronome_enabled") and node.has_method("is_metronome_enabled"):
+		_playback_sync = node
+		_log("Found PlaybackSync: %s" % node.get_path())
+		return
+	
+	for child in node.get_children():
+		_find_playback_sync_recursive(child)
+		if _playback_sync:
+			return

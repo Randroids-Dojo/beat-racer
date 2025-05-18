@@ -55,15 +55,15 @@ func _create_beep_sample(frequency: float, duration: float) -> AudioStreamWAV:
 	
 	return wav
 
-func play_tick(volume_db: float = -6.0):
+func play_tick(vol_db: float = -6.0):
 	stream = _tick_sample
-	volume_db = volume_db
+	volume_db = vol_db
 	pitch_scale = 1.0
 	play()
 
-func play_tock(volume_db: float = -6.0):
+func play_tock(vol_db: float = -6.0):
 	stream = _tock_sample
-	volume_db = volume_db
+	volume_db = vol_db
 	pitch_scale = 1.0
 	play()
 

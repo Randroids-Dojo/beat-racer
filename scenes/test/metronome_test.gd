@@ -13,9 +13,11 @@ var _volume_slider: HSlider
 var _volume_label: Label
 
 var _is_metronome_enabled: bool = false
+var _playback_sync: Node  # PlaybackSync instance
 
 func _ready():
 	_setup_ui()
+	_setup_playback_sync()
 	_connect_signals()
 
 func _setup_ui():
@@ -79,6 +81,12 @@ func _setup_ui():
 	_volume_slider.step = 1
 	_volume_slider.size = Vector2(200, 20)
 	volume_container.add_child(_volume_slider)
+
+func _setup_playback_sync():
+	# Create PlaybackSync instance so BeatManager can find it
+	var PlaybackSyncClass = preload("res://scripts/components/sound/playback_sync.gd")
+	_playback_sync = PlaybackSyncClass.new()
+	add_child(_playback_sync)
 
 func _connect_signals():
 	_tick_button.pressed.connect(_on_tick_pressed)

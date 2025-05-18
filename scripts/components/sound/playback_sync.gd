@@ -143,8 +143,11 @@ func _correct_sync():
 func _on_beat_occurred(beat_number: int, beat_time: float):
 	if _metronome_enabled:
 		var is_downbeat = (beat_number % _beat_manager.beats_per_measure) == 0
+		_log("Beat %d occurred, metronome enabled, playing %s" % [beat_number, "tick" if is_downbeat else "tock"])
 		_play_metronome_tick(is_downbeat)
 		emit_signal("metronome_tick", beat_number, is_downbeat)
+	else:
+		_log("Beat %d occurred but metronome disabled" % beat_number)
 
 func _on_measure_completed(measure_number: int, measure_time: float):
 	# Could trigger special effects or transitions on measure boundaries
@@ -152,8 +155,10 @@ func _on_measure_completed(measure_number: int, measure_time: float):
 
 func _play_metronome_tick(is_downbeat: bool):
 	if not _metronome_generator:
+		_log("ERROR: No metronome generator!")
 		return
 		
+	_log("Playing metronome %s at volume %f dB" % ["tick" if is_downbeat else "tock", _metronome_volume])
 	_metronome_generator.play_metronome_beat(is_downbeat, _metronome_volume)
 
 # Music player management
