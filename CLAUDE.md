@@ -856,7 +856,13 @@ The Beat Racer project uses the Godot Unit Test (GUT) framework for comprehensiv
    ./run_gut_tests.sh --report
    ```
 
-2. **Test Organization**:
+2. **Test Result Management**:
+   - Test results (*.xml files) are automatically ignored by git
+   - Clean up test results: `rm test_results*.xml`
+   - Test results directory (`/test_results/`) is also ignored
+   - No test result files should be committed to the repository
+
+3. **Test Organization**:
    ```
    tests/gut/
    ├── unit/                 # Unit tests for individual components
@@ -869,14 +875,14 @@ The Beat Racer project uses the Godot Unit Test (GUT) framework for comprehensiv
        └── test_gut_conversion_validation.gd
    ```
 
-3. **Key Test Areas**:
+4. **Key Test Areas**:
    - **Audio Effect Properties**: Verifies AudioEffectDelay uses 'dry' not 'mix' ✓
    - **Audio Bus Management**: Tests bus creation, routing, and effects
    - **Sound Generation**: Tests procedural audio generation
    - **UI Configuration**: Verifies slider step=0.01 for smooth control
    - **System Integration**: Tests component interactions
 
-4. **Running Specific Tests**:
+5. **Running Specific Tests**:
    ```bash
    # Test specific category
    godot --headless --path . -s addons/gut/gut_cmdln.gd -gtest=res://tests/gut/unit/
@@ -885,7 +891,7 @@ The Beat Racer project uses the Godot Unit Test (GUT) framework for comprehensiv
    godot --headless --path . -s addons/gut/gut_cmdln.gd -gtest=res://tests/gut/unit/test_audio_effect_properties.gd
    ```
 
-5. **CI/CD Integration**:
+6. **CI/CD Integration**:
    - Headless execution support
    - JUnit XML report generation
    - Exit codes for success/failure

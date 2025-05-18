@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Beat Racer test suite has been migrated to use the Godot Unit Test (GUT) framework for better structure, command line execution, and CI/CD integration.
+The Beat Racer test suite uses the Godot Unit Test (GUT) framework with a zero-orphan policy for clean, maintainable testing.
 
 ## Directory Structure
 
@@ -17,18 +17,21 @@ tests/
 │   │   └── test_audio_system_integration.gd
 │   └── verification/         # Verification tests for framework and assumptions
 │       └── test_gut_conversion_validation.gd
+├── TESTING_BEST_PRACTICES.md # Testing patterns and guidelines
+├── TEST_TEMPLATE.gd          # Template for new tests
 ├── GUT_TESTING_GUIDE.md      # Comprehensive GUT testing guide
 └── README.md                 # This file
 ```
 
 ## Current Status
 
-✅ **Fully migrated to GUT framework**
+✅ **Production-ready test suite**
 - All tests use GUT test structure
 - Command line execution supported
 - CI/CD ready with JUnit XML reports
-- Automated test runner (`run_gut_tests.sh`)
-- Comprehensive documentation
+- **Zero orphan policy** - all tests run clean
+- Comprehensive testing patterns documented
+- Test template for consistent new tests
 
 ### Test Categories
 
@@ -96,7 +99,20 @@ See `run_gut_tests.sh` for integration examples.
 ## Contributing
 
 When adding new tests:
-1. Follow GUT conventions (extend GutTest)
-2. Place tests in appropriate category folder
-3. Use descriptive test method names (prefix with `test_`)
-4. Update this README if adding new test categories
+1. Copy `TEST_TEMPLATE.gd` to start a new test file
+2. Follow patterns in `TESTING_BEST_PRACTICES.md`
+3. Track all created nodes for proper cleanup
+4. Place tests in appropriate category folder
+5. Run tests and ensure 0 orphans
+6. Update this README if adding new test categories
+
+## Zero Orphan Policy
+
+This test suite maintains a strict zero orphan policy:
+- All created nodes must be tracked
+- Proper cleanup in `after_each()` functions
+- AudioStreamPlayer nodes must be stopped
+- Nodes with `_ready()` should be added to scene tree
+- Always await frame processing for cleanup
+
+See `TESTING_BEST_PRACTICES.md` for detailed patterns.

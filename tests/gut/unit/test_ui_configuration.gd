@@ -2,10 +2,24 @@
 # UI configuration tests converted to GUT framework
 extends GutTest
 
+var _created_nodes = []
+
+func after_each():
+	# Clean up all tracked nodes
+	for node in _created_nodes:
+		if is_instance_valid(node):
+			if node.is_inside_tree():
+				node.get_parent().remove_child(node)
+			node.queue_free()
+	_created_nodes.clear()
+	# Wait for nodes to be freed
+	await get_tree().process_frame
+
 func test_slider_step_configuration():
 	gut.p("Testing HSlider step configuration for smooth control")
 	
 	var slider = HSlider.new()
+	_created_nodes.append(slider)
 	
 	# Test default step (often problematic)
 	gut.p("Default slider step: %f" % slider.step)
@@ -29,15 +43,12 @@ func test_slider_step_configuration():
 	# Without proper step, values would jump to 0 or 1
 	slider.value = 0.33
 	assert_almost_eq(slider.value, 0.33, 0.01, "Should set value to 0.33 with precision")
-	
-	# Clean up properly
-	remove_child(slider)
-	slider.queue_free()
 
 func test_vslider_configuration():
 	gut.p("Testing VSlider configuration")
 	
 	var vslider = VSlider.new()
+	_created_nodes.append(vslider)
 	
 	# Configure same as HSlider
 	vslider.min_value = 0.0
@@ -49,14 +60,12 @@ func test_vslider_configuration():
 	# Test intermediate values
 	vslider.value = 0.25
 	assert_eq(vslider.value, 0.25, "Should set value to 0.25")
-	
-	# Clean up
-	vslider.queue_free()
 
 func test_slider_audio_volume_mapping():
 	gut.p("Testing slider to audio volume dB mapping")
 	
 	var slider = HSlider.new()
+	_created_nodes.append(slider)
 	slider.min_value = 0.0
 	slider.max_value = 1.0
 	slider.step = 0.01
@@ -85,6 +94,7 @@ func test_slider_scene_configuration():
 	
 	# This test documents the correct way to configure sliders
 	var slider = HSlider.new()
+	_created_nodes.append(slider)
 	
 	# CRITICAL: Always set step property
 	slider.step = 0.01
@@ -115,6 +125,10 @@ func test_multiple_slider_configuration():
 		"percussion": HSlider.new()
 	}
 	
+	# Track all sliders for cleanup
+	for name in sliders:
+		_created_nodes.append(sliders[name])
+	
 	# Add all sliders as children first
 	for name in sliders:
 		add_child(sliders[name])
@@ -130,18 +144,13 @@ func test_multiple_slider_configuration():
 		# Verify configuration
 		assert_eq(slider.step, 0.01, "%s slider should have 0.01 step" % name)
 		assert_eq(slider.value, 0.5, "%s slider should start at 0.5" % name)
-	
-	# Clean up properly
-	for name in sliders:
-		var slider = sliders[name]
-		remove_child(slider)
-		slider.queue_free()
 
 func test_ui_control_initialization_order():
 	gut.p("Testing UI control initialization order")
 	
 	# Test that controls can be configured after creation
 	var slider = HSlider.new()
+	_created_nodes.append(slider)
 	
 	# Even if step isn't set initially, it can be configured later
 	assert_gte(slider.step, 0.0, "Slider should have non-negative step")

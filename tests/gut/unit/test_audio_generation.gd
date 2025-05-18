@@ -3,9 +3,24 @@
 extends GutTest
 
 var SoundGenerator
+var _created_nodes = []
 
 func before_all():
 	SoundGenerator = load("res://scripts/components/sound/sound_generator.gd")
+
+func after_each():
+	# Clean up all tracked nodes
+	for node in _created_nodes:
+		if is_instance_valid(node):
+			if node.has_method("stop") and node.has_method("playing"):
+				if node.playing:
+					node.stop()
+			if node.is_inside_tree():
+				node.get_parent().remove_child(node)
+			node.queue_free()
+	_created_nodes.clear()
+	# Wait for nodes to be freed
+	await get_tree().process_frame
 
 func test_audio_stream_generator_creation():
 	gut.p("Testing AudioStreamGenerator creation")
@@ -28,19 +43,22 @@ func test_sound_generator_initialization():
 	gut.p("Testing SoundGenerator initialization")
 	
 	var sound_gen = SoundGenerator.new()
+	_created_nodes.append(sound_gen)
+	# The SoundGenerator might create child nodes in _ready()
+	# so we add it to the scene tree temporarily
+	add_child(sound_gen)
+	
 	assert_not_null(sound_gen, "Should create SoundGenerator instance")
 	
 	# Check default properties if they exist
 	if "sample_rate" in sound_gen:
 		assert_eq(sound_gen.sample_rate, 44100.0, "Default sample rate should be 44100")
-	
-	# Clean up
-	sound_gen.queue_free()
 
 func test_audio_stream_player_setup():
 	gut.p("Testing AudioStreamPlayer setup for generation")
 	
 	var player = AudioStreamPlayer.new()
+	_created_nodes.append(player)
 	var generator = AudioStreamGenerator.new()
 	
 	# Configure generator
@@ -61,9 +79,6 @@ func test_audio_stream_player_setup():
 	
 	assert_eq(player.volume_db, -6.0, "Volume should be set correctly")
 	assert_eq(player.pitch_scale, 1.5, "Pitch scale should be set correctly")
-	
-	# Clean up properly
-	player.queue_free()
 
 func test_stream_playback_retrieval():
 	gut.p("Testing stream playback retrieval")
@@ -71,6 +86,7 @@ func test_stream_playback_retrieval():
 	var player = AudioStreamPlayer.new()
 	# Add to scene tree first
 	add_child(player)
+	_created_nodes.append(player)
 	var generator = AudioStreamGenerator.new()
 	
 	generator.mix_rate = 44100.0
@@ -83,11 +99,6 @@ func test_stream_playback_retrieval():
 	# Note: Playback might be null if not playing
 	if player.playing:
 		assert_not_null(playback, "Should get stream playback when playing")
-	
-	# Clean up
-	player.stop()
-	remove_child(player)
-	player.queue_free()
 
 func test_audio_frame_generation():
 	gut.p("Testing audio frame generation")
@@ -95,6 +106,7 @@ func test_audio_frame_generation():
 	gut.p("Full audio generation testing requires running in the scene tree with proper timing")
 	
 	var player = AudioStreamPlayer.new()
+	_created_nodes.append(player)
 	var generator = AudioStreamGenerator.new()
 	
 	generator.mix_rate = 44100.0
@@ -106,9 +118,6 @@ func test_audio_frame_generation():
 	# Basic setup verification only
 	assert_not_null(player.stream, "Player should have stream assigned")
 	assert_eq(player.stream.mix_rate, 44100.0, "Stream should have correct mix rate")
-	
-	remove_child(player)
-	player.queue_free()
 
 func test_multiple_generator_instances():
 	gut.p("Testing multiple generator instances")

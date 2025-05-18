@@ -21,6 +21,9 @@ build/
 
 # Test reports
 test_report_*.txt
+test_results.xml
+test_results_*.xml
+/test_results/
 
 # Addons (can be installed separately)
-/addons/gut/
+/addons/gut/*.xml

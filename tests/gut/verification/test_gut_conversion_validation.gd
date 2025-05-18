@@ -2,6 +2,19 @@
 # Validates that converted tests work correctly with GUT
 extends GutTest
 
+var _created_nodes = []
+
+func after_each():
+	# Clean up all tracked nodes
+	for node in _created_nodes:
+		if is_instance_valid(node):
+			if node.is_inside_tree():
+				node.get_parent().remove_child(node)
+			node.queue_free()
+	_created_nodes.clear()
+	# Wait for nodes to be freed
+	await get_tree().process_frame
+
 func test_gut_framework_is_available():
 	gut.p("Testing GUT framework availability")
 	
@@ -68,14 +81,12 @@ func test_node_creation():
 	
 	# Test that we can create nodes
 	var node = Node.new()
+	_created_nodes.append(node)
 	assert_not_null(node, "Should be able to create nodes")
 	
 	var audio_player = AudioStreamPlayer.new()
+	_created_nodes.append(audio_player)
 	assert_not_null(audio_player, "Should be able to create audio nodes")
-	
-	# Clean up
-	node.queue_free()
-	audio_player.queue_free()
 
 func test_gut_output_methods():
 	gut.p("Testing GUT output methods")

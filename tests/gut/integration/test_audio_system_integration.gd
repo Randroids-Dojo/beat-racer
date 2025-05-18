@@ -4,6 +4,7 @@ extends GutTest
 
 var AudioManager
 var audio_manager_instance
+var _created_nodes = []
 
 func before_all():
 	AudioManager = load("res://scripts/autoloads/audio_manager.gd")
@@ -11,13 +12,28 @@ func before_all():
 func before_each():
 	# Create fresh audio manager for each test
 	audio_manager_instance = AudioManager.new()
+	_created_nodes.append(audio_manager_instance)
 	audio_manager_instance._ready()
 
 func after_each():
+	# Clean up all tracked nodes
+	for node in _created_nodes:
+		if is_instance_valid(node):
+			if node.has_method("stop") and node.has_method("playing"):
+				if node.playing:
+					node.stop()
+			if node.is_inside_tree():
+				node.get_parent().remove_child(node)
+			node.queue_free()
+	_created_nodes.clear()
+	
 	# Clean up audio manager
 	if audio_manager_instance:
 		audio_manager_instance.queue_free()
 		audio_manager_instance = null
+	
+	# Wait for nodes to be freed
+	await get_tree().process_frame
 
 func test_audio_manager_initialization():
 	gut.p("Testing AudioManager initialization")
@@ -86,6 +102,7 @@ func test_sound_playback_capabilities():
 	
 	# Test that we can create audio players
 	var test_player = AudioStreamPlayer.new()
+	_created_nodes.append(test_player)
 	assert_not_null(test_player, "Should be able to create AudioStreamPlayer")
 	
 	# Test bus assignment
@@ -103,11 +120,6 @@ func test_sound_playback_capabilities():
 	add_child(test_player)
 	test_player.play()
 	assert_true(test_player.playing, "Player should be playing")
-	
-	# Clean up
-	test_player.stop()
-	remove_child(test_player)
-	test_player.queue_free()
 
 func test_multiple_audio_players():
 	gut.p("Testing multiple audio player management")
@@ -118,15 +130,20 @@ func test_multiple_audio_players():
 	# Create multiple players
 	for i in range(player_count):
 		var player = AudioStreamPlayer.new()
-		player.bus = "Test"
+		player.bus = "SFX"  # Use existing bus instead of "Test"
 		add_child(player)
 		players.append(player)
+		_created_nodes.append(player)
+		
+		# Generate a test stream
+		var generator = AudioStreamGenerator.new()
+		generator.mix_rate = 44100.0
+		player.stream = generator
+		player.play()
 	
 	assert_eq(players.size(), player_count, "Should create all players successfully")
 	
-	# Clean up
+	# Test that all players are playing
 	for player in players:
-		if player.playing:
-			player.stop()
-		remove_child(player)
-		player.queue_free()
+		assert_true(player.playing, "Player should be playing")
+		player.stop()  # Stop immediately after testing
