@@ -64,12 +64,63 @@ tests/
 │   │   ├── test_audio_generation.gd
 │   │   └── test_ui_configuration.gd
 │   ├── integration/          # Integration tests for system interactions
-│   │   └── test_audio_system_integration.gd
+│   │   ├── test_audio_system_integration.gd
+│   │   └── test_simple_sound_playback.gd    # Tests for Story 004
 │   └── verification/         # Verification tests for framework and assumptions
 │       └── test_gut_conversion_validation.gd
 ├── TEST_TEMPLATE.gd          # Template for new tests
 └── README.md                 # Testing documentation (being integrated)
 ```
+
+### Test Scenes
+
+Interactive test scenes for manual testing and demonstration:
+
+```
+scenes/test/
+├── beat_sync_demo.gd         # Beat synchronization demonstration
+├── beat_sync_demo.tscn
+├── lane_sound_test.gd        # Lane sound system testing
+├── lane_sound_test.tscn
+├── simple_sound_playback_test.gd    # Story 004: Standalone sound test
+└── simple_sound_playback_test.tscn
+```
+
+#### Simple Sound Playback Test (Story 004)
+
+A comprehensive test scene that combines lane sounds, beat synchronization, and visual feedback:
+
+**Run the test:**
+```bash
+# Using the convenience script
+./run_simple_sound_test.sh
+
+# Or directly with Godot
+godot --path . scenes/test/simple_sound_playback_test.tscn
+```
+
+**Features:**
+- Keyboard controls for lane selection (Q/W/E keys)
+- Visual indicators that flash and brighten when active
+- Adjustable BPM slider (60-240)
+- Sound parameter controls (waveform, volume, octave)
+- Scale selection (major, minor, pentatonic, blues, chromatic)
+- Beat visualization panel showing sync status
+- Metronome toggle
+
+**Keyboard controls:**
+- **Q** - Play Left Lane (red indicator)
+- **W** - Play Center Lane (green indicator)
+- **E** - Play Right Lane (blue indicator)
+- **SPACE** - Start/Stop beat manager
+- **ESC** - Clear current lane
+
+This test scene has corresponding integration tests in `/tests/gut/integration/test_simple_sound_playback.gd` that verify:
+- Keyboard input handling
+- Visual feedback activation
+- Parameter updates
+- Lane switching during playback
+- Status label updates
 
 ### Writing Tests - Basic Structure
 

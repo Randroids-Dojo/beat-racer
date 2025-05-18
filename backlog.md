@@ -27,10 +27,10 @@ Establish the basic audio system that will allow sound generation based on lane 
   - Implemented volume controls with both dB and linear value handling
   - Added mute/solo functionality for each audio bus
   - Applied appropriate audio effects to each bus:
-    - Melody: Reverb, Chorus
-    - Bass: Distortion, Limiter
-    - Percussion: Delay, Filter
-    - SFX: Chorus, Compressor
+	- Melody: Reverb, Chorus
+	- Bass: Distortion, Limiter
+	- Percussion: Delay, Filter
+	- SFX: Chorus, Compressor
   - Added test tone generation system for each bus
   - Implemented effect toggle controls for runtime configuration
   - Created visual feedback for audio bus states
@@ -53,12 +53,12 @@ Establish the basic audio system that will allow sound generation based on lane 
   - Created comprehensive test suite (unit and integration tests)
   - Built demonstration scene for testing lane sound functionality
   - Features include:
-    - Real-time lane switching with audio feedback
-    - Configurable waveforms (sine, square, triangle, saw)
-    - Musical scale support (major, minor, pentatonic, blues, chromatic)
-    - Independent volume and octave control per lane
-    - Multi-lane simultaneous playback capability
-    - Global root note and scale settings
+	- Real-time lane switching with audio feedback
+	- Configurable waveforms (sine, square, triangle, saw)
+	- Musical scale support (major, minor, pentatonic, blues, chromatic)
+	- Independent volume and octave control per lane
+	- Multi-lane simultaneous playback capability
+	- Global root note and scale settings
 
 - [x] **Story 003: Beat Synchronization System** ✓ COMPLETE
   *Build a system to keep sounds aligned to a consistent beat*
@@ -73,23 +73,34 @@ Establish the basic audio system that will allow sound generation based on lane 
   - Built BeatEventSystem for quantized event scheduling
   - Added visual components (BeatIndicator, BeatVisualizationPanel)
   - Features include:
-    - BPM support from 60-240 with real-time adjustment
-    - Multiple quantization levels (beat, half-beat, measure, etc.)
-    - Automatic sync detection and correction
-    - Metronome functionality with audio feedback
-    - Visual beat indicators with customizable appearance
-    - Event system supporting delayed and repeating callbacks
-    - Integration with lane sound system for rhythm gameplay
+	- BPM support from 60-240 with real-time adjustment
+	- Multiple quantization levels (beat, half-beat, measure, etc.)
+	- Automatic sync detection and correction
+	- Metronome functionality with audio feedback
+	- Visual beat indicators with customizable appearance
+	- Event system supporting delayed and repeating callbacks
+	- Integration with lane sound system for rhythm gameplay
   - Created comprehensive test suite for all components
   - Built demo scene showcasing complete system integration
   - Full documentation in docs/beat-synchronization.md
 
-- [ ] **Story 004: Simple Sound Playback Test**  
+- [x] **Story 004: Simple Sound Playback Test** ✓ COMPLETE
   *Create a standalone test for playing sounds through the systems above*
   - Add keyboard input to trigger lane sounds
   - Implement visual feedback when sounds play
-  - Support adjustable BPM
+  - Support adjustable BPM  
   - Allow for basic sound parameter adjustments
+  
+  **Implementation Notes:**
+  - Created comprehensive test scene (`simple_sound_playback_test.tscn`)
+  - Keyboard controls: Q/W/E for lanes, SPACE for play/stop, ESC to clear
+  - Visual indicators with lane-specific colors and shapes
+  - Adjustable BPM slider (60-240 range)
+  - Sound parameters: waveform, volume, octave, scale selection
+  - Beat visualization panel integration
+  - Full GUT integration test coverage
+  - Created convenience script `run_simple_sound_test.sh`
+  - Documented in `/docs/testing-debugging.md`
 
 ---
 
