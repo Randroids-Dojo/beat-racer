@@ -28,7 +28,16 @@ func _ready():
 	_log("=== AudioManager Starting Initialization ===")
 	_log("Godot version: " + Engine.get_version_info().string)
 	_log("Project name: " + ProjectSettings.get_setting("application/config/name"))
-	_log("Current scene: " + str(get_tree().current_scene))
+	
+	# Safely check for scene tree and current scene
+	var tree = null
+	if has_method("get_tree"):
+		tree = get_tree()
+	
+	if tree != null and tree.current_scene != null:
+		_log("Current scene: " + str(tree.current_scene))
+	else:
+		_log("Current scene: <null - test environment>")
 	
 	_setup_audio_buses()
 	_setup_effects()

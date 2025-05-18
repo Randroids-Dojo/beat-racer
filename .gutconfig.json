@@ -1,0 +1,10 @@
+{
+  "dirs": ["res://tests/gut/"],
+  "include_subdirs": true,
+  "prefix": "test_",
+  "suffix": ".gd",
+  "log_level": 1,
+  "should_exit": true,
+  "junit_xml_file": "res://test_results.xml",
+  "audio_driver": "Dummy"
+}

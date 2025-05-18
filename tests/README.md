@@ -1,115 +1,106 @@
-# Beat Racer Audio Test Framework
+# Beat Racer Test Suite
 
-This comprehensive test framework ensures the audio system functions correctly and follows the guidelines in CLAUDE.md.
+## Overview
 
-## Test Structure
+The Beat Racer test suite has been migrated to use the Godot Unit Test (GUT) framework for better structure, command line execution, and CI/CD integration.
+
+## Directory Structure
 
 ```
 tests/
-├── test_runner.gd              # Main test orchestrator
-├── unit/                       # Unit tests for individual components
-│   ├── test_audio_effects.gd   # Audio effect property tests
-│   └── test_audio_generation.gd # Audio stream generation tests
-├── integration/                # Integration tests
-│   └── test_audio_system_integration.gd
-├── verification/               # Property verification tests
-│   └── test_effect_property_verification.gd
-├── ui/                        # UI configuration tests
-│   └── test_ui_configuration.gd
-└── README.md                  # This file
+├── gut/                       # All GUT-based tests
+│   ├── unit/                 # Unit tests for individual components
+│   │   ├── test_audio_effect_properties.gd
+│   │   ├── test_audio_generation.gd
+│   │   └── test_ui_configuration.gd
+│   ├── integration/          # Integration tests for system interactions
+│   │   └── test_audio_system_integration.gd
+│   └── verification/         # Verification tests for framework and assumptions
+│       └── test_gut_conversion_validation.gd
+├── convert_to_gut.gd         # Helper script for converting legacy tests
+├── GUT_TESTING_GUIDE.md      # Comprehensive GUT testing guide
+├── README.md                 # This file
+└── TESTING.md               # Original testing documentation
 ```
 
-## Key Test Areas
+## Migration Status
 
-### 1. Audio Effect Properties
-- Verifies correct properties exist for each effect type
-- **Critical**: Confirms AudioEffectDelay doesn't have 'mix' property (uses dry/wet instead)
-- Tests property access and value setting
+### Completed ✅
+- Test framework migration to GUT
+- Directory structure reorganization
+- Command line execution support
+- CI/CD integration setup
+- Configuration file (`.gutconfig.json`)
+- Test runner script (`run_gut_tests.sh`)
 
-### 2. Audio Stream Generation
-- Tests AudioStreamGenerator configuration
-- Verifies proper stream playback setup
-- Tests frame generation and buffer handling
+### Test Categories
 
-### 3. UI Configuration
-- **Critical**: Tests slider step values (must be 0.01 for smooth control)
-- Verifies default values are appropriate
-- Tests common configuration errors
+#### Unit Tests (`gut/unit/`)
+- **test_audio_effect_properties.gd**: Validates audio effect properties and behaviors
+- **test_audio_generation.gd**: Tests audio stream generation capabilities
+- **test_ui_configuration.gd**: Verifies UI control configurations (especially sliders)
 
-### 4. Integration Testing
-- Tests complete audio system initialization
-- Verifies bus creation and routing
-- Tests effect chains and interactions
+#### Integration Tests (`gut/integration/`)
+- **test_audio_system_integration.gd**: Tests complete audio system integration
+
+#### Verification Tests (`gut/verification/`)
+- **test_gut_conversion_validation.gd**: Validates GUT framework functionality
 
 ## Running Tests
 
-### Run All Tests
+### Quick Start
 ```bash
-./build_and_test.sh
+# Run all tests
+./run_gut_tests.sh
+
+# Run with JUnit XML report
+./run_gut_tests.sh --report
+
+# Run specific test category
+godot --headless --path . -s addons/gut/gut_cmdln.gd -gtest=res://tests/gut/unit/
 ```
 
-### Run with Report Generation
-```bash
-./build_and_test.sh --report
-```
+### Detailed Documentation
+See [GUT_TESTING_GUIDE.md](GUT_TESTING_GUIDE.md) for comprehensive testing information.
 
-### Run Individual Test
-```bash
-godot --headless --path . --script res://tests/test_runner.gd
-```
+## Key Files
 
-## Important Findings
+- **`.gutconfig.json`**: GUT configuration file
+- **`run_gut_tests.sh`**: Shell script for running tests (CI/CD compatible)
+- **`convert_to_gut.gd`**: Helper for converting legacy tests
+- **`GUT_TESTING_GUIDE.md`**: Complete testing guide
 
-### AudioEffectDelay Properties
-- ❌ Does NOT have 'mix' property
-- ✅ Uses 'dry' property instead
-- ✅ Has tap1/tap2 and feedback controls
+## Testing Focus Areas
 
-### UI Slider Configuration
-- **Must** set `step = 0.01` for smooth operation
-- Without proper step, sliders show binary (0/1) behavior
-- Always configure in code as failsafe
+The Beat Racer test suite focuses on:
 
-### Best Practices
-1. Always use Context7 to verify properties before implementation
-2. Test property existence before setting values
-3. Configure UI controls programmatically
-4. Log all operations for debugging
-5. Test after every major change
+1. **Audio Effect Properties**: Verifying Godot audio effects have expected properties
+2. **Audio Bus Management**: Testing bus creation, routing, and effects
+3. **Sound Generation**: Validating procedural audio generation
+4. **UI Configuration**: Ensuring proper slider configuration (critical for smooth control)
+5. **System Integration**: Testing interactions between components
 
-## Test Output
+## Important Notes
 
-Tests provide detailed output including:
-- Property listings for all effects
-- Pass/fail status for each test
-- Specific error messages when properties don't match expectations
-- Verification that CLAUDE.md guidelines are followed
+- AudioEffectDelay uses 'dry' property instead of 'mix' (verified in tests)
+- Sliders must have step=0.01 for smooth operation
+- Tests use dummy audio driver for headless execution
+- All tests are designed for command line execution
 
-## Adding New Tests
+## CI/CD Integration
 
-1. Create test file in appropriate directory (unit/integration/etc)
-2. Extend SceneTree for standalone execution
-3. Follow naming convention: `test_*.gd`
-4. Update test_runner.gd to include new test
-5. Add to build_and_test.sh
+The test suite is designed for CI/CD pipelines:
+- Headless execution support
+- JUnit XML report generation
+- Exit codes for success/failure
+- Configurable verbosity levels
 
-## Common Issues and Solutions
+See `run_gut_tests.sh` for integration examples.
 
-### Issue: Slider only shows 0 or 1
-**Cause**: Missing or incorrect step value
-**Solution**: Set `slider.step = 0.01`
+## Contributing
 
-### Issue: AudioEffectDelay mix property error
-**Cause**: Attempting to use non-existent 'mix' property
-**Solution**: Use 'dry' property instead
-
-### Issue: Audio stream not playing
-**Cause**: Incorrect buffer handling or async issues
-**Solution**: Generate all frames immediately, then await finished signal
-
-## Maintenance
-
-- Regularly run tests after implementing new features
-- Update tests when Godot API changes
-- Document any new findings in this README
-- Keep CLAUDE.md synchronized with test results
+When adding new tests:
+1. Follow GUT conventions (extend GutTest)
+2. Place tests in appropriate category folder
+3. Use descriptive test method names (prefix with `test_`)
+4. Update this README if adding new test categories
