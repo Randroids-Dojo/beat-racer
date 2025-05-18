@@ -845,54 +845,56 @@ When implementing audio systems in Godot 4, ALWAYS verify effect properties befo
 
 ## Build and Testing
 
-### Comprehensive Testing Framework
+### GUT Testing Framework
 
-A comprehensive test suite has been implemented to verify critical audio system functionality:
+The Beat Racer project uses the Godot Unit Test (GUT) framework for comprehensive testing:
 
 1. **Run Complete Test Suite**:
    ```bash
-   ./build_and_test.sh
-   # or with report generation:
-   ./build_and_test.sh --report
+   ./run_gut_tests.sh
+   # or with JUnit XML report:
+   ./run_gut_tests.sh --report
    ```
 
-2. **Key Test Areas (test_comprehensive_audio.gd)**:
-   - **Audio Effect Properties**: Verifies AudioEffectDelay lacks 'mix' property ✓
-   - **Audio Bus Setup**: Tests creation of all required buses
-   - **Volume Controls**: Tests dB and linear volume settings
-   - **Effect Verification**: Tests property_exists() helper function
-   - **UI Configuration**: Tests slider step configuration (0.01 critical)
+2. **Test Organization**:
+   ```
+   tests/gut/
+   ├── unit/                 # Unit tests for individual components
+   │   ├── test_audio_effect_properties.gd
+   │   ├── test_audio_generation.gd
+   │   └── test_ui_configuration.gd
+   ├── integration/          # Integration tests for system interactions
+   │   └── test_audio_system_integration.gd
+   └── verification/         # Verification tests for framework and assumptions
+       └── test_gut_conversion_validation.gd
+   ```
 
-3. **Critical Verification Tests**:
+3. **Key Test Areas**:
+   - **Audio Effect Properties**: Verifies AudioEffectDelay uses 'dry' not 'mix' ✓
+   - **Audio Bus Management**: Tests bus creation, routing, and effects
+   - **Sound Generation**: Tests procedural audio generation
+   - **UI Configuration**: Verifies slider step=0.01 for smooth control
+   - **System Integration**: Tests component interactions
+
+4. **Running Specific Tests**:
    ```bash
-   # Run comprehensive test
-   godot --headless --path . --script res://tests/test_comprehensive_audio.gd
+   # Test specific category
+   godot --headless --path . -s addons/gut/gut_cmdln.gd -gtest=res://tests/gut/unit/
    
-   # Test individual components
-   godot --headless --path . --script res://tests/test_audio_system.gd
-   godot --headless --path . --script res://tests/test_single_effect.gd
+   # Test specific file
+   godot --headless --path . -s addons/gut/gut_cmdln.gd -gtest=res://tests/gut/unit/test_audio_effect_properties.gd
    ```
 
-4. **Example Comprehensive Test Output**:
-   ```
-   [AUDIO_EFFECT_PROPERTIES]
-   Passed: 4 | Failed: 0
-   ✓ AudioEffectDelay has tap1_active
-   ✓ AudioEffectDelay has feedback_active
-   ✓ AudioEffectDelay correctly lacks 'mix' property
-   ✓ AudioEffectDelay has 'dry' property instead
-   ```
-
-5. **Test After Every Major Change**:
-   - After implementing new features
-   - After modifying existing code
-   - Before committing changes
-   - When verifying effect properties
+5. **CI/CD Integration**:
+   - Headless execution support
+   - JUnit XML report generation
+   - Exit codes for success/failure
+   - Configurable through `.gutconfig.json`
 
 ### Testing Best Practices
 
 1. **Always Test UI Controls**:
-   - Verify sliders have step = 0.01 (CRITICAL - verified in test_comprehensive_audio.gd)
+   - Verify sliders have step = 0.01 (CRITICAL - verified in test_ui_configuration.gd)
    - Check initial values match expected defaults
    - Test edge cases (min/max values)
    - Ensure visual feedback matches internal state
@@ -905,19 +907,16 @@ A comprehensive test suite has been implemented to verify critical audio system 
 
 3. **Effect Property Testing**:
    - Always verify properties exist before using them
-   - Use test_comprehensive_audio.gd as reference
    - Remember: AudioEffectDelay uses 'dry' not 'mix' ✓
    - Check property names with verification helpers
+   - Use GUT assertions for clear test results
 
-4. **Log-Based Testing Checklist**:
-   ```
-   ✓ All expected initialization logs present
-   ✓ No ERROR messages in output
-   ✓ User actions generate corresponding logs
-   ✓ Values change as expected (not binary)
-   ✓ All test functions complete successfully
-   ✓ Audio effect properties verified correctly
-   ```
+4. **GUT Test Conventions**:
+   - Extend GutTest for all test classes
+   - Use descriptive test method names (test_*)
+   - One assertion per test when possible
+   - Use describe() for test context
+   - Clean up resources in after_each()
 
 5. **Common Pitfalls to Avoid**:
    - Missing `step` property on sliders (causes binary behavior)
