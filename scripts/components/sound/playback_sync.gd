@@ -41,6 +41,9 @@ var _debug_logging: bool = true
 func _ready():
 	_log("=== PlaybackSync Initialization ===")
 	
+	# Add to group for easy discovery
+	add_to_group("playback_sync")
+	
 	# Get references to autoloaded singletons
 	_beat_manager = get_node("/root/BeatManager") if has_node("/root/BeatManager") else null
 	_audio_manager = get_node("/root/AudioManager") if has_node("/root/AudioManager") else null

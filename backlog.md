@@ -59,6 +59,7 @@ Establish the basic audio system that will allow sound generation based on lane 
 	- Independent volume and octave control per lane
 	- Multi-lane simultaneous playback capability
 	- Global root note and scale settings
+  - Related stories: Forms foundation for Story 003 (Beat Sync) and Story 004 (Sound Playback Test)
 
 - [x] **Story 003: Beat Synchronization System** ✓ COMPLETE
   *Build a system to keep sounds aligned to a consistent beat*
@@ -83,6 +84,7 @@ Establish the basic audio system that will allow sound generation based on lane 
   - Created comprehensive test suite for all components
   - Built demo scene showcasing complete system integration
   - Full documentation in docs/beat-synchronization.md
+  - Related stories: This system integrates with Story 002 (Lane-based Sound) and Story 004 (Sound Playback Test)
 
 - [x] **Story 004: Simple Sound Playback Test** ✓ COMPLETE
   *Create a standalone test for playing sounds through the systems above*
@@ -260,9 +262,16 @@ Expand beyond the core game loop with additional features.
 
 ### Testing Milestones
 1. **Audio Test**: Keyboard-driven sound generation (Story 004)
+   - Run with: `./run_simple_sound_test.sh`
 2. **Driving Test**: Vehicle control and lane detection (Story 008)
 3. **Core Loop Test**: Record and playback a simple pattern (Story 011)
 4. **Complete MVP**: Functional composition creation (Story 016)
+
+### Test Commands
+- Run all tests: `./run_gut_tests.sh`
+- Run with JUnit report: `./run_gut_tests.sh --report`
+- Run specific test file: `godot --headless --path . -s addons/gut/gut_cmdln.gd -gtest=res://tests/gut/unit/test_name.gd`
+- Run simple sound test: `./run_simple_sound_test.sh`
 
 ### Development Process
 1. Focus on one story at a time

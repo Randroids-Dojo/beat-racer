@@ -48,6 +48,9 @@ var beat_intensity: float = 1.0  # 0.0 to 1.0, affects visual feedback
 
 # Debug/monitoring
 var _debug_logging: bool = true
+
+# Metronome control
+var _playback_sync: Node = null
 var _beat_timer: Timer
 var _missed_beats: int = 0
 
@@ -58,6 +61,9 @@ func _ready():
 	
 	_setup_timer()
 	_recalculate_timing()
+	
+	# Get reference to PlaybackSync - it will be created later, but we'll check for it
+	# when metronome methods are called
 	
 	_log("Beat Manager ready")
 	_log("===============================")
@@ -262,5 +268,45 @@ func print_debug_info():
 	print("Total Beats: %d" % total_beats)
 	print("Is Playing: %s" % str(is_playing))
 	print("Beat Progress: %.2f%%" % (get_beat_progress() * 100))
-	print("Accuracy: %.2f%%" % get_beat_accuracy())
-	print("===============================")
+
+# Metronome control methods
+func enable_metronome():
+	_get_playback_sync()
+	if _playback_sync and _playback_sync.has_method("set_metronome_enabled"):
+		_playback_sync.set_metronome_enabled(true)
+		_log("Metronome enabled")
+	else:
+		push_warning("PlaybackSync not available for metronome control")
+
+func disable_metronome():
+	_get_playback_sync()
+	if _playback_sync and _playback_sync.has_method("set_metronome_enabled"):
+		_playback_sync.set_metronome_enabled(false)
+		_log("Metronome disabled")
+	else:
+		push_warning("PlaybackSync not available for metronome control")
+
+func set_metronome_volume(volume_db: float):
+	_get_playback_sync()
+	if _playback_sync and _playback_sync.has_method("set_metronome_volume"):
+		_playback_sync.set_metronome_volume(volume_db)
+		_log("Metronome volume set to: %f dB" % volume_db)
+
+func is_metronome_enabled() -> bool:
+	_get_playback_sync()
+	if _playback_sync and _playback_sync.has_method("is_metronome_enabled"):
+		return _playback_sync.is_metronome_enabled()
+	return false
+
+func _get_playback_sync():
+	if not _playback_sync:
+		# Look for PlaybackSync in the scene tree
+		var nodes = get_tree().get_nodes_in_group("playback_sync")
+		if nodes.size() > 0:
+			_playback_sync = nodes[0]
+		else:
+			# Try to find it by type
+			for node in get_tree().get_nodes_in_group(""):
+				if node.has_method("set_metronome_enabled") and node.has_method("is_metronome_enabled"):
+					_playback_sync = node
+					break
