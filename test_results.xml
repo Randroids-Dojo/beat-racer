@@ -1,79 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="GutTests" failures="0" tests="33" >
-  <testsuite name="tests/gut/integration/test_audio_system_integration.gd" tests="6" failures="0" skipped="0" time="0.005302" >
-      <testcase name="test_audio_manager_initialization" assertions="4" status="pass" classname="tests/gut/integration/test_audio_system_integration.gd" time="0.000993" >
+<testsuites name="GutTests" failures="0" tests="27" >
+  <testsuite name="tests/gut/integration/test_audio_system_integration.gd" tests="6" failures="0" skipped="0" time="0.004706" >
+      <testcase name="test_audio_manager_initialization" assertions="4" status="pass" classname="tests/gut/integration/test_audio_system_integration.gd" time="0.000861" >
       </testcase>
-      <testcase name="test_bus_creation_and_routing" assertions="9" status="pass" classname="tests/gut/integration/test_audio_system_integration.gd" time="0.000917" >
+      <testcase name="test_bus_creation_and_routing" assertions="9" status="pass" classname="tests/gut/integration/test_audio_system_integration.gd" time="0.000805" >
       </testcase>
-      <testcase name="test_effect_application" assertions="4" status="pass" classname="tests/gut/integration/test_audio_system_integration.gd" time="0.000815" >
+      <testcase name="test_effect_application" assertions="4" status="pass" classname="tests/gut/integration/test_audio_system_integration.gd" time="0.000746" >
       </testcase>
-      <testcase name="test_volume_control" assertions="1" status="pass" classname="tests/gut/integration/test_audio_system_integration.gd" time="0.000796" >
+      <testcase name="test_volume_control" assertions="1" status="pass" classname="tests/gut/integration/test_audio_system_integration.gd" time="0.000745" >
       </testcase>
-      <testcase name="test_sound_playback_capabilities" assertions="4" status="pass" classname="tests/gut/integration/test_audio_system_integration.gd" time="0.00096" >
+      <testcase name="test_sound_playback_capabilities" assertions="4" status="pass" classname="tests/gut/integration/test_audio_system_integration.gd" time="0.000793" >
       </testcase>
-      <testcase name="test_multiple_audio_players" assertions="1" status="pass" classname="tests/gut/integration/test_audio_system_integration.gd" time="0.000821" >
-      </testcase>
-      </testsuite>
-  <testsuite name="tests/gut/unit/test_audio_effect_properties.gd" tests="4" failures="0" skipped="0" time="0.001957" >
-      <testcase name="test_audio_effect_delay_properties" assertions="4" status="pass" classname="tests/gut/unit/test_audio_effect_properties.gd" time="0.000151" >
-      </testcase>
-      <testcase name="test_reverb_properties" assertions="11" status="pass" classname="tests/gut/unit/test_audio_effect_properties.gd" time="0.000237" >
-      </testcase>
-      <testcase name="test_chorus_properties" assertions="27" status="pass" classname="tests/gut/unit/test_audio_effect_properties.gd" time="0.001264" >
-      </testcase>
-      <testcase name="test_property_verification_helper" assertions="5" status="pass" classname="tests/gut/unit/test_audio_effect_properties.gd" time="0.000305" >
+      <testcase name="test_multiple_audio_players" assertions="1" status="pass" classname="tests/gut/integration/test_audio_system_integration.gd" time="0.000756" >
       </testcase>
       </testsuite>
-  <testsuite name="tests/gut/unit/test_audio_generation.gd" tests="7" failures="0" skipped="0" time="0.000713" >
-      <testcase name="test_audio_stream_generator_creation" assertions="5" status="pass" classname="tests/gut/unit/test_audio_generation.gd" time="0.000148" >
+  <testsuite name="tests/gut/unit/test_audio_effect_properties.gd" tests="4" failures="0" skipped="0" time="0.001801" >
+      <testcase name="test_audio_effect_delay_properties" assertions="4" status="pass" classname="tests/gut/unit/test_audio_effect_properties.gd" time="0.00013" >
       </testcase>
-      <testcase name="test_sound_generator_initialization" assertions="1" status="pass" classname="tests/gut/unit/test_audio_generation.gd" time="0.000115" >
+      <testcase name="test_reverb_properties" assertions="11" status="pass" classname="tests/gut/unit/test_audio_effect_properties.gd" time="0.000225" >
       </testcase>
-      <testcase name="test_audio_stream_player_setup" assertions="4" status="pass" classname="tests/gut/unit/test_audio_generation.gd" time="0.000152" >
+      <testcase name="test_chorus_properties" assertions="27" status="pass" classname="tests/gut/unit/test_audio_effect_properties.gd" time="0.001146" >
       </testcase>
-      <testcase name="test_stream_playback_retrieval" assertions="1" status="pass" classname="tests/gut/unit/test_audio_generation.gd" time="0.000075" >
-      </testcase>
-      <testcase name="test_audio_frame_generation" assertions="2" status="pass" classname="tests/gut/unit/test_audio_generation.gd" time="0.000076" >
-      </testcase>
-      <testcase name="test_multiple_generator_instances" assertions="4" status="pass" classname="tests/gut/unit/test_audio_generation.gd" time="0.000074" >
-      </testcase>
-      <testcase name="test_generator_with_different_sample_rates" assertions="3" status="pass" classname="tests/gut/unit/test_audio_generation.gd" time="0.000073" >
+      <testcase name="test_property_verification_helper" assertions="5" status="pass" classname="tests/gut/unit/test_audio_effect_properties.gd" time="0.0003" >
       </testcase>
       </testsuite>
-  <testsuite name="tests/gut/unit/test_ui_configuration.gd" tests="6" failures="0" skipped="0" time="0.000892" >
-      <testcase name="test_slider_step_configuration" assertions="6" status="pass" classname="tests/gut/unit/test_ui_configuration.gd" time="0.000197" >
+  <testsuite name="tests/gut/unit/test_audio_generation.gd" tests="7" failures="0" skipped="0" time="0.000634" >
+      <testcase name="test_audio_stream_generator_creation" assertions="5" status="pass" classname="tests/gut/unit/test_audio_generation.gd" time="0.000089" >
       </testcase>
-      <testcase name="test_vslider_configuration" assertions="2" status="pass" classname="tests/gut/unit/test_ui_configuration.gd" time="0.000086" >
+      <testcase name="test_sound_generator_initialization" assertions="1" status="pass" classname="tests/gut/unit/test_audio_generation.gd" time="0.000078" >
       </testcase>
-      <testcase name="test_slider_audio_volume_mapping" assertions="3" status="pass" classname="tests/gut/unit/test_ui_configuration.gd" time="0.000096" >
+      <testcase name="test_audio_stream_player_setup" assertions="4" status="pass" classname="tests/gut/unit/test_audio_generation.gd" time="0.000151" >
       </testcase>
-      <testcase name="test_slider_scene_configuration" assertions="11" status="pass" classname="tests/gut/unit/test_ui_configuration.gd" time="0.000142" >
+      <testcase name="test_stream_playback_retrieval" assertions="1" status="pass" classname="tests/gut/unit/test_audio_generation.gd" time="0.000084" >
       </testcase>
-      <testcase name="test_multiple_slider_configuration" assertions="8" status="pass" classname="tests/gut/unit/test_ui_configuration.gd" time="0.000276" >
+      <testcase name="test_audio_frame_generation" assertions="2" status="pass" classname="tests/gut/unit/test_audio_generation.gd" time="0.000084" >
       </testcase>
-      <testcase name="test_ui_control_initialization_order" assertions="2" status="pass" classname="tests/gut/unit/test_ui_configuration.gd" time="0.000095" >
+      <testcase name="test_multiple_generator_instances" assertions="4" status="pass" classname="tests/gut/unit/test_audio_generation.gd" time="0.000078" >
+      </testcase>
+      <testcase name="test_generator_with_different_sample_rates" assertions="3" status="pass" classname="tests/gut/unit/test_audio_generation.gd" time="0.00007" >
       </testcase>
       </testsuite>
-  <testsuite name="tests/gut/verification/test_gut_conversion_validation.gd" tests="10" failures="0" skipped="0" time="0.005763" >
-      <testcase name="test_gut_framework_is_available" assertions="2" status="pass" classname="tests/gut/verification/test_gut_conversion_validation.gd" time="0.000058" >
+  <testsuite name="tests/gut/verification/test_gut_conversion_validation.gd" tests="10" failures="0" skipped="0" time="0.004417" >
+      <testcase name="test_gut_framework_is_available" assertions="2" status="pass" classname="tests/gut/verification/test_gut_conversion_validation.gd" time="0.000057" >
       </testcase>
       <testcase name="test_assertion_methods_work" assertions="12" status="pass" classname="tests/gut/verification/test_gut_conversion_validation.gd" time="0.000108" >
       </testcase>
-      <testcase name="test_describe_function" assertions="1" status="pass" classname="tests/gut/verification/test_gut_conversion_validation.gd" time="0.000026" >
+      <testcase name="test_describe_function" assertions="1" status="pass" classname="tests/gut/verification/test_gut_conversion_validation.gd" time="0.000034" >
       </testcase>
-      <testcase name="test_lifecycle_methods" assertions="4" status="pass" classname="tests/gut/verification/test_gut_conversion_validation.gd" time="0.000029" >
+      <testcase name="test_lifecycle_methods" assertions="4" status="pass" classname="tests/gut/verification/test_gut_conversion_validation.gd" time="0.000035" >
       </testcase>
-      <testcase name="test_audio_server_access" assertions="2" status="pass" classname="tests/gut/verification/test_gut_conversion_validation.gd" time="0.000036" >
+      <testcase name="test_audio_server_access" assertions="2" status="pass" classname="tests/gut/verification/test_gut_conversion_validation.gd" time="0.000041" >
       </testcase>
-      <testcase name="test_resource_loading" assertions="1" status="pass" classname="tests/gut/verification/test_gut_conversion_validation.gd" time="0.000047" >
+      <testcase name="test_resource_loading" assertions="1" status="pass" classname="tests/gut/verification/test_gut_conversion_validation.gd" time="0.000045" >
       </testcase>
       <testcase name="test_node_creation" assertions="2" status="pass" classname="tests/gut/verification/test_gut_conversion_validation.gd" time="0.000059" >
       </testcase>
-      <testcase name="test_gut_output_methods" assertions="1" status="pass" classname="tests/gut/verification/test_gut_conversion_validation.gd" time="0.000035" >
+      <testcase name="test_gut_output_methods" assertions="1" status="pass" classname="tests/gut/verification/test_gut_conversion_validation.gd" time="0.000045" >
       </testcase>
-      <testcase name="test_signal_watching" assertions="1" status="pass" classname="tests/gut/verification/test_gut_conversion_validation.gd" time="0.000181" >
+      <testcase name="test_signal_watching" assertions="1" status="pass" classname="tests/gut/verification/test_gut_conversion_validation.gd" time="0.000161" >
       </testcase>
-      <testcase name="test_async_capabilities" assertions="1" status="pass" classname="tests/gut/verification/test_gut_conversion_validation.gd" time="0.005184" >
+      <testcase name="test_async_capabilities" assertions="1" status="pass" classname="tests/gut/verification/test_gut_conversion_validation.gd" time="0.003832" >
       </testcase>
       </testsuite>
   </testsuites>

@@ -69,13 +69,13 @@ func test_stream_playback_retrieval():
 	gut.p("Testing stream playback retrieval")
 	
 	var player = AudioStreamPlayer.new()
+	# Add to scene tree first
+	add_child(player)
 	var generator = AudioStreamGenerator.new()
 	
 	generator.mix_rate = 44100.0
 	player.stream = generator
 	
-	# Add to scene tree first
-	add_child(player)
 	player.play()
 	
 	# Get playback
@@ -84,6 +84,7 @@ func test_stream_playback_retrieval():
 	if player.playing:
 		assert_not_null(playback, "Should get stream playback when playing")
 	
+	# Clean up
 	player.stop()
 	remove_child(player)
 	player.queue_free()

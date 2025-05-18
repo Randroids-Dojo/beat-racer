@@ -49,6 +49,9 @@ func test_vslider_configuration():
 	# Test intermediate values
 	vslider.value = 0.25
 	assert_eq(vslider.value, 0.25, "Should set value to 0.25")
+	
+	# Clean up
+	vslider.queue_free()
 
 func test_slider_audio_volume_mapping():
 	gut.p("Testing slider to audio volume dB mapping")
@@ -141,7 +144,7 @@ func test_ui_control_initialization_order():
 	var slider = HSlider.new()
 	
 	# Even if step isn't set initially, it can be configured later
-	assert_gte(slider.step, 0, "Slider should have non-negative step")
+	assert_gte(slider.step, 0.0, "Slider should have non-negative step")
 	
 	# Configure programmatically
 	slider.step = 0.01
