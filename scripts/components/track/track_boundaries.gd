@@ -7,8 +7,6 @@ class_name TrackBoundaries
 
 var outer_boundary_body: StaticBody2D
 var inner_boundary_body: StaticBody2D
-var outer_collision_polygon: CollisionPolygon2D
-var inner_collision_polygon: CollisionPolygon2D
 
 
 func _ready() -> void:
@@ -29,100 +27,110 @@ func _create_boundary_bodies() -> void:
 	outer_boundary_body.name = "OuterBoundary"
 	add_child(outer_boundary_body)
 	
-	outer_collision_polygon = CollisionPolygon2D.new()
-	outer_boundary_body.add_child(outer_collision_polygon)
-	
 	# Create inner boundary
 	inner_boundary_body = StaticBody2D.new()
 	inner_boundary_body.name = "InnerBoundary"
 	add_child(inner_boundary_body)
-	
-	inner_collision_polygon = CollisionPolygon2D.new()
-	inner_boundary_body.add_child(inner_collision_polygon)
 
 
 func _update_collision_shapes() -> void:
-	if not track_geometry or not outer_collision_polygon or not inner_collision_polygon:
+	if not track_geometry or not outer_boundary_body or not inner_boundary_body:
 		return
 	
-	# Generate outer boundary polygon
+	# Clear existing collision shapes
+	for child in outer_boundary_body.get_children():
+		child.queue_free()
+	for child in inner_boundary_body.get_children():
+		child.queue_free()
+	
+	# Create outer boundary using multiple convex segments
 	var outer_radius := track_geometry.curve_radius + track_geometry.track_width / 2.0 + boundary_thickness
-	var outer_points := _generate_oval_boundary(outer_radius, track_geometry.track_length)
+	var track_outer_radius := track_geometry.curve_radius + track_geometry.track_width / 2.0
+	_create_segmented_boundary(outer_boundary_body, track_outer_radius, outer_radius, track_geometry.track_length, true)
 	
-	# Generate inner boundary polygon
+	# Create inner boundary using multiple convex segments
 	var inner_radius := track_geometry.curve_radius - track_geometry.track_width / 2.0 - boundary_thickness
-	var inner_points := _generate_oval_boundary(inner_radius, track_geometry.track_length)
-	
-	# Create outer boundary collision shape (wall outside the track)
-	var outer_wall_points := _create_wall_polygon(
-		_generate_oval_boundary(
-			track_geometry.curve_radius + track_geometry.track_width / 2.0,
-			track_geometry.track_length
-		),
-		outer_points,
-		true
-	)
-	outer_collision_polygon.polygon = outer_wall_points
-	
-	# Create inner boundary collision shape (wall inside the track)
-	var inner_wall_points := _create_wall_polygon(
-		inner_points,
-		_generate_oval_boundary(
-			track_geometry.curve_radius - track_geometry.track_width / 2.0,
-			track_geometry.track_length
-		),
-		false
-	)
-	inner_collision_polygon.polygon = inner_wall_points
+	var track_inner_radius := track_geometry.curve_radius - track_geometry.track_width / 2.0
+	_create_segmented_boundary(inner_boundary_body, inner_radius, track_inner_radius, track_geometry.track_length, false)
 
 
-func _generate_oval_boundary(radius: float, straight_length: float) -> PackedVector2Array:
+func _create_segmented_boundary(body: StaticBody2D, inner_radius: float, outer_radius: float, 
+		straight_length: float, is_outer: bool) -> void:
+	var segments := 16  # Number of segments for curves
+	
+	# Create top straight section
+	var top_collision := CollisionPolygon2D.new()
+	top_collision.polygon = _create_straight_segment(
+		-straight_length / 2.0, straight_length / 2.0,
+		inner_radius if is_outer else -outer_radius,
+		outer_radius if is_outer else -inner_radius
+	)
+	body.add_child(top_collision)
+	
+	# Create bottom straight section
+	var bottom_collision := CollisionPolygon2D.new()
+	bottom_collision.polygon = _create_straight_segment(
+		straight_length / 2.0, -straight_length / 2.0,
+		inner_radius if not is_outer else -outer_radius,
+		outer_radius if not is_outer else -inner_radius
+	)
+	body.add_child(bottom_collision)
+	
+	# Create right curve segments
+	for i in range(segments / 2):
+		var start_angle := -PI / 2.0 + i * PI / (segments / 2)
+		var end_angle := -PI / 2.0 + (i + 1) * PI / (segments / 2)
+		
+		var collision := CollisionPolygon2D.new()
+		collision.polygon = _create_curve_segment(
+			straight_length / 2.0, 0.0,
+			inner_radius, outer_radius,
+			start_angle, end_angle,
+			is_outer
+		)
+		body.add_child(collision)
+	
+	# Create left curve segments
+	for i in range(segments / 2):
+		var start_angle := PI / 2.0 + i * PI / (segments / 2)
+		var end_angle := PI / 2.0 + (i + 1) * PI / (segments / 2)
+		
+		var collision := CollisionPolygon2D.new()
+		collision.polygon = _create_curve_segment(
+			-straight_length / 2.0, 0.0,
+			inner_radius, outer_radius,
+			start_angle, end_angle,
+			is_outer
+		)
+		body.add_child(collision)
+
+
+func _create_straight_segment(x1: float, x2: float, y1: float, y2: float) -> PackedVector2Array:
 	var points := PackedVector2Array()
-	var segments := 32  # Number of segments for curves
-	
-	# Top straight section
-	for i in range(6):
-		var x := -straight_length / 2.0 + i * straight_length / 5.0
-		points.append(Vector2(x, -radius))
-	
-	# Right curve
-	for i in range(segments / 2 + 1):
-		var angle := -PI / 2.0 + i * PI / (segments / 2)
-		var x := straight_length / 2.0 + radius * cos(angle)
-		var y := radius * sin(angle)
-		points.append(Vector2(x, y))
-	
-	# Bottom straight section
-	for i in range(6):
-		var x := straight_length / 2.0 - i * straight_length / 5.0
-		points.append(Vector2(x, radius))
-	
-	# Left curve
-	for i in range(segments / 2 + 1):
-		var angle := PI / 2.0 + i * PI / (segments / 2)
-		var x := -straight_length / 2.0 + radius * cos(angle)
-		var y := radius * sin(angle)
-		points.append(Vector2(x, y))
-	
+	points.append(Vector2(x1, y1))
+	points.append(Vector2(x2, y1))
+	points.append(Vector2(x2, y2))
+	points.append(Vector2(x1, y2))
 	return points
 
 
-func _create_wall_polygon(inner_edge: PackedVector2Array, outer_edge: PackedVector2Array, 
-		is_outer_wall: bool) -> PackedVector2Array:
-	var wall_points := PackedVector2Array()
+func _create_curve_segment(center_x: float, center_y: float, inner_radius: float, 
+		outer_radius: float, start_angle: float, end_angle: float, is_outer: bool) -> PackedVector2Array:
+	var points := PackedVector2Array()
+	var steps := 8
 	
-	if is_outer_wall:
-		# For outer wall: track edge -> outer boundary -> reverse
-		wall_points.append_array(inner_edge)
-		wall_points.append_array(outer_edge)
-		# Close the polygon
-		wall_points.append(inner_edge[0])
-	else:
-		# For inner wall: inner boundary -> track edge -> reverse
-		wall_points.append_array(inner_edge)
-		for i in range(outer_edge.size() - 1, -1, -1):
-			wall_points.append(outer_edge[i])
-		# Close the polygon
-		wall_points.append(inner_edge[0])
+	# Add inner arc points
+	for i in range(steps + 1):
+		var angle := start_angle + i * (end_angle - start_angle) / steps
+		var x := center_x + inner_radius * cos(angle)
+		var y := center_y + inner_radius * sin(angle)
+		points.append(Vector2(x, y))
 	
-	return wall_points
+	# Add outer arc points in reverse order
+	for i in range(steps, -1, -1):
+		var angle := start_angle + i * (end_angle - start_angle) / steps
+		var x := center_x + outer_radius * cos(angle)
+		var y := center_y + outer_radius * sin(angle)
+		points.append(Vector2(x, y))
+	
+	return points

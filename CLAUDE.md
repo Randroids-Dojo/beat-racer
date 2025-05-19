@@ -124,9 +124,10 @@ mcp__context7-mcp__get-library-docs:
 - Story 004: Simple Sound Playback Test ✓
 - Story 005: Basic Track Layout ✓ (See [Story 005 Complete](docs/story-005-complete.md))
 - Story 006: Single Vehicle Implementation ✓ (See [Story 006 Complete](docs/story-006-complete.md))
+- Story 007: Lane Detection System ✓ (See [Story 007 Complete](docs/story-007-complete.md))
 
 ### Next Story
-- Story 007: Visual Feedback System
+- Story 008: Visual Feedback System
 
 ## Additional Resources
 

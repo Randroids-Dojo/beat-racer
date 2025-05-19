@@ -1,0 +1,57 @@
+[gd_scene load_steps=8 format=3 uid="uid://blane1234lane"]
+
+[ext_resource type="Script" path="res://scripts/components/track/track_system.gd" id="1_track"]
+[ext_resource type="Script" path="res://scripts/components/track/track_geometry.gd" id="2_geom"]
+[ext_resource type="Script" path="res://scripts/components/track/track_boundaries.gd" id="3_bounds"]
+[ext_resource type="Script" path="res://scripts/components/vehicle/rhythm_vehicle_with_lanes.gd" id="4_vehicle"]
+[ext_resource type="Script" path="res://scripts/components/track/lane_detection_system.gd" id="5_detection"]
+[ext_resource type="Script" path="res://scripts/components/visual/lane_visual_feedback.gd" id="6_visual"]
+[ext_resource type="Script" path="res://scenes/test/lane_detection_test.gd" id="7_test"]
+
+[node name="LaneDetectionTest" type="Node2D"]
+script = ExtResource("7_test")
+
+[node name="TrackSystem" type="Node2D" parent="."]
+script = ExtResource("1_track")
+
+[node name="TrackGeometry" type="Node2D" parent="TrackSystem"]
+script = ExtResource("2_geom")
+
+[node name="TrackBoundaries" type="Node2D" parent="TrackSystem"]
+script = ExtResource("3_bounds")
+track_geometry = NodePath("../TrackGeometry")
+
+[node name="RhythmVehicleWithLanes" type="CharacterBody2D" parent="."]
+script = ExtResource("4_vehicle")
+
+[node name="LaneDetectionSystem" type="Node2D" parent="."]
+script = ExtResource("5_detection")
+track_geometry = NodePath("../TrackSystem/TrackGeometry")
+
+[node name="LaneVisualFeedback" type="Node2D" parent="."]
+script = ExtResource("6_visual")
+vehicle = NodePath("../RhythmVehicleWithLanes")
+lane_detection_system = NodePath("../LaneDetectionSystem")
+show_debug_overlay = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.5, 0.5)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="InfoLabel" type="RichTextLabel" parent="UI"]
+offset_right = 400.0
+offset_bottom = 200.0
+mouse_filter = 2
+bbcode_enabled = true
+text = "[b]Lane Detection Test[/b]
+Current Lane: -
+Offset from Center: -
+Is Centered: -
+Speed: -
+
+[b]Controls:[/b]
+Arrow Keys: Drive
+Q/E: Change lanes manually
+Space: Toggle debug overlay
+R: Reset position"
