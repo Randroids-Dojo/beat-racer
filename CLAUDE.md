@@ -115,6 +115,19 @@ mcp__context7-mcp__get-library-docs:
   topic: "AudioEffectDelay dry"
 ```
 
+## Project Progress
+
+### Completed Stories
+- Story 001: Audio Bus Setup ✓
+- Story 002: Lane-based Sound Generator ✓
+- Story 003: Beat Synchronization System ✓
+- Story 004: Simple Sound Playback Test ✓
+- Story 005: Basic Track Layout ✓ (See [Story 005 Complete](docs/story-005-complete.md))
+- Story 006: Single Vehicle Implementation ✓ (See [Story 006 Complete](docs/story-006-complete.md))
+
+### Next Story
+- Story 007: Visual Feedback System
+
 ## Additional Resources
 
 - [Official Godot Documentation](https://docs.godotengine.org/en/stable/)
