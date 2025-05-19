@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5w6x7y81aa0b"]
+
+[ext_resource type="Script" path="res://scenes/test/track_visual_test.gd" id="1_t5u6v"]
+
+[node name="TrackVisualTest" type="Node2D"]
+script = ExtResource("1_t5u6v")

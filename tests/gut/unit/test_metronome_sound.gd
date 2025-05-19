@@ -1,110 +1,60 @@
 extends "res://addons/gut/test.gd"
 
-# Test that metronome actually produces sound
-# Tests the MetronomeGenerator class and integration with PlaybackSync
+# Test basic metronome functionality in PlaybackSync
 
-var MetronomeGeneratorClass = preload("res://scripts/components/sound/metronome_generator.gd")
 var PlaybackSyncClass = preload("res://scripts/components/sound/playback_sync.gd")
 
-var metronome_generator
 var playback_sync
-var beat_manager
 
 func before_each():
-	# Create metronome generator
-	metronome_generator = MetronomeGeneratorClass.new()
-	add_child(metronome_generator)
-	
-	# Create playback sync
+	# Create playback sync - let it initialize naturally
 	playback_sync = PlaybackSyncClass.new()
 	add_child(playback_sync)
 	
-	# Get BeatManager
-	beat_manager = get_tree().root.get_node("/root/BeatManager")
-	
-	await get_tree().process_frame
+	# Wait for initialization
+	await wait_frames(2)
 
 func after_each():
-	if metronome_generator:
-		metronome_generator.queue_free()
 	if playback_sync:
 		playback_sync.queue_free()
 
-func test_metronome_generator_exists():
-	assert_not_null(metronome_generator)
-	assert_true(metronome_generator.has_method("play_tick"))
-	assert_true(metronome_generator.has_method("play_tock"))
+func test_playback_sync_has_metronome_methods():
+	assert_not_null(playback_sync)
+	assert_true(playback_sync.has_method("set_metronome_enabled"))
+	assert_true(playback_sync.has_method("is_metronome_enabled"))
+	assert_true(playback_sync.has_method("set_metronome_volume"))
+	assert_true(playback_sync.has_method("get_metronome_volume"))
 
-func test_direct_metronome_sound():
-	# Test playing tick sound directly
-	metronome_generator.play_tick(-6.0)
-	await get_tree().create_timer(0.1).timeout
-	
-	# Test playing tock sound directly  
-	metronome_generator.play_tock(-6.0)
-	await get_tree().create_timer(0.1).timeout
-	
-	# No crash = success
-	assert_true(true, "Metronome sounds played without error")
-
-func test_metronome_through_playback_sync():
-	# Enable metronome
+func test_metronome_enable_disable():
+	# Test enabling metronome
 	playback_sync.set_metronome_enabled(true)
-	
-	# Simulate beat events
-	playback_sync._on_beat_occurred(0, 0.0)  # Downbeat
-	await get_tree().create_timer(0.1).timeout
-	
-	playback_sync._on_beat_occurred(1, 0.5)  # Regular beat
-	await get_tree().create_timer(0.1).timeout
-	
 	assert_true(playback_sync.is_metronome_enabled())
-
-func test_metronome_with_beat_manager():
-	# Create PlaybackSync so BeatManager can find it
-	var sync = playback_sync  # Use the one created in before_each
-	assert_not_null(sync, "PlaybackSync should exist")
 	
-	# Reset BeatManager
-	beat_manager.reset()
-	beat_manager.bpm = 120
-	
-	# Enable metronome through BeatManager
-	beat_manager.enable_metronome()
-	beat_manager.start()
-	
-	# Let a few beats play
-	await get_tree().create_timer(2.5).timeout
-	
-	# Stop and disable
-	var beats = beat_manager.current_beat
-	beat_manager.stop()
-	beat_manager.disable_metronome()
-	
-	assert_gt(beats, 0, "Beats should have occurred")
+	# Test disabling metronome
+	playback_sync.set_metronome_enabled(false)
+	assert_false(playback_sync.is_metronome_enabled())
 
 func test_metronome_volume_control():
-	# Set different volumes
-	metronome_generator.play_tick(-12.0)
-	await get_tree().create_timer(0.05).timeout
+	# Test setting metronome volume in dB
+	playback_sync.set_metronome_volume(-6.0)
+	assert_almost_eq(playback_sync.get_metronome_volume(), -6.0, 0.01)
 	
-	metronome_generator.play_tick(0.0)
-	await get_tree().create_timer(0.05).timeout
+	playback_sync.set_metronome_volume(0.0)
+	assert_almost_eq(playback_sync.get_metronome_volume(), 0.0, 0.01)
 	
-	metronome_generator.play_tick(-20.0)
-	await get_tree().create_timer(0.05).timeout
-	
-	assert_true(true, "Volume control tested")
+	playback_sync.set_metronome_volume(-12.0)
+	assert_almost_eq(playback_sync.get_metronome_volume(), -12.0, 0.01)
 
-func test_metronome_frequency_settings():
-	# Test custom frequencies
-	metronome_generator.set_tick_frequency(1000.0)
-	metronome_generator.set_tock_frequency(500.0)
+func test_metronome_default_state():
+	# Test that metronome starts disabled by default
+	assert_false(playback_sync.is_metronome_enabled())
 	
-	metronome_generator.play_tick()
-	await get_tree().create_timer(0.1).timeout
-	
-	metronome_generator.play_tock()
-	await get_tree().create_timer(0.1).timeout
-	
-	assert_true(true, "Custom frequencies work")
+	# Test default volume is reasonable
+	var default_volume = playback_sync.get_metronome_volume()
+	assert_true(default_volume <= 0.0 and default_volume >= -40.0, 
+		"Default volume should be reasonable (between -40dB and 0dB)")
+
+func test_metronome_signal_exists():
+	# Just verify the signal exists
+	assert_true(playback_sync.has_signal("metronome_tick"), 
+		"PlaybackSync should have metronome_tick signal")

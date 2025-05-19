@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bs5j7xqm8vcpr"]
+
+[ext_resource type="Script" path="res://scenes/test/simple_rhythm_test.gd" id="1_v8msj"]
+
+[node name="SimpleRhythmTest" type="Node2D"]
+script = ExtResource("1_v8msj")
