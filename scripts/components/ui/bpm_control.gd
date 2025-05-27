@@ -203,7 +203,7 @@ func set_bpm(bpm: float, update_slider: bool = true):
 	
 	# Update beat manager
 	if beat_manager:
-		beat_manager.set_bpm(current_bpm)
+		beat_manager.bpm = current_bpm
 	
 	# Update slider
 	if update_slider and bpm_slider:
