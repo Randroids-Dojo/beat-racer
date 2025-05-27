@@ -109,30 +109,29 @@ func _setup_scene():
 
 func _configure_lane_sounds():
 	"""Configure lane sound mappings"""
-	var config = LaneSoundConfig.new()
+	# Create lane mapping resource with default configs
+	var mapping = LaneMappingResource.new()
 	
-	# Left lane
-	var left = LaneMappingResource.new()
-	left.waveform = LaneMappingResource.Waveform.SINE
-	left.octave = 2
-	left.scale_degree = 0
-	config.lane_mappings[0] = left
+	# Left lane - melody
+	mapping.left_lane_config.waveform = SoundGenerator.WaveType.SINE
+	mapping.left_lane_config.audio_bus = "Melody"
+	mapping.left_lane_config.octave = 0
+	mapping.left_lane_config.scale_degree = 1
 	
-	# Center lane (silent)
-	var center = LaneMappingResource.new()
-	center.waveform = LaneMappingResource.Waveform.SINE
-	center.octave = 3
-	center.scale_degree = 2
-	config.lane_mappings[1] = center
+	# Center lane - bass
+	mapping.center_lane_config.waveform = SoundGenerator.WaveType.SQUARE
+	mapping.center_lane_config.audio_bus = "Bass"
+	mapping.center_lane_config.octave = -1
+	mapping.center_lane_config.scale_degree = 3
 	
-	# Right lane
-	var right = LaneMappingResource.new()
-	right.waveform = LaneMappingResource.Waveform.SQUARE
-	right.octave = 4
-	right.scale_degree = 4
-	config.lane_mappings[2] = right
+	# Right lane - higher melody
+	mapping.right_lane_config.waveform = SoundGenerator.WaveType.TRIANGLE
+	mapping.right_lane_config.audio_bus = "Melody"
+	mapping.right_lane_config.octave = 1
+	mapping.right_lane_config.scale_degree = 5
 	
-	lane_sound_system.load_configuration(config)
+	# Apply configuration to lane sound system
+	# Use the default setup since the system doesn't have load_configuration
 
 
 func _create_player_vehicle():
