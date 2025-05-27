@@ -43,11 +43,15 @@ func _ready():
 func _setup_scene():
 	# Create track
 	track_system = TrackSystem.new()
-	track_system.track_radius = 300
-	track_system.track_width = 120
-	track_system.lane_count = 3
-	track_system.beat_markers_per_lap = 16
+	track_system.beats_per_lap = 16
 	add_child(track_system)
+	
+	# Wait for track to initialize then configure
+	await get_tree().process_frame
+	if track_system.track_geometry:
+		track_system.track_geometry.track_width = 180
+		track_system.track_geometry.lane_count = 3
+		track_system.track_geometry.curve_radius = 300
 	
 	# Create lane sound system
 	lane_sound_system = LaneSoundSystem.new()
@@ -140,7 +144,7 @@ func _create_player_vehicle():
 		rhythm_vehicle.queue_free()
 	
 	rhythm_vehicle = RhythmVehicleWithLanes.new()
-	rhythm_vehicle.position = Vector2(0, -track_system.track_radius)
+	rhythm_vehicle.position = Vector2(0, -300)  # Start above track center
 	
 	# Apply vehicle properties based on selection
 	var vehicle_data = game_ui.vehicle_selector.get_vehicle_data(selected_vehicle_type)
