@@ -1,0 +1,150 @@
+[gd_scene load_steps=8 format=3 uid="uid://clane8sound7map"]
+
+[ext_resource type="Script" path="res://scenes/test/lane_sound_mapping_demo.gd" id="1_demo"]
+[ext_resource type="Script" path="res://scripts/components/track/track_system.gd" id="2_track"]
+[ext_resource type="Script" path="res://scripts/components/vehicle/rhythm_vehicle_with_lanes.gd" id="3_vehicle"]
+[ext_resource type="Script" path="res://scripts/components/track/lane_detection_system.gd" id="4_detect"]
+[ext_resource type="Script" path="res://scripts/components/sound/lane_sound_system.gd" id="5_sound"]
+[ext_resource type="Script" path="res://scripts/components/sound/lane_audio_controller.gd" id="6_control"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(40, 20)
+
+[node name="LaneSoundMappingDemo" type="Node2D"]
+script = ExtResource("1_demo")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+zoom = Vector2(0.8, 0.8)
+
+[node name="TrackSystem" type="Node2D" parent="."]
+script = ExtResource("2_track")
+
+[node name="RhythmVehicleWithLanes" type="RigidBody2D" parent="."]
+gravity_scale = 0.0
+linear_damp = 2.0
+angular_damp = 5.0
+script = ExtResource("3_vehicle")
+show_lane_feedback = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RhythmVehicleWithLanes"]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="VehicleVisual" type="Polygon2D" parent="RhythmVehicleWithLanes"]
+color = Color(0.2, 0.8, 0.2, 1)
+polygon = PackedVector2Array(-20, -10, 20, -10, 20, 10, -20, 10)
+
+[node name="DirectionIndicator" type="Line2D" parent="RhythmVehicleWithLanes"]
+points = PackedVector2Array(0, 0, 30, 0)
+width = 3.0
+default_color = Color(1, 1, 0, 1)
+
+[node name="LaneDetectionSystem" type="Node2D" parent="."]
+script = ExtResource("4_detect")
+debug_draw = true
+
+[node name="LaneSoundSystem" type="Node" parent="."]
+script = ExtResource("5_sound")
+
+[node name="LaneAudioController" type="Node" parent="."]
+script = ExtResource("6_control")
+debug_logging = true
+
+[node name="UIContainer" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="InfoPanel" type="Panel" parent="UIContainer"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -150.0
+offset_right = 310.0
+offset_bottom = -10.0
+modulate = Color(1, 1, 1, 0.9)
+
+[node name="InfoLabel" type="Label" parent="UIContainer/InfoPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+theme_override_font_sizes/font_size = 14
+text = "Lane Sound Mapping Info"
+
+[node name="ControlPanel" type="Panel" parent="UIContainer"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -320.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 250.0
+modulate = Color(1, 1, 1, 0.9)
+
+[node name="Title" type="Label" parent="UIContainer/ControlPanel"]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 290.0
+offset_bottom = 35.0
+theme_override_font_sizes/font_size = 18
+text = "Audio Controls"
+horizontal_alignment = 1
+
+[node name="CenterSilentCheck" type="CheckBox" parent="UIContainer/ControlPanel"]
+offset_left = 10.0
+offset_top = 45.0
+offset_right = 290.0
+offset_bottom = 70.0
+text = "Center Lane Silent"
+
+[node name="TransitionsCheck" type="CheckBox" parent="UIContainer/ControlPanel"]
+offset_left = 10.0
+offset_top = 75.0
+offset_right = 290.0
+offset_bottom = 100.0
+button_pressed = true
+text = "Enable Transitions"
+
+[node name="TransitionTimeLabel" type="Label" parent="UIContainer/ControlPanel"]
+offset_left = 10.0
+offset_top = 105.0
+offset_right = 290.0
+offset_bottom = 125.0
+text = "Transition Time: 0.2s"
+
+[node name="TransitionTimeSlider" type="HSlider" parent="UIContainer/ControlPanel"]
+offset_left = 10.0
+offset_top = 130.0
+offset_right = 290.0
+offset_bottom = 150.0
+min_value = 0.05
+max_value = 1.0
+step = 0.05
+value = 0.2
+
+[node name="VolumeLabel" type="Label" parent="UIContainer/ControlPanel"]
+offset_left = 10.0
+offset_top = 155.0
+offset_right = 290.0
+offset_bottom = 175.0
+text = "Volume: 100%"
+
+[node name="VolumeSlider" type="HSlider" parent="UIContainer/ControlPanel"]
+offset_left = 10.0
+offset_top = 180.0
+offset_right = 290.0
+offset_bottom = 200.0
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="LaneIndicators" type="VBoxContainer" parent="UIContainer"]
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 10.0
+offset_right = 100.0
+offset_bottom = 210.0
+theme_override_constants/separation = 5

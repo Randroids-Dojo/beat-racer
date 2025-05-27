@@ -126,9 +126,10 @@ mcp__context7-mcp__get-library-docs:
 - Story 006: Single Vehicle Implementation ✓ (See [Story 006 Complete](docs/story-006-complete.md))
 - Story 007: Lane Detection System ✓ (See [Story 007 Complete](docs/story-007-complete.md))
 - Story 008: Visual Feedback System ✓ (See [Story 008 Complete](docs/story-008-complete.md))
+- Story 009: Lane Position to Sound Mapping ✓ (See [Story 009 Complete](docs/story-009-complete.md))
 
 ### Next Story
-- Story 009: Lane Position to Sound Mapping
+- Story 010: Lap Recording System
 
 ## Additional Resources
 
