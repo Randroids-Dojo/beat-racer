@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://clane8sound7map"]
+[gd_scene load_steps=8 format=3 uid="uid://ivetg1kuocl8"]
 
 [ext_resource type="Script" path="res://scenes/test/lane_sound_mapping_demo.gd" id="1_demo"]
 [ext_resource type="Script" path="res://scripts/components/track/track_system.gd" id="2_track"]

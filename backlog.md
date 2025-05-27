@@ -168,12 +168,15 @@ Create the fundamental track environment and basic vehicle with functional lane 
   - Story 007 title was "Lane Detection System" in backlog but "Visual Feedback System" in CLAUDE.md
   - Both aspects were implemented in this story
 
-- [ ] **Story 008: Vehicle Control System**  
-  *Implement responsive controls for the vehicle*
-  - Add keyboard input handling
-  - Implement smooth lane switching
-  - Add subtle lane centering assist
-  - Create visual feedback for controls
+- [x] **Story 008: Visual Feedback System** ✓ COMPLETE  
+  *Implement visual feedback for rhythm gameplay*
+  - Created RhythmFeedbackManager for centralized feedback
+  - Added PerfectHitIndicator with particle effects
+  - Implemented MissIndicator for timing failures
+  - Enhanced BeatIndicator with combo effects
+  - Added performance tracking and multipliers
+  - Created comprehensive visual feedback demo
+  - Full test coverage for all components
 
 ---
 
@@ -182,26 +185,32 @@ Create the fundamental track environment and basic vehicle with functional lane 
 Connect audio and driving systems to create the fundamental gameplay experience.
 
 ### Stories:
-- [ ] **Story 009: Lane Position to Sound Mapping**  
+- [x] **Story 009: Lane Position to Sound Mapping** ✓ COMPLETE  
   *Connect lane detection system to sound generator*
-  - Link lane position to sound parameters
-  - Implement continuous sound while in active lanes
-  - Create silence when in center lane
-  - Add transition effects between lanes
+  - Created LaneAudioController to bridge systems
+  - Implemented smooth volume transitions
+  - Added center lane silence option
+  - Created fade curves for natural transitions
+  - Integrated with beat synchronization
+  - Built comprehensive test coverage
 
-- [ ] **Story 010: Lap Recording System**  
+- [x] **Story 010: Lap Recording System** ✓ COMPLETE  
   *Create system to record vehicle path during a lap*
-  - Implement position sampling at regular intervals
-  - Store lane positions during recording
-  - Add lap completion detection
-  - Create recording indicator
+  - Created LapRecorder with configurable sample rates
+  - Implemented comprehensive position/lane/velocity tracking
+  - Added automatic lap completion detection
+  - Created RecordingIndicator UI component
+  - Stored beat alignment and timing data
+  - Built resource-based recording format
 
-- [ ] **Story 011: Path Playback System**  
+- [x] **Story 011: Path Playback System** ✓ COMPLETE  
   *Create system to automatically replay recorded paths*
-  - Implement path following for recorded vehicles
-  - Create sound triggering during playback
-  - Add visual distinction between recording/playback modes
-  - Support loop repetition
+  - Created PathPlayer with multiple interpolation modes
+  - Implemented PlaybackVehicle as ghost with trails
+  - Added automatic sound triggering during playback
+  - Created PlaybackModeIndicator UI component
+  - Supported infinite loops with speed control
+  - Built comprehensive demo and test coverage
 
 - [ ] **Story 012: Basic UI Elements**  
   *Add minimal UI elements needed for core game loop*

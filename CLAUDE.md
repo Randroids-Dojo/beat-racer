@@ -128,9 +128,10 @@ mcp__context7-mcp__get-library-docs:
 - Story 008: Visual Feedback System ✓ (See [Story 008 Complete](docs/story-008-complete.md))
 - Story 009: Lane Position to Sound Mapping ✓ (See [Story 009 Complete](docs/story-009-complete.md))
 - Story 010: Lap Recording System ✓ (See [Story 010 Complete](docs/story-010-complete.md))
+- Story 011: Path Playback System ✓ (See [Story 011 Complete](docs/story-011-complete.md))
 
 ### Next Story
-- Story 011: Path Playback System
+- Story 012: Basic UI Elements
 
 ## Additional Resources
 
