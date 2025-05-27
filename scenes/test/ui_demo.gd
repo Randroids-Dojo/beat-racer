@@ -156,7 +156,12 @@ func _create_player_vehicle():
 	rhythm_vehicle.modulate = selected_vehicle_color
 	
 	add_child(rhythm_vehicle)
-	rhythm_vehicle.setup_lane_detection(track_system, lane_sound_system)
+	
+	# Setup lane detection manually
+	var lane_detection = LaneDetectionSystem.new()
+	lane_detection.track_geometry = track_system.track_geometry
+	rhythm_vehicle.add_child(lane_detection)
+	rhythm_vehicle.lane_detection_system = lane_detection
 	
 	# Update recorder reference
 	if lap_recorder:
