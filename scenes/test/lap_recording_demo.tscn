@@ -1,0 +1,162 @@
+[gd_scene load_steps=9 format=3 uid="uid://blaprecordemo"]
+
+[ext_resource type="Script" path="res://scenes/test/lap_recording_demo.gd" id="1_demo"]
+[ext_resource type="Script" path="res://scripts/components/track/track_system.gd" id="2_track"]
+[ext_resource type="Script" path="res://scripts/components/vehicle/rhythm_vehicle_with_lanes.gd" id="3_vehicle"]
+[ext_resource type="Script" path="res://scripts/components/track/lane_detection_system.gd" id="4_detect"]
+[ext_resource type="Script" path="res://scripts/components/recording/lap_recorder.gd" id="5_recorder"]
+[ext_resource type="Script" path="res://scripts/components/ui/recording_indicator.gd" id="6_indicator"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(40, 20)
+
+[sub_resource type="InputEventKey" id="InputEventKey_1"]
+keycode = 82
+
+[node name="LapRecordingDemo" type="Node2D"]
+script = ExtResource("1_demo")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+
+[node name="TrackSystem" type="Node2D" parent="."]
+script = ExtResource("2_track")
+
+[node name="RhythmVehicleWithLanes" type="RigidBody2D" parent="."]
+gravity_scale = 0.0
+linear_damp = 2.0
+angular_damp = 5.0
+script = ExtResource("3_vehicle")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RhythmVehicleWithLanes"]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="VehicleVisual" type="Polygon2D" parent="RhythmVehicleWithLanes"]
+color = Color(0.2, 0.8, 0.2, 1)
+polygon = PackedVector2Array(-20, -10, 20, -10, 20, 10, -20, 10)
+
+[node name="DirectionIndicator" type="Line2D" parent="RhythmVehicleWithLanes"]
+points = PackedVector2Array(0, 0, 30, 0)
+width = 3.0
+default_color = Color(1, 1, 0, 1)
+
+[node name="LaneDetectionSystem" type="Node2D" parent="."]
+script = ExtResource("4_detect")
+
+[node name="LapRecorder" type="Node" parent="."]
+script = ExtResource("5_recorder")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="RecordingIndicator" type="Control" parent="UI"]
+anchor_right = 0.3
+anchor_bottom = 0.2
+offset_right = -10.0
+offset_bottom = -10.0
+script = ExtResource("6_indicator")
+
+[node name="InfoPanel" type="Panel" parent="UI"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -300.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 200.0
+modulate = Color(1, 1, 1, 0.9)
+
+[node name="InfoLabel" type="Label" parent="UI/InfoPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+theme_override_font_sizes/font_size = 14
+text = "Demo Info"
+
+[node name="RecordingsPanel" type="Panel" parent="UI"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -250.0
+offset_right = 310.0
+offset_bottom = -10.0
+modulate = Color(1, 1, 1, 0.9)
+
+[node name="Title" type="Label" parent="UI/RecordingsPanel"]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 290.0
+offset_bottom = 35.0
+theme_override_font_sizes/font_size = 18
+text = "Recordings"
+horizontal_alignment = 1
+
+[node name="RecordingsList" type="ItemList" parent="UI/RecordingsPanel"]
+offset_left = 10.0
+offset_top = 40.0
+offset_right = 290.0
+offset_bottom = 180.0
+
+[node name="PlaybackButton" type="Button" parent="UI/RecordingsPanel"]
+offset_left = 10.0
+offset_top = 190.0
+offset_right = 140.0
+offset_bottom = 220.0
+text = "Playback Selected"
+
+[node name="ClearButton" type="Button" parent="UI/RecordingsPanel"]
+offset_left = 150.0
+offset_top = 190.0
+offset_right = 290.0
+offset_bottom = 220.0
+text = "Clear All"
+
+[node name="SettingsPanel" type="Panel" parent="UI"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -150.0
+offset_right = -10.0
+offset_bottom = -10.0
+modulate = Color(1, 1, 1, 0.9)
+
+[node name="Title" type="Label" parent="UI/SettingsPanel"]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 280.0
+offset_bottom = 35.0
+theme_override_font_sizes/font_size = 18
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="SampleRateLabel" type="Label" parent="UI/SettingsPanel"]
+offset_left = 10.0
+offset_top = 45.0
+offset_right = 280.0
+offset_bottom = 65.0
+text = "Sample Rate: 30 Hz"
+
+[node name="SampleRateSlider" type="HSlider" parent="UI/SettingsPanel"]
+offset_left = 10.0
+offset_top = 70.0
+offset_right = 280.0
+offset_bottom = 90.0
+min_value = 10.0
+max_value = 60.0
+step = 5.0
+value = 30.0
+
+[node name="ShowSamplesCheck" type="CheckBox" parent="UI/SettingsPanel"]
+offset_left = 10.0
+offset_top = 100.0
+offset_right = 280.0
+offset_bottom = 130.0
+text = "Show Sample Points"
+
+[node name="InputMap" type="Node" parent="."]
+
+[node name="ResetAction" type="Node" parent="InputMap"]
+script = ExtResource("1_demo")
