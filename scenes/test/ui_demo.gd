@@ -150,7 +150,7 @@ func _create_player_vehicle():
 	var vehicle_data = game_ui.vehicle_selector.get_vehicle_data(selected_vehicle_type)
 	if vehicle_data:
 		rhythm_vehicle.max_speed *= vehicle_data.speed_modifier
-		rhythm_vehicle.steer_angle *= vehicle_data.handling_modifier
+		rhythm_vehicle.turn_speed *= vehicle_data.handling_modifier
 	
 	# Apply color (would need visual component in real implementation)
 	rhythm_vehicle.modulate = selected_vehicle_color
