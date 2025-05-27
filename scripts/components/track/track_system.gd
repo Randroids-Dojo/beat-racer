@@ -71,8 +71,7 @@ func _create_beat_markers() -> void:
 		beat_markers.append(marker)
 
 
-func _on_beat_occurred(beat_count: int, _measure_count: int, 
-		beat_in_measure: int, _time_to_next_beat: float) -> void:
+func _on_beat_occurred(beat_count: int, _beat_time: float) -> void:
 	# Activate the current beat marker
 	var marker_index := beat_count % beats_per_lap
 	if marker_index < beat_markers.size():

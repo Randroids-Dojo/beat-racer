@@ -58,8 +58,7 @@ func _draw() -> void:
 			HORIZONTAL_ALIGNMENT_CENTER, -1, 16, Color.WHITE)
 
 
-func _on_beat_occurred(beat_count: int, _measure_count: int, 
-		_beat_in_measure: int, _time_to_next_beat: float) -> void:
+func _on_beat_occurred(beat_count: int, _beat_time: float) -> void:
 	"""Activate marker on matching beat"""
 	if beat_count % 16 == beat_number:  # Assuming 16 beats per track loop
 		activate()

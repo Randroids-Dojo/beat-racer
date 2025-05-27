@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c5rxhspoxl5d"]
+
+[ext_resource type="Script" path="res://scenes/test/visual_feedback_demo.gd" id="1_xyakl"]
+
+[node name="VisualFeedbackDemo" type="Node2D"]
+script = ExtResource("1_xyakl")

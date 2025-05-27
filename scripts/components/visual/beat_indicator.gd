@@ -16,6 +16,12 @@ signal pulse_completed()
 @export var enable_glow: bool = true
 @export var glow_radius: float = 50.0
 
+# Enhanced visual properties for feedback
+@export var perfect_color: Color = Color(0.0, 1.0, 0.5)
+@export var streak_color: Color = Color(1.0, 0.8, 0.0)
+@export var enable_streak_effects: bool = true
+@export var streak_glow_multiplier: float = 1.5
+
 # Shape properties  
 @export_enum("Circle", "Square", "Diamond") var indicator_shape: String = "Circle"
 @export var indicator_size: float = 80.0
@@ -36,6 +42,12 @@ var _beat_event_system: Node = null
 var _debug_logging: bool = false
 var _pulse_count: int = 0
 
+# Enhanced properties
+var _streak_count: int = 0
+var _multiplier: float = 1.0
+var _is_perfect_pulse: bool = false
+var _rhythm_feedback_manager = null
+
 func _ready():
 	_log("=== BeatIndicator Initialization ===")
 	
@@ -49,6 +61,12 @@ func _ready():
 	
 	# Get references
 	_beat_manager = get_node("/root/BeatManager") if has_node("/root/BeatManager") else null
+	
+	# Look for RhythmFeedbackManager in the scene
+	var managers = get_tree().get_nodes_in_group("rhythm_feedback")
+	if managers.size() > 0:
+		_rhythm_feedback_manager = managers[0]
+		_connect_feedback_signals()
 	
 	if not _beat_manager:
 		push_warning("BeatManager not found. Beat indicator will not respond to beats.")
@@ -67,6 +85,13 @@ func _connect_signals():
 	if _beat_manager:
 		_beat_manager.connect("beat_occurred", _on_beat_occurred)
 		_log("Connected to BeatManager")
+
+func _connect_feedback_signals():
+	if _rhythm_feedback_manager:
+		_rhythm_feedback_manager.perfect_hit_detected.connect(_on_perfect_hit)
+		_rhythm_feedback_manager.combo_updated.connect(_on_combo_updated)
+		_rhythm_feedback_manager.streak_broken.connect(_on_streak_broken)
+		_log("Connected to RhythmFeedbackManager")
 
 func _draw():
 	var center = size / 2
@@ -118,6 +143,14 @@ func trigger_pulse():
 	_pulse_timer = 0.0
 	_pulse_count += 1
 	_log("Pulse triggered (#%d)" % _pulse_count)
+	
+	# Enhanced effects for streaks
+	if _streak_count > 0 and enable_streak_effects:
+		_current_color = streak_color
+		# Increase pulse scale for streaks
+		var bonus_scale = 1.0 + (_streak_count * 0.05)
+		bonus_scale = min(bonus_scale, 2.0)  # Cap at 2x
+		pulse_scale = 1.2 * bonus_scale
 
 func _update_pulse(delta: float):
 	_pulse_timer += delta
@@ -226,3 +259,36 @@ func print_debug_info():
 	print("Pulse Progress: %.1f%%" % (get_pulse_progress() * 100))
 	print("Glow Enabled: %s" % str(enable_glow))
 	print("===============================")
+
+# Enhanced feedback methods
+func _on_perfect_hit(accuracy: float, lane: int):
+	_is_perfect_pulse = true
+	_current_color = perfect_color
+	# Extra glow for perfect hits
+	if enable_glow:
+		_glow_strength = 1.5
+
+func _on_combo_updated(combo: int):
+	_streak_count = combo
+	if _rhythm_feedback_manager:
+		_multiplier = _rhythm_feedback_manager.get_multiplier()
+
+func _on_streak_broken():
+	_streak_count = 0
+	_multiplier = 1.0
+	# Reset to base color
+	_current_color = base_color
+
+func set_multiplier_display(multiplier: float):
+	_multiplier = multiplier
+	# Could add visual representation of multiplier
+
+func trigger_perfect_pulse():
+	trigger_pulse()
+	_is_perfect_pulse = true
+	_current_color = perfect_color
+	pulse_scale = 1.5  # Bigger pulse for perfect
+
+func trigger_streak_pulse(streak: int):
+	_streak_count = streak
+	trigger_pulse()
