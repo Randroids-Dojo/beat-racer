@@ -80,13 +80,13 @@ func _ready():
 	
 	vehicle_name_label = Label.new()
 	vehicle_name_label.add_theme_font_size_override("font_size", 16)
-	vehicle_name_label.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vehicle_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	info_container.add_child(vehicle_name_label)
 	
 	vehicle_desc_label = Label.new()
 	vehicle_desc_label.add_theme_font_size_override("font_size", 10)
 	vehicle_desc_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
-	vehicle_desc_label.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vehicle_desc_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vehicle_desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info_container.add_child(vehicle_desc_label)
 	
