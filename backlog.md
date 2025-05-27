@@ -212,12 +212,13 @@ Connect audio and driving systems to create the fundamental gameplay experience.
   - Supported infinite loops with speed control
   - Built comprehensive demo and test coverage
 
-- [ ] **Story 012: Basic UI Elements**  
+- [x] **Story 012: Basic UI Elements** ✓ COMPLETE  
   *Add minimal UI elements needed for core game loop*
-  - Implement recording/playback status indicator
-  - Add beat/measure counter
-  - Create BPM display and control
-  - Implement basic vehicle selection
+  - Created GameStatusIndicator with mode display
+  - Added BeatMeasureCounter with visual dots
+  - Implemented BPMControl with tap tempo
+  - Built VehicleSelector with preview and stats
+  - Organized all elements in GameUIPanel
 
 ---
 

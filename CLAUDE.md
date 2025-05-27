@@ -129,9 +129,10 @@ mcp__context7-mcp__get-library-docs:
 - Story 009: Lane Position to Sound Mapping ✓ (See [Story 009 Complete](docs/story-009-complete.md))
 - Story 010: Lap Recording System ✓ (See [Story 010 Complete](docs/story-010-complete.md))
 - Story 011: Path Playback System ✓ (See [Story 011 Complete](docs/story-011-complete.md))
+- Story 012: Basic UI Elements ✓ (See [Story 012 Complete](docs/story-012-complete.md))
 
 ### Next Story
-- Story 012: Basic UI Elements
+- Story 013: Sound Visualization
 
 ## Additional Resources
 
