@@ -130,9 +130,10 @@ mcp__context7-mcp__get-library-docs:
 - Story 010: Lap Recording System ✓ (See [Story 010 Complete](docs/story-010-complete.md))
 - Story 011: Path Playback System ✓ (See [Story 011 Complete](docs/story-011-complete.md))
 - Story 012: Basic UI Elements ✓ (See [Story 012 Complete](docs/story-012-complete.md))
+- Story 013: Sound Visualization ✓ (See [Story 013 Complete](docs/story-013-complete.md))
 
 ### Next Story
-- Story 013: Sound Visualization
+- Story 014: Audio Mixing Controls
 
 ## Additional Resources
 
