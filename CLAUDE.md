@@ -133,9 +133,10 @@ mcp__context7-mcp__get-library-docs:
 - Story 013: Sound Visualization ✓ (See [Story 013 Complete](docs/story-013-complete.md))
 - Story 014: Audio Mixing Controls ✓ (See [Story 014 Complete](docs/story-014-complete.md))
 - Story 015: Vehicle Feel Improvements ✓ (See [Story 015 Complete](docs/story-015-complete.md))
+- Story 016: Camera System ✓ (See [Story 016 Complete](docs/story-016-complete.md))
 
 ### Next Story
-- Story 016: Camera System
+- Story 017: Multiple Sound Banks
 
 ## Additional Resources
 

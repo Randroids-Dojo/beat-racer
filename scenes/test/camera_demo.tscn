@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3 uid="uid://cmmgt37tdcq0n"]
+
+[ext_resource type="Script" uid="uid://dv3xk5jy7nw6t" path="res://scenes/test/camera_demo.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/systems/track_system.tscn" id="2"]
+[ext_resource type="Script" uid="uid://bqvxk5jy7nw6t" path="res://scripts/components/camera/camera_controller.gd" id="3"]
+[ext_resource type="Script" uid="uid://chp3xk8jy2nw6" path="res://scripts/components/camera/screen_shake_system.gd" id="4"]
+
+[sub_resource type="Curve" id="Curve_1"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 0.8), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[node name="CameraDemo" type="Node2D"]
+script = ExtResource("1")
+
+[node name="TrackSystem" parent="." instance=ExtResource("2")]
+
+[node name="CameraController" type="Camera2D" parent="."]
+script = ExtResource("3")
+transition_curve = SubResource("Curve_1")
+
+[node name="ScreenShakeSystem" type="Node" parent="."]
+script = ExtResource("4")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UIContainer" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
