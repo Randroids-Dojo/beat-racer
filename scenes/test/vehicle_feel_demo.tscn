@@ -1,0 +1,62 @@
+[gd_scene load_steps=5 format=3 uid="uid://egnulxlh4353"]
+
+[ext_resource type="Script" uid="uid://cwom6ac8sp3ll" path="res://scenes/test/vehicle_feel_demo.gd" id="1"]
+[ext_resource type="Script" uid="uid://cak5202bnobhf" path="res://scripts/components/vehicle/enhanced_vehicle.gd" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/systems/track_system.tscn" id="3"]
+[ext_resource type="Script" path="res://scripts/components/visual/sound_reactive_trail.gd" id="4"]
+
+[node name="VehicleFeelDemo" type="Node2D"]
+script = ExtResource("1")
+
+[node name="TrackSystem" parent="." instance=ExtResource("3")]
+
+[node name="EnhancedVehicle" type="CharacterBody2D" parent="."]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("2")
+
+[node name="SoundReactiveTrail" type="Line2D" parent="EnhancedVehicle"]
+script = ExtResource("4")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UIPanel" type="Panel" parent="CanvasLayer"]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 310.0
+offset_bottom = 610.0
+
+[node name="StatsLabel" type="Label" parent="CanvasLayer/UIPanel"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 290.0
+offset_bottom = 150.0
+text = "Vehicle Stats:
+Loading..."
+
+[node name="ControlsLabel" type="Label" parent="CanvasLayer/UIPanel"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 160.0
+offset_right = 290.0
+offset_bottom = 280.0
+text = "Controls:
+Loading..."
+
+[node name="PhysicsSliders" type="VBoxContainer" parent="CanvasLayer/UIPanel"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 300.0
+offset_right = 290.0
+offset_bottom = 450.0
+
+[node name="VisualToggles" type="VBoxContainer" parent="CanvasLayer/UIPanel"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 470.0
+offset_right = 290.0
+offset_bottom = 590.0

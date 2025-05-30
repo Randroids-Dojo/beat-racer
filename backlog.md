@@ -265,12 +265,25 @@ Add polish features that improve the core gameplay experience.
   - Interactive demo scene with lane sound integration
   - Documentation in docs/story-014-complete.md
 
-- [ ] **Story 015: Vehicle Feel Improvements**  
+- [x] **Story 015: Vehicle Feel Improvements** ✓ COMPLETE 
   *Polish vehicle controls and physics for better feel*
   - Add subtle drift for smoother turning 
   - Implement acceleration/deceleration curves
   - Add screen shake and feedback effects
   - Create vehicle state machine for different driving modes
+  
+  **Implementation Notes:**
+  - Created EnhancedVehicle class with realistic physics and momentum
+  - Implemented speed-dependent acceleration/deceleration curves
+  - Added visual banking when turning (vehicles lean into turns)
+  - Created comprehensive particle system (tire smoke, speed particles)
+  - Built state machine with 6 states (Idle, Accelerating, Cruising, Braking, Drifting, Airborne)
+  - Added slip angle calculation for realistic drift mechanics
+  - Integrated screen shake for acceleration, speed, and impacts
+  - Created interactive demo with UI controls and physics presets
+  - Full test coverage (unit and integration tests)
+  - Trail effects already integrated from previous stories
+  - Documented in docs/story-015-complete.md
 
 - [ ] **Story 016: Camera System**  
   *Implement a dynamic camera that follows vehicle movement*

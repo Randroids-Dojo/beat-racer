@@ -100,3 +100,12 @@ func get_track_progress_at_position(global_position: Vector2) -> float:
 func get_current_lane(global_position: Vector2) -> int:
 	"""Get the current lane index for a given position"""
 	return track_geometry.get_closest_lane(global_position)
+
+
+func get_start_position() -> Vector2:
+	"""Get the starting position on the track (center lane at start/finish line)"""
+	if start_finish_line:
+		return start_finish_line.global_position
+	else:
+		# Default position if start/finish line not set
+		return Vector2(0, -track_geometry.curve_radius if track_geometry else -400)

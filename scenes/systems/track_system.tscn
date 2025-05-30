@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/components/track/track_system.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/components/track/track_geometry.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/components/track/track_boundaries.gd" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/components/track/start_finish_line.tscn" id="4"]
+
+[node name="TrackSystem" type="Node2D"]
+script = ExtResource("1")
+beats_per_lap = 16
+
+[node name="TrackGeometry" type="Node2D" parent="."]
+script = ExtResource("2")
+track_width = 300.0
+curve_radius = 400.0
+straight_length = 600.0
+lane_count = 3
+lane_divider_style = 1
+
+[node name="TrackBoundaries" type="Node2D" parent="."]
+script = ExtResource("3")
+inner_wall_offset = 10.0
+outer_wall_offset = 10.0
+collision_layer = 1
+
+[node name="StartFinishLine" parent="." instance=ExtResource("4")]
+position = Vector2(0, -400)
+line_width = 300.0
+checkered_size = 20.0

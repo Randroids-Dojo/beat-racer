@@ -68,7 +68,8 @@ func _ready():
 	width = base_width
 	default_color = base_color
 	joint_mode = Line2D.LINE_JOINT_ROUND
-	cap_mode = Line2D.LINE_CAP_ROUND
+	begin_cap_mode = Line2D.LINE_CAP_ROUND
+	end_cap_mode = Line2D.LINE_CAP_ROUND
 	antialiased = true
 	
 	# Setup gradient if enabled

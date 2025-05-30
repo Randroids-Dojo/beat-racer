@@ -132,9 +132,10 @@ mcp__context7-mcp__get-library-docs:
 - Story 012: Basic UI Elements ✓ (See [Story 012 Complete](docs/story-012-complete.md))
 - Story 013: Sound Visualization ✓ (See [Story 013 Complete](docs/story-013-complete.md))
 - Story 014: Audio Mixing Controls ✓ (See [Story 014 Complete](docs/story-014-complete.md))
+- Story 015: Vehicle Feel Improvements ✓ (See [Story 015 Complete](docs/story-015-complete.md))
 
 ### Next Story
-- Story 015: Vehicle Feel Improvements
+- Story 016: Camera System
 
 ## Additional Resources
 
