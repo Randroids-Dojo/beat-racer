@@ -52,12 +52,19 @@ var _phase: float = 0.0
 # Scale parameters
 var _root_note: Note = Note.C
 var _scale_type: Scale = Scale.MAJOR
-var _scale_degrees: Array[int] = []
+var _scale_degrees: Array = []
 
 func _init(bus: String = "Melody"):
 	_current_bus = bus
 	_player = AudioStreamPlayer.new()
-	_player.bus = bus
+	
+	# Only set bus if it exists, otherwise use Master
+	var bus_index = AudioServer.get_bus_index(bus)
+	if bus_index != -1:
+		_player.bus = bus
+	else:
+		_player.bus = "Master"
+		print("SoundGenerator: Bus '%s' not found, using Master" % bus)
 	
 	_generator = AudioStreamGenerator.new()
 	_generator.mix_rate = _sample_rate
@@ -69,6 +76,10 @@ func _init(bus: String = "Melody"):
 	_update_scale_degrees()
 
 func _ready():
+	# Defer audio player setup to avoid blocking ready signal
+	call_deferred("_setup_audio_player")
+
+func _setup_audio_player():
 	add_child(_player)
 	_player.finished.connect(_on_playback_finished)
 
@@ -77,11 +88,20 @@ func _on_playback_finished():
 	emit_signal("sound_stopped")
 
 func start_playback():
-	if not _is_playing:
+	print("SoundGenerator.start_playback() called")
+	print("  _is_playing: %s" % _is_playing)
+	print("  _player exists: %s" % (_player != null))
+	print("  _player has parent: %s" % (_player and _player.get_parent() != null))
+	
+	if not _is_playing and _player and _player.get_parent():
+		print("  Starting audio playback...")
 		_player.play()
 		_playback = _player.get_stream_playback()
 		_is_playing = true
+		print("  Playback started successfully")
 		emit_signal("sound_started")
+	else:
+		print("  Playback NOT started - conditions not met")
 
 func stop_playback():
 	if _is_playing:
@@ -91,7 +111,14 @@ func stop_playback():
 
 func set_bus(bus_name: String):
 	_current_bus = bus_name
-	_player.bus = bus_name
+	
+	# Only set bus if it exists, otherwise use Master
+	var bus_index = AudioServer.get_bus_index(bus_name)
+	if bus_index != -1:
+		_player.bus = bus_name
+	else:
+		_player.bus = "Master"
+		print("SoundGenerator: Bus '%s' not found when setting, using Master" % bus_name)
 
 func get_bus() -> String:
 	return _current_bus
@@ -176,9 +203,6 @@ func generate_frames(frame_count: int):
 		
 		# Update phase
 		_phase = fmod(_phase + actual_freq / _sample_rate, 1.0)
-		
-		if i % int(_sample_rate * _buffer_size / 4.0) == 0:
-			await get_tree().process_frame
 
 # Generate a single sample based on the waveform type
 func _generate_sample(phase: float, freq: float) -> float:

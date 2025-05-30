@@ -1,13 +1,13 @@
 # GUT integration test for RhythmVehicle with track and beat systems
 extends GutTest
 
-const RhythmVehicle = preload("res://scripts/components/vehicle/rhythm_vehicle.gd")
-const TrackSystem = preload("res://scripts/components/track/track_system.gd")
+const RhythmVehicleScript = preload("res://scripts/components/vehicle/rhythm_vehicle.gd")
+const TrackSystemScript = preload("res://scripts/components/track/track_system.gd")
 const BeatManager = preload("res://scripts/autoloads/beat_manager.gd")
 const AudioManager = preload("res://scripts/autoloads/audio_manager.gd")
 
-var rhythm_vehicle: RhythmVehicle
-var track_system: TrackSystem
+var rhythm_vehicle: RhythmVehicleScript
+var track_system: TrackSystemScript
 var beat_manager: BeatManager
 var audio_manager: AudioManager
 
@@ -24,11 +24,11 @@ func before_each() -> void:
 	get_tree().root.add_child(beat_manager)
 	
 	# Create track system
-	track_system = autofree(TrackSystem.new())
+	track_system = autofree(TrackSystemScript.new())
 	add_child(track_system)
 	
 	# Create rhythm vehicle
-	rhythm_vehicle = autofree(RhythmVehicle.new())
+	rhythm_vehicle = autofree(RhythmVehicleScript.new())
 	add_child(rhythm_vehicle)
 	
 	await wait_frames(1)

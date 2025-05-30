@@ -224,6 +224,10 @@ func reset_rhythm_stats() -> void:
 
 func _on_beat_occurred(beat_number: int) -> void:
 	"""Handle beat occurrence for visual/audio cues"""
+	# Check if player missed the beat (no input when they could have gotten boost)
+	if boost_on_beat and current_speed > 10 and throttle_input <= 0:
+		emit_signal("beat_missed", beat_number)
+	
 	# Add subtle visual pulse even without input
 	if visual_beat_response and current_speed > 10:
 		var tween = create_tween()
@@ -231,7 +235,7 @@ func _on_beat_occurred(beat_number: int) -> void:
 		tween.tween_property(self, "modulate", Color.WHITE, 0.1)
 
 
-func _on_measure_completed(measure_number: int) -> void:
+func _on_measure_completed(_measure_number: int) -> void:
 	"""Handle measure completion for special effects"""
 	# Could add measure-based mechanics here
 	pass

@@ -1,40 +1,34 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=12 format=3 uid="uid://bbtaefxnnc82p"]
 
 [ext_resource type="Script" path="res://scenes/test/sound_visualization_demo.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/components/track/track_system.gd" id="2"]
-[ext_resource type="Script" path="res://scripts/components/sound/lane_sound_system.gd" id="3"]
-[ext_resource type="Script" path="res://scripts/components/vehicle/rhythm_vehicle_with_lanes.gd" id="4"]
-[ext_resource type="Script" path="res://scripts/components/visual/rhythm_feedback_manager.gd" id="5"]
+[ext_resource type="Script" uid="uid://cc2dv7mq0tqbu" path="res://scripts/components/track/track_system.gd" id="2"]
+[ext_resource type="Script" uid="uid://cu4t4d053muh1" path="res://scripts/components/sound/lane_sound_system.gd" id="3"]
+[ext_resource type="Script" uid="uid://djqprxlna61a2" path="res://scripts/components/vehicle/rhythm_vehicle_with_lanes.gd" id="4"]
+[ext_resource type="Script" uid="uid://6tv04gupj4mf" path="res://scripts/components/visual/rhythm_feedback_manager.gd" id="5"]
 [ext_resource type="Script" path="res://scripts/components/visual/environment_visualizer.gd" id="6"]
 [ext_resource type="Script" path="res://scripts/components/visual/lane_sound_visualizer.gd" id="7"]
 [ext_resource type="Script" path="res://scripts/components/visual/beat_pulse_visualizer.gd" id="8"]
 [ext_resource type="Script" path="res://scripts/components/visual/sound_reactive_trail.gd" id="9"]
 
-[sub_resource type="Resource" id="1"]
-script = ExtResource("3")
-
 [sub_resource type="Theme" id="2"]
 default_font_size = 16
 
 [sub_resource type="StyleBoxFlat" id="3"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
 bg_color = Color(0.1, 0.1, 0.15, 0.8)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
-content_margin_left = 20.0
-content_margin_top = 20.0
-content_margin_right = 20.0
-content_margin_bottom = 20.0
 
 [node name="SoundVisualizationDemo" type="Node2D"]
 script = ExtResource("1")
 
 [node name="TrackSystem" type="Node2D" parent="."]
 script = ExtResource("2")
-track_width = 600.0
-track_height = 400.0
-lane_count = 3
 
 [node name="LaneSoundSystem" type="Node" parent="."]
 script = ExtResource("3")
@@ -47,8 +41,7 @@ script = ExtResource("4")
 script = ExtResource("8")
 pulse_scale = 1.3
 pulse_duration = 0.15
-pulse_color = Color(1.0, 0.8, 0.2, 1.0)
-enable_glow = true
+pulse_color = Color(1, 0.8, 0.2, 1)
 glow_radius = 60.0
 
 [node name="SoundReactiveTrail" type="Line2D" parent="RhythmVehicle"]
@@ -58,11 +51,6 @@ max_points = 75
 point_lifetime = 1.5
 base_width = 15.0
 max_width = 50.0
-react_to_beat = true
-react_to_volume = true
-react_to_lane_change = true
-gradient_enabled = true
-use_lane_colors = true
 
 [node name="RhythmFeedbackManager" type="Node" parent="."]
 script = ExtResource("5")
@@ -82,19 +70,11 @@ enhance_beat_markers = true
 z_index = -5
 position = Vector2(512, 300)
 script = ExtResource("7")
-waveform_enabled = true
 waveform_height = 80.0
-particle_enabled = true
-glow_enabled = true
 
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="InfoPanel" type="Panel" parent="UI"]
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
 offset_left = 20.0
 offset_top = 20.0
 offset_right = 320.0
@@ -107,6 +87,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="InfoLabel" type="Label" parent="UI/InfoPanel/VBoxContainer"]
 layout_mode = 2
@@ -137,6 +119,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Label" type="Label" parent="UI/ControlPanel/VBoxContainer"]
 layout_mode = 2
@@ -153,8 +137,8 @@ text = "BPM: 120"
 layout_mode = 2
 min_value = 60.0
 max_value = 240.0
-value = 120.0
 step = 10.0
+value = 120.0
 
 [node name="HSeparator2" type="HSeparator" parent="UI/ControlPanel/VBoxContainer"]
 layout_mode = 2

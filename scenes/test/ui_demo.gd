@@ -331,5 +331,5 @@ func _on_playback_stopped_ui():
 func _process(_delta: float):
 	# Update playback progress
 	if is_playing and playback_vehicle:
-		var progress = playback_vehicle.get_playback_progress()
+		var _progress = playback_vehicle.get_playback_progress()
 		# Could update a progress bar here
