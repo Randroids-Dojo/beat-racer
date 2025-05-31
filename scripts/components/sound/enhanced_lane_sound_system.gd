@@ -43,12 +43,20 @@ func _setup_lane_mappings():
 	# CENTER lane -> First Bass generator  
 	# RIGHT lane -> Second Melody generator (or Percussion if not available)
 	
-	await _sound_bank_manager.ready # Wait for generators to be created
-	_update_lane_mappings()
+	print("EnhancedLaneSoundSystem: Setting up lane mappings...")
+	if _sound_bank_manager:
+		# Use call_deferred to ensure sound bank manager is fully initialized
+		call_deferred("_update_lane_mappings")
+		print("EnhancedLaneSoundSystem: Deferred lane mapping update")
+	else:
+		print("EnhancedLaneSoundSystem: No sound bank manager!")
 
 func _update_lane_mappings():
 	"""Update which generators are assigned to which lanes"""
 	_lane_mappings.clear()
+	
+	if not _sound_bank_manager:
+		return
 	
 	var generators = _sound_bank_manager.get_generators()
 	var melody_generators = []
@@ -58,13 +66,15 @@ func _update_lane_mappings():
 	# Sort generators by bus
 	for i in range(generators.size()):
 		var gen = generators[i]
-		match gen.get_bus():
-			"Melody":
-				melody_generators.append(i)
-			"Bass":
-				bass_generators.append(i)
-			"Percussion":
-				percussion_generators.append(i)
+		if gen:
+			var bus = gen.get_bus()
+			match bus:
+				"Melody":
+					melody_generators.append(i)
+				"Bass":
+					bass_generators.append(i)
+				"Percussion":
+					percussion_generators.append(i)
 	
 	# Assign lanes to generators
 	if melody_generators.size() > 0:
@@ -78,7 +88,7 @@ func _update_lane_mappings():
 	elif percussion_generators.size() > 0:
 		_lane_mappings[LaneType.RIGHT] = percussion_generators[0]
 	
-	print("EnhancedLaneSoundSystem: Updated lane mappings: %s" % _lane_mappings)
+	print("EnhancedLaneSoundSystem: Lane mappings updated: %s" % _lane_mappings)
 
 func _process(delta):
 	# Handle bank switching cooldown
@@ -137,9 +147,13 @@ func _trigger_lane_note(lane: int, scale_degree: int = 1):
 	if generator_idx >= 0 and generator_idx < generators.size():
 		var generator = generators[generator_idx]
 		if generator:
+			# Set the note first
 			generator.set_note_from_scale(scale_degree)
-			if not generator._is_playing:
-				generator.start_playback()
+			
+			# Restart playback to create a distinct note trigger
+			if generator._is_playing:
+				generator.stop_playback()
+			generator.start_playback()
 			
 			emit_signal("sound_triggered", lane, scale_degree)
 

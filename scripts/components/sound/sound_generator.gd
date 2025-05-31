@@ -88,20 +88,11 @@ func _on_playback_finished():
 	emit_signal("sound_stopped")
 
 func start_playback():
-	print("SoundGenerator.start_playback() called")
-	print("  _is_playing: %s" % _is_playing)
-	print("  _player exists: %s" % (_player != null))
-	print("  _player has parent: %s" % (_player and _player.get_parent() != null))
-	
 	if not _is_playing and _player and _player.get_parent():
-		print("  Starting audio playback...")
 		_player.play()
 		_playback = _player.get_stream_playback()
 		_is_playing = true
-		print("  Playback started successfully")
 		emit_signal("sound_started")
-	else:
-		print("  Playback NOT started - conditions not met")
 
 func stop_playback():
 	if _is_playing:

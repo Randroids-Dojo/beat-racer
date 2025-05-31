@@ -242,17 +242,21 @@ func _update_from_audio_manager():
 		_update_volume_label(control, volume_db)
 		
 		# Update mute/solo
-		var mute_button = control.get_node("MuteButton")
-		var solo_button = control.get_node("SoloButton")
-		mute_button.set_pressed_no_signal(AudioManager.is_bus_muted(bus_name))
-		solo_button.set_pressed_no_signal(AudioManager.is_bus_soloed(bus_name))
+		var mute_button = control.get_node_or_null("MuteButton")
+		var solo_button = control.get_node_or_null("SoloButton")
+		if mute_button:
+			mute_button.set_pressed_no_signal(AudioManager.is_bus_muted(bus_name))
+		if solo_button:
+			solo_button.set_pressed_no_signal(AudioManager.is_bus_soloed(bus_name))
 		
 		# Update effect states
 		var effects_container = control.get_node_or_null("EffectsContainer")
 		if effects_container:
 			for i in range(effects_container.get_child_count()):
-				var effect_button = effects_container.get_child(i)
-				effect_button.set_pressed_no_signal(AudioManager.is_bus_effect_enabled(bus_name, i))
+				var effect_row = effects_container.get_child(i)
+				var effect_button = effect_row.get_node_or_null("Effect" + str(i) + "Button")
+				if effect_button and effect_button.has_method("set_pressed_no_signal"):
+					effect_button.set_pressed_no_signal(AudioManager.is_bus_effect_enabled(bus_name, i))
 
 func _update_volume_label(control: Control, volume_db: float):
 	var volume_label = control.get_node("VolumeLabel")

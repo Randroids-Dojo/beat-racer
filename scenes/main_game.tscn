@@ -1,0 +1,175 @@
+[gd_scene load_steps=8 format=3 uid="uid://b5xqh7m8np4k3"]
+
+[ext_resource type="Script" uid="uid://b7xnqm4p5k8jw" path="res://scenes/main_game.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://dp5l8m6qy7xvh" path="res://scripts/systems/game_state_manager.gd" id="2_state"]
+[ext_resource type="PackedScene" path="res://scenes/systems/track_system.tscn" id="3_track"]
+[ext_resource type="Script" uid="uid://bqvxk5jy7nw6t" path="res://scripts/components/camera/camera_controller.gd" id="4_camera"]
+[ext_resource type="Script" uid="uid://cx3m7n5qk8wpj" path="res://scripts/ui/main_game_ui_panel.gd" id="5_ui"]
+[ext_resource type="Script" uid="uid://vlh0hbpxtcqk" path="res://scripts/components/visual/beat_visualization_panel.gd" id="6_beat_viz"]
+[ext_resource type="Script" uid="uid://dmix5q7n8xpvl" path="res://scripts/components/ui/audio_mixer_panel.gd" id="7_mixer"]
+
+[node name="MainGame" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="GameStateManager" type="Node" parent="."]
+script = ExtResource("2_state")
+
+[node name="TrackSystem" parent="." instance=ExtResource("3_track")]
+
+[node name="VehicleContainer" type="Node2D" parent="."]
+
+[node name="PlaybackContainer" type="Node2D" parent="."]
+
+[node name="CameraController" type="Camera2D" parent="."]
+script = ExtResource("4_camera")
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="GameUIPanel" type="Control" parent="UILayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5_ui")
+
+[node name="TopBar" type="HBoxContainer" parent="UILayer/GameUIPanel"]
+layout_mode = 0
+anchor_right = 1.0
+offset_bottom = 60.0
+theme_override_constants/separation = 20
+
+[node name="ModeLabel" type="Label" parent="UILayer/GameUIPanel/TopBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Mode: Live"
+
+[node name="BPMControl" type="HBoxContainer" parent="UILayer/GameUIPanel/TopBar"]
+layout_mode = 2
+
+[node name="BPMLabel" type="Label" parent="UILayer/GameUIPanel/TopBar/BPMControl"]
+layout_mode = 2
+text = "BPM:"
+
+[node name="BPMSlider" type="HSlider" parent="UILayer/GameUIPanel/TopBar/BPMControl"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 60.0
+max_value = 240.0
+value = 120.0
+
+[node name="BPMValue" type="Label" parent="UILayer/GameUIPanel/TopBar/BPMControl"]
+layout_mode = 2
+text = "120"
+
+[node name="HSeparator" type="HSeparator" parent="UILayer/GameUIPanel/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RecordButton" type="Button" parent="UILayer/GameUIPanel/TopBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Record"
+
+[node name="PlayButton" type="Button" parent="UILayer/GameUIPanel/TopBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Play"
+
+[node name="StopButton" type="Button" parent="UILayer/GameUIPanel/TopBar"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Stop"
+
+[node name="ClearButton" type="Button" parent="UILayer/GameUIPanel/TopBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Clear"
+
+[node name="LeftPanel" type="VBoxContainer" parent="UILayer/GameUIPanel"]
+layout_mode = 0
+anchor_bottom = 1.0
+offset_top = 80.0
+offset_right = 300.0
+theme_override_constants/separation = 10
+
+[node name="SoundBankSection" type="VBoxContainer" parent="UILayer/GameUIPanel/LeftPanel"]
+layout_mode = 2
+
+[node name="SoundBankLabel" type="Label" parent="UILayer/GameUIPanel/LeftPanel/SoundBankSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Sound Bank"
+
+[node name="SoundBankSelector" type="OptionButton" parent="UILayer/GameUIPanel/LeftPanel/SoundBankSection"]
+layout_mode = 2
+
+[node name="LayersSection" type="VBoxContainer" parent="UILayer/GameUIPanel/LeftPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LayersLabel" type="Label" parent="UILayer/GameUIPanel/LeftPanel/LayersSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Layers"
+
+[node name="LayersList" type="ItemList" parent="UILayer/GameUIPanel/LeftPanel/LayersSection"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RemoveLayerButton" type="Button" parent="UILayer/GameUIPanel/LeftPanel/LayersSection"]
+layout_mode = 2
+text = "Remove Layer"
+
+[node name="RightPanel" type="VBoxContainer" parent="UILayer/GameUIPanel"]
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = 80.0
+theme_override_constants/separation = 10
+
+[node name="BeatVisualizationPanel" type="PanelContainer" parent="UILayer/GameUIPanel/RightPanel"]
+custom_minimum_size = Vector2(280, 200)
+layout_mode = 2
+script = ExtResource("6_beat_viz")
+
+[node name="AudioMixerPanel" type="Panel" parent="UILayer/GameUIPanel/RightPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("7_mixer")
+
+[node name="BottomBar" type="HBoxContainer" parent="UILayer/GameUIPanel"]
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+theme_override_constants/separation = 20
+
+[node name="StatusLabel" type="Label" parent="UILayer/GameUIPanel/BottomBar"]
+layout_mode = 2
+text = "Ready"
+
+[node name="RecordingIndicator" type="Label" parent="UILayer/GameUIPanel/BottomBar"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+text = "● REC"
+
+[node name="BeatCounter" type="Label" parent="UILayer/GameUIPanel/BottomBar"]
+layout_mode = 2
+text = "Measure 1 | Beat 1"
+
+[node name="HSeparator" type="HSeparator" parent="UILayer/GameUIPanel/BottomBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HelpLabel" type="Label" parent="UILayer/GameUIPanel/BottomBar"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+text = "WASD: Drive | Up/Down: Change Lanes | QWE: Manual Lanes | Space: Record | Tab: Camera"
