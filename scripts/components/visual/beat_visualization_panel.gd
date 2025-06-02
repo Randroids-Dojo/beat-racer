@@ -194,11 +194,11 @@ func _on_beat_occurred(beat_number: int, beat_time: float):
 			if i == beat_in_measure:
 				_sub_indicators[i].trigger_pulse()
 
-func _on_measure_completed(measure_number: int, measure_time: float):
+func _on_measure_completed(measure_number: int, _measure_time: float):
 	if _measure_label:
 		_measure_label.text = str(measure_number)
 
-func _on_bpm_changed(old_bpm: float, new_bpm: float):
+func _on_bpm_changed(_old_bpm: float, new_bpm: float):
 	if _bpm_label:
 		_bpm_label.text = str(int(new_bpm))
 

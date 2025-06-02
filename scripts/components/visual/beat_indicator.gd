@@ -261,7 +261,7 @@ func print_debug_info():
 	print("===============================")
 
 # Enhanced feedback methods
-func _on_perfect_hit(accuracy: float, lane: int):
+func _on_perfect_hit(accuracy: float, _lane: int):
 	_is_perfect_pulse = true
 	_current_color = perfect_color
 	# Extra glow for perfect hits

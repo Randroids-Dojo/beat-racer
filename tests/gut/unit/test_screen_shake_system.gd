@@ -44,7 +44,7 @@ func test_basic_shake():
 func test_shake_intensity_clamping():
 	# Test intensity values outside range
 	shake_system.shake(1.5, 0.1)  # Should clamp to 1.0
-	assert_le(shake_system.get_shake_intensity(), 1.0, "Should clamp max intensity to 1.0")
+	assert_lte(shake_system.get_shake_intensity(), 1.0, "Should clamp max intensity to 1.0")
 	
 	shake_system.stop_all_shakes()
 	shake_system.shake(-0.5, 0.1)  # Should clamp to 0.0

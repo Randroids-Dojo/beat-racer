@@ -140,19 +140,22 @@ func test_show_beat_dots_toggle():
 
 
 func test_downbeat_detection():
-	var is_downbeat = false
+	var received_beat = -1
+	var received_beat_in_measure = -1
 	
-	# Track if downbeat flash occurs
-	beat_counter._start_flash = func(downbeat: bool):
-		is_downbeat = downbeat
+	# Track beat_changed signal emissions
+	beat_counter.beat_changed.connect(func(beat: int, beat_in_measure: int):
+		received_beat = beat
+		received_beat_in_measure = beat_in_measure)
 	
 	# First beat of measure (downbeat)
 	beat_counter.beat_in_measure = 1
 	beat_counter._on_beat_occurred(0, 0.0)
-	assert_true(is_downbeat, "Should detect downbeat")
+	assert_eq(received_beat_in_measure, 1, "Should detect downbeat with beat_in_measure = 1")
+	assert_eq(received_beat, 0, "Should report correct beat number")
 	
-	# Other beats
-	is_downbeat = false
+	# Other beats in measure
 	beat_counter.beat_in_measure = 2
 	beat_counter._on_beat_occurred(1, 0.0)
-	assert_false(is_downbeat, "Should not be downbeat")
+	assert_eq(received_beat_in_measure, 2, "Should detect non-downbeat correctly")
+	assert_eq(received_beat, 1, "Should report correct beat number")

@@ -72,7 +72,7 @@ func test_preset_resource_save():
 	preset.save_from_audio_manager()
 	
 	# Verify saved data
-	assert_not_empty(preset.bus_settings, "Bus settings should not be empty")
+	assert_false(preset.bus_settings.is_empty(), "Bus settings should not be empty")
 	assert_has(preset.bus_settings, "Melody", "Should have Melody bus settings")
 	assert_has(preset.bus_settings, "Bass", "Should have Bass bus settings")
 	assert_has(preset.bus_settings, "Percussion", "Should have Percussion bus settings")
@@ -247,7 +247,7 @@ func test_preset_signals():
 	await wait_frames(2)
 	
 	assert_true(loaded_signal_emitted, "Load signal should be emitted")
-	assert_not_empty(loaded_preset_name, "Load signal should include preset name")
+	assert_false(loaded_preset_name.is_empty(), "Load signal should include preset name")
 
 func test_effect_parameters_save():
 	# Test that effect parameters are saved correctly
@@ -267,7 +267,7 @@ func test_effect_parameters_save():
 		
 		# Check saved effect data
 		var melody_effects = preset.bus_settings["Melody"]["effects"]
-		assert_not_empty(melody_effects, "Melody should have effects saved")
+		assert_false(melody_effects.is_empty(), "Melody should have effects saved")
 		
 		var reverb_data = melody_effects[0]
 		assert_eq(reverb_data["class_name"], "AudioEffectReverb", "Should save effect class name")

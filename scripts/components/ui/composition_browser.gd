@@ -118,7 +118,7 @@ func _update_list_display() -> void:
 	
 	for i in range(filtered_compositions.size()):
 		var comp := filtered_compositions[i]
-		var item_text := comp.name
+		var item_text: String = comp.name
 		
 		if comp.is_autosave:
 			item_text = "[AUTO] " + item_text

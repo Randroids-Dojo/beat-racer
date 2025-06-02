@@ -137,22 +137,22 @@ func _draw_center_line_guide(vehicle_pos: Vector2) -> void:
 	draw_circle(center_local, 5, color)
 
 
-func _on_lane_changed(previous_lane: int, new_lane: int) -> void:
+func _on_lane_changed(_previous_lane: int, _new_lane: int) -> void:
 	# Could add animation or effects here
 	pass
 
 
-func _on_lane_position_updated(lane: int, offset_from_center: float) -> void:
+func _on_lane_position_updated(_lane: int, _offset_from_center: float) -> void:
 	# Could update UI elements here
 	pass
 
 
-func _on_entered_lane_center(lane: int) -> void:
+func _on_entered_lane_center(_lane: int) -> void:
 	# Could trigger visual effect
 	pass
 
 
-func _on_exited_lane_center(lane: int) -> void:
+func _on_exited_lane_center(_lane: int) -> void:
 	# Could stop visual effect
 	pass
 

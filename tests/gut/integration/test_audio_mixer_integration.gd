@@ -44,8 +44,8 @@ func test_mixer_controls_audio_output():
 	# Test that mixer controls actually affect audio output
 	
 	# Configure lane sound to use Melody bus
-	lane_sound_system.set_lane_config(LaneSoundSystem.Lane.LEFT, {
-		"waveform": LaneSoundSystem.Waveform.SINE,
+	lane_sound_system.set_lane_config(LaneSoundSystem.LaneType.LEFT, {
+		"waveform": SoundGenerator.WaveType.SINE,
 		"bus": "Melody",
 		"volume": 0.5,
 		"octave": 4,
@@ -55,7 +55,7 @@ func test_mixer_controls_audio_output():
 	await wait_frames(2)
 	
 	# Start lane sound
-	lane_sound_system.start_lane(LaneSoundSystem.Lane.LEFT)
+	lane_sound_system.start_lane(LaneSoundSystem.LaneType.LEFT)
 	await wait_frames(2)
 	
 	# Test volume control
@@ -78,7 +78,7 @@ func test_mixer_controls_audio_output():
 	assert_true(AudioManager.is_bus_muted("Melody"), "Bus should be muted")
 	
 	# Clean up
-	lane_sound_system.stop_lane(LaneSoundSystem.Lane.LEFT)
+	lane_sound_system.stop_lane(LaneSoundSystem.LaneType.LEFT)
 	mute_button.button_pressed = false
 	mute_button.toggled.emit(false)
 
@@ -208,16 +208,16 @@ func test_lane_sound_bus_routing():
 	# Test that lane sounds route through correct buses and are affected by mixer
 	
 	# Configure different lanes to different buses
-	lane_sound_system.set_lane_config(LaneSoundSystem.Lane.LEFT, {
-		"waveform": LaneSoundSystem.Waveform.SINE,
+	lane_sound_system.set_lane_config(LaneSoundSystem.LaneType.LEFT, {
+		"waveform": SoundGenerator.WaveType.SINE,
 		"bus": "Melody",
 		"volume": 0.5,
 		"octave": 4,
 		"scale_degree": 0
 	})
 	
-	lane_sound_system.set_lane_config(LaneSoundSystem.Lane.CENTER, {
-		"waveform": LaneSoundSystem.Waveform.SQUARE,
+	lane_sound_system.set_lane_config(LaneSoundSystem.LaneType.CENTER, {
+		"waveform": SoundGenerator.WaveType.SQUARE,
 		"bus": "Bass",
 		"volume": 0.4,
 		"octave": 2,
@@ -227,8 +227,8 @@ func test_lane_sound_bus_routing():
 	await wait_frames(2)
 	
 	# Start lane sounds
-	lane_sound_system.start_lane(LaneSoundSystem.Lane.LEFT)
-	lane_sound_system.start_lane(LaneSoundSystem.Lane.CENTER)
+	lane_sound_system.start_lane(LaneSoundSystem.LaneType.LEFT)
+	lane_sound_system.start_lane(LaneSoundSystem.LaneType.CENTER)
 	await wait_frames(2)
 	
 	# Mute melody bus - should affect left lane

@@ -202,7 +202,7 @@ func test_slip_angle_limits():
 	
 	vehicle.apply_enhanced_physics(0.1)
 	
-	assert_le(abs(vehicle.slip_angle), vehicle.max_slip_angle, "Slip angle should be clamped")
+	assert_lte(abs(vehicle.slip_angle), vehicle.max_slip_angle, "Slip angle should be clamped")
 
 
 func test_banking_visual_effect():
@@ -219,7 +219,7 @@ func test_banking_visual_effect():
 		await wait_frames(1)
 	
 	assert_lt(vehicle.current_bank_angle, 0.0, "Should bank into the turn")
-	assert_ge(vehicle.current_bank_angle, -vehicle.max_bank_angle * 1.5, "Banking should be limited")
+	assert_gte(vehicle.current_bank_angle, -vehicle.max_bank_angle * 1.5, "Banking should be limited")
 
 
 func test_complete_driving_loop():

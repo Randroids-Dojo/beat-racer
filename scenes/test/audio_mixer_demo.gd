@@ -52,24 +52,24 @@ func _setup_lane_sounds():
 	add_child(lane_sound_system)
 	
 	# Configure sounds for each lane (bus)
-	lane_sound_system.set_lane_config(LaneSoundSystem.Lane.LEFT, {
-		"waveform": LaneSoundSystem.Waveform.SINE,
+	lane_sound_system.set_lane_config(LaneSoundSystem.LaneType.LEFT, {
+		"waveform": SoundGenerator.WaveType.SINE,
 		"bus": "Melody",
 		"volume": 0.5,
 		"octave": 4,
 		"scale_degree": 0
 	})
 	
-	lane_sound_system.set_lane_config(LaneSoundSystem.Lane.CENTER, {
-		"waveform": LaneSoundSystem.Waveform.SQUARE,
+	lane_sound_system.set_lane_config(LaneSoundSystem.LaneType.CENTER, {
+		"waveform": SoundGenerator.WaveType.SQUARE,
 		"bus": "Bass",
 		"volume": 0.4,
 		"octave": 2,
 		"scale_degree": 0
 	})
 	
-	lane_sound_system.set_lane_config(LaneSoundSystem.Lane.RIGHT, {
-		"waveform": LaneSoundSystem.Waveform.TRIANGLE,
+	lane_sound_system.set_lane_config(LaneSoundSystem.LaneType.RIGHT, {
+		"waveform": SoundGenerator.WaveType.TRIANGLE,
 		"bus": "Percussion",
 		"volume": 0.3,
 		"octave": 3,

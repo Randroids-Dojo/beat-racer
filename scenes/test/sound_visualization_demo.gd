@@ -404,7 +404,7 @@ func _on_beat_occurred(beat_number: int, beat_time: float):
 	pass
 
 
-func _on_measure_completed(measure_number: int, measure_time: float):
+func _on_measure_completed(measure_number: int, _measure_time: float):
 	"""Handle measure completion"""
 	# Could trigger special effects every measure
 	if demo_mode == "music" and measure_number % 4 == 0:

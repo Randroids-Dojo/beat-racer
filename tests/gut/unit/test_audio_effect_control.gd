@@ -86,7 +86,7 @@ func test_parameter_value_updates():
 	var reverb = AudioServer.get_bus_effect(melody_idx, 0) as AudioEffectReverb
 	
 	if not reverb:
-		pass("No reverb effect to test")
+		pending("No reverb effect to test")
 		return
 	
 	# Set initial value
@@ -223,7 +223,7 @@ func test_effect_parameter_application():
 	var reverb = AudioServer.get_bus_effect(melody_idx, 0) as AudioEffectReverb
 	
 	if not reverb:
-		pass("No reverb effect to test")
+		pending("No reverb effect to test")
 		return
 	
 	var original_room_size = reverb.room_size

@@ -91,7 +91,7 @@ func _on_beat_occurred(beat_number: int, beat_time: float):
 	# Emit combo update
 	emit_signal("combo_updated", _current_combo)
 
-func _on_measure_completed(measure_number: int, measure_time: float):
+func _on_measure_completed(_measure_number: int, _measure_time: float):
 	# Could add measure-based effects or scoring here
 	pass
 

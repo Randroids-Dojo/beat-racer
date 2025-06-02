@@ -148,7 +148,7 @@ func _find_track_elements():
 		_log("Found %d track boundary points" % track_boundaries.size())
 	
 	# Find beat markers
-	beat_markers = get_tree().get_nodes_in_group("beat_markers")
+	beat_markers = get_tree().get_nodes_in_group("beat_markers").filter(func(node): return node is Node2D)
 	_log("Found %d beat markers" % beat_markers.size())
 
 

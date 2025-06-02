@@ -87,7 +87,7 @@ func _on_entered_lane_center(lane: int) -> void:
 	lane_centered.emit(lane)
 
 
-func _on_exited_lane_center(lane: int) -> void:
+func _on_exited_lane_center(_lane: int) -> void:
 	pass
 
 

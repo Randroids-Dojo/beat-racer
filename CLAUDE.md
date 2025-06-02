@@ -8,6 +8,14 @@ This is the main documentation index for the Beat Racer project. Documentation h
 - Slider configuration requirements (step = 0.01)
 - Verification procedures before implementation
 
+**🔍 ERROR CHECKING** - Run before committing code:
+```bash
+bash check_errors.sh
+```
+- Comprehensive error detection for parse, type, and script errors
+- Must pass before submitting any changes
+- Use regularly during development to catch issues early
+
 ## Quick Navigation
 
 ### Core Development
@@ -77,6 +85,9 @@ This is the main documentation index for the Beat Racer project. Documentation h
 
 ### Testing Commands
 ```bash
+# Check for errors before running tests
+bash check_errors.sh
+
 # Run all tests (with zero-orphan policy)
 ./run_gut_tests.sh
 
@@ -97,11 +108,12 @@ Note: All tests follow zero-orphan policy. See [Testing and Debugging](docs/test
 
 ## Key Reminders
 
-1. **AudioEffectDelay** uses 'dry' property, NOT 'mix' ✓
-2. **Sliders** must have step = 0.01 for smooth operation ✓
-3. **Always test** with GUT framework before implementing
-4. **Use Context7** to verify Godot API properties (see [Context7 Guide](docs/context7-godot-lookup.md))
-5. **Log comprehensively** for easier debugging
+1. **Run error checking** with `bash check_errors.sh` before committing ✓
+2. **AudioEffectDelay** uses 'dry' property, NOT 'mix' ✓
+3. **Sliders** must have step = 0.01 for smooth operation ✓
+4. **Always test** with GUT framework before implementing
+5. **Use Context7** to verify Godot API properties (see [Context7 Guide](docs/context7-godot-lookup.md))
+6. **Log comprehensively** for easier debugging
 
 ### Quick Context7 Reference
 ```

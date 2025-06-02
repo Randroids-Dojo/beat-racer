@@ -110,7 +110,7 @@ func test_audio_recorder_integration() -> void:
 func test_export_workflow_simulation() -> void:
 	# Simulate a complete export workflow
 	if not game_state_manager or not composition_recorder:
-		skip("Required components not available")
+		pending("Required components not available")
 		return
 	
 	# Add a dummy layer to enable export
@@ -142,7 +142,7 @@ func test_export_workflow_simulation() -> void:
 func test_export_dialog_interaction() -> void:
 	# Test export dialog interaction
 	if not export_dialog:
-		skip("Export dialog not available")
+		pending("Export dialog not available")
 		return
 	
 	# Setup dialog with test data
@@ -165,7 +165,7 @@ func test_export_dialog_interaction() -> void:
 func test_metadata_capture() -> void:
 	# Test that metadata is properly captured during export
 	if not composition_recorder:
-		skip("Composition recorder not available")
+		pending("Composition recorder not available")
 		return
 	
 	# Set up some test metadata
@@ -189,7 +189,7 @@ func test_metadata_capture() -> void:
 func test_export_file_generation() -> void:
 	# Test that export generates actual files
 	if not composition_recorder:
-		skip("Composition recorder not available")
+		pending("Composition recorder not available")
 		return
 	
 	# Record some test audio

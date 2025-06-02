@@ -69,17 +69,17 @@ func _update_info_display() -> void:
 	info_label.text += "R: Reset position"
 
 
-func _on_vehicle_entered_lane(lane_index: int) -> void:
+func _on_vehicle_entered_lane(_lane_index: int) -> void:
 	# Vehicle entered a new lane
 	pass
 
 
-func _on_vehicle_lane_centered(lane_index: int) -> void:
+func _on_vehicle_lane_centered(_lane_index: int) -> void:
 	# Vehicle is now centered in its lane
 	pass
 
 
-func _on_lane_position_updated(lane: int, offset_from_center: float) -> void:
+func _on_lane_position_updated(_lane: int, _offset_from_center: float) -> void:
 	# Could add visual or audio feedback here
 	pass
 

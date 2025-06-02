@@ -151,7 +151,7 @@ func test_vehicle_movement_creates_trail():
 		_sound_reactive_trail._check_add_new_point()
 	
 	assert_gt(_sound_reactive_trail.get_trail_length(), 0, "Trail should have points")
-	assert_le(_sound_reactive_trail.get_trail_length(), 5, "Trail should not exceed movement count")
+	assert_lte(_sound_reactive_trail.get_trail_length(), 5, "Trail should not exceed movement count")
 
 
 func test_visual_synchronization():
@@ -250,7 +250,7 @@ func test_visual_feedback_chain():
 # Helper functions
 func wait_for_beat():
 	"""Wait for next beat to occur"""
-	if not _beat_manager.is_playing():
+	if not _beat_manager.is_playing:
 		_beat_manager.start()
 	
 	var beat_interval = _beat_manager.get_beat_interval()

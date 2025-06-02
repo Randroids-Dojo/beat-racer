@@ -25,7 +25,7 @@ func _ready() -> void:
 	# Setup dialog
 	title = "Export Audio Recording"
 	set_ok_button_text("Export")
-	set_cancel_button_text("Cancel")
+	add_cancel_button("Cancel")
 	
 	# Create UI if nodes don't exist
 	if not $VBox:
