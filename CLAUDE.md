@@ -134,9 +134,13 @@ mcp__context7-mcp__get-library-docs:
 - Story 014: Audio Mixing Controls ✓ (See [Story 014 Complete](docs/story-014-complete.md))
 - Story 015: Vehicle Feel Improvements ✓ (See [Story 015 Complete](docs/story-015-complete.md))
 - Story 016: Camera System ✓ (See [Story 016 Complete](docs/story-016-complete.md))
+- Story 017: Multiple Sound Banks ✓ (See [Story 017 Complete](docs/story-017-complete.md))
+- Story 017.5: Main Game Scene Integration ✓
+- Story 018: Save/Load System ✓ (See [Story 018 Complete](docs/story-018-complete.md))
+- Story 019: Audio Export ✓
 
 ### Next Story
-- Story 017: Multiple Sound Banks
+- Story 020: Track Editor
 
 ## Additional Resources
 

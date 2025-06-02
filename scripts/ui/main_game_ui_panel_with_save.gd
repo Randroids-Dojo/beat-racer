@@ -17,6 +17,7 @@ signal camera_mode_changed()
 signal save_requested()
 signal load_requested()
 signal composition_loaded(composition: CompositionResource)
+signal export_requested()
 
 # UI Component References
 @onready var mode_label: Label = $TopBar/ModeLabel
@@ -28,6 +29,7 @@ signal composition_loaded(composition: CompositionResource)
 @onready var clear_button: Button = $TopBar/ClearButton
 @onready var save_button: Button = $TopBar/SaveButton
 @onready var load_button: Button = $TopBar/LoadButton
+@onready var export_button: Button = $TopBar/ExportButton
 
 @onready var sound_bank_selector: OptionButton = $LeftPanel/SoundBankSection/SoundBankSelector
 @onready var layers_list: ItemList = $LeftPanel/LayersSection/LayersList
@@ -137,6 +139,8 @@ func _connect_signals() -> void:
 		save_button.pressed.connect(_on_save_pressed)
 	if load_button:
 		load_button.pressed.connect(_on_load_pressed)
+	if export_button:
+		export_button.pressed.connect(_on_export_pressed)
 	
 	# BPM control
 	if bpm_slider:
@@ -322,6 +326,10 @@ func _on_export_requested(filepath: String) -> void:
 	update_status("Export not yet implemented")
 
 
+func _on_export_pressed() -> void:
+	export_requested.emit()
+
+
 func _initialize_sound_banks() -> void:
 	if not sound_bank_selector:
 		return
@@ -394,6 +402,8 @@ func _update_ui_state() -> void:
 				save_button.disabled = layers_list.item_count == 0 if layers_list else true
 			if load_button:
 				load_button.disabled = false
+			if export_button:
+				export_button.disabled = layers_list.item_count == 0 if layers_list else true
 		
 		1:  # RECORDING
 			if record_button:
@@ -409,6 +419,8 @@ func _update_ui_state() -> void:
 				save_button.disabled = true
 			if load_button:
 				load_button.disabled = true
+			if export_button:
+				export_button.disabled = true
 		
 		2:  # PLAYBACK
 			if record_button:
@@ -425,6 +437,8 @@ func _update_ui_state() -> void:
 				save_button.disabled = false
 			if load_button:
 				load_button.disabled = true
+			if export_button:
+				export_button.disabled = false
 		
 		3:  # LAYERING
 			if record_button:
@@ -440,6 +454,8 @@ func _update_ui_state() -> void:
 				save_button.disabled = true
 			if load_button:
 				load_button.disabled = true
+			if export_button:
+				export_button.disabled = true
 
 
 func show_recording_indicator(visible: bool) -> void:

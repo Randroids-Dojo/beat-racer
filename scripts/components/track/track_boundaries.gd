@@ -10,6 +10,12 @@ var inner_boundary_body: StaticBody2D
 
 
 func _ready() -> void:
+	# Try to find TrackGeometry in parent if not set
+	if not track_geometry:
+		var parent_node = get_parent()
+		if parent_node:
+			track_geometry = parent_node.get_node_or_null("TrackGeometry")
+	
 	if not track_geometry:
 		push_error("TrackBoundaries requires a TrackGeometry reference")
 		return

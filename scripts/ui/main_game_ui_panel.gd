@@ -85,9 +85,14 @@ func _setup_ui() -> void:
 
 
 func _connect_signals() -> void:
+	print("UI Panel: Connecting signals...")
 	# Button signals
+	print("record_button reference: ", record_button)
 	if record_button:
+		print("Connecting record button signal")
 		record_button.pressed.connect(_on_record_pressed)
+	else:
+		print("ERROR: record_button is null!")
 	if play_button:
 		play_button.pressed.connect(_on_play_pressed)
 	if stop_button:
@@ -280,6 +285,13 @@ func clear_all_layers() -> void:
 
 
 func _on_record_pressed() -> void:
+	print("UI Panel: Record button clicked, emitting signal")
+	
+	# Immediate visual feedback
+	if status_label:
+		status_label.text = "Record button pressed - processing..."
+		status_label.modulate = Color.YELLOW
+	
 	record_pressed.emit()
 
 
@@ -349,6 +361,7 @@ func _update_beat_counter() -> void:
 func update_status(text: String) -> void:
 	if status_label:
 		status_label.text = text
+		status_label.modulate = Color.WHITE  # Reset color
 
 
 func _input(event: InputEvent) -> void:

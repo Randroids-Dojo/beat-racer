@@ -58,7 +58,7 @@ func _setup_systems() -> void:
 	_setup_camera()
 	
 	# Initialize UI
-	_setup_ui()
+	await _setup_ui()
 
 
 func _spawn_player_vehicle() -> void:
@@ -148,11 +148,23 @@ func _setup_camera() -> void:
 
 
 func _setup_ui() -> void:
+	print("Setting up UI...")
+	print("game_ui_panel reference: ", game_ui_panel)
+	
+	# Wait for UI panel to be ready
+	if game_ui_panel and not game_ui_panel.is_node_ready():
+		print("Waiting for UI panel to be ready...")
+		await game_ui_panel.ready
+	
 	# UI is already set up in the scene, just configure connections
 	if game_ui_panel:
+		print("Found game_ui_panel: ", game_ui_panel)
 		# Connect UI events to game state manager
 		if game_ui_panel.has_signal("record_pressed"):
+			print("Connecting record_pressed signal")
 			game_ui_panel.record_pressed.connect(_on_record_pressed)
+		else:
+			print("ERROR: game_ui_panel doesn't have record_pressed signal!")
 		if game_ui_panel.has_signal("play_pressed"):
 			game_ui_panel.play_pressed.connect(_on_play_pressed)
 		if game_ui_panel.has_signal("stop_pressed"):
@@ -316,12 +328,24 @@ func _configure_layering_mode() -> void:
 
 
 func _on_recording_started() -> void:
+	print("Recording started - updating UI")
 	# Update UI indicators
-	if game_ui_panel and game_ui_panel.has_method("show_recording_indicator"):
-		game_ui_panel.show_recording_indicator(true)
+	if game_ui_panel:
+		if game_ui_panel.has_method("show_recording_indicator"):
+			game_ui_panel.show_recording_indicator(true)
+		if game_ui_panel.has_method("update_status"):
+			game_ui_panel.update_status("Recording in progress...")
+		
+		# Update record button
+		var record_button = game_ui_panel.get_node_or_null("TopBar/RecordButton")
+		if record_button:
+			record_button.text = "Recording..."
+			record_button.modulate = Color.RED
+			record_button.disabled = true
 
 
 func _on_recording_stopped() -> void:
+	print("Recording stopped - updating UI")
 	# Stop lap recorder
 	if lap_recorder:
 		var recording = lap_recorder.stop_recording()
@@ -330,8 +354,18 @@ func _on_recording_stopped() -> void:
 			pass
 	
 	# Update UI
-	if game_ui_panel and game_ui_panel.has_method("show_recording_indicator"):
-		game_ui_panel.show_recording_indicator(false)
+	if game_ui_panel:
+		if game_ui_panel.has_method("show_recording_indicator"):
+			game_ui_panel.show_recording_indicator(false)
+		if game_ui_panel.has_method("update_status"):
+			game_ui_panel.update_status("Recording completed!")
+		
+		# Reset record button
+		var record_button = game_ui_panel.get_node_or_null("TopBar/RecordButton")
+		if record_button:
+			record_button.text = "Add Layer"
+			record_button.modulate = Color.WHITE  # Reset color
+			record_button.disabled = false
 
 
 func _on_playback_started() -> void:
@@ -480,11 +514,43 @@ func _on_playback_position_updated(position: Vector2, rotation: float, lane: int
 
 # UI callback handlers
 func _on_record_pressed() -> void:
+	print("Record button pressed!")
+	
+	# Immediate visual feedback
+	if game_ui_panel and game_ui_panel.has_method("update_status"):
+		game_ui_panel.update_status("Record button clicked!")
+	
+	# Change button text immediately
+	var record_button = game_ui_panel.get_node_or_null("TopBar/RecordButton") if game_ui_panel else null
+	if record_button:
+		print("Found record button, changing text...")
+		record_button.text = "Recording..."
+		record_button.modulate = Color.RED  # Make it red to show it's recording
+		record_button.disabled = true
+		print("Button text changed to: ", record_button.text)
+	else:
+		print("Could not find record button at TopBar/RecordButton")
+	
+	if not game_state_manager:
+		print("ERROR: game_state_manager is null!")
+		if game_ui_panel and game_ui_panel.has_method("update_status"):
+			game_ui_panel.update_status("ERROR: Game state manager not found!")
+		return
+		
 	if game_state_manager.can_record():
+		print("Can record - starting recording...")
+		if game_ui_panel and game_ui_panel.has_method("update_status"):
+			game_ui_panel.update_status("Starting recording...")
 		game_state_manager.start_recording()
 	else:
-		# Could show a message that max layers reached
-		pass
+		print("Cannot record - max layers reached or wrong mode")
+		if game_ui_panel and game_ui_panel.has_method("update_status"):
+			game_ui_panel.update_status("Cannot record - wrong mode or max layers reached")
+		# Reset button if can't record
+		if record_button:
+			record_button.text = "Record"
+			record_button.modulate = Color.WHITE
+			record_button.disabled = false
 
 
 func _on_play_pressed() -> void:

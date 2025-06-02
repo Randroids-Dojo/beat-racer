@@ -39,7 +39,12 @@ func _ready() -> void:
 
 ## Changes the game mode with proper transitions
 func change_mode(new_mode: GameMode) -> void:
-	if is_transitioning or new_mode == current_mode:
+	print("GameStateManager.change_mode() - from ", current_mode, " to ", new_mode)
+	if is_transitioning:
+		print("Already transitioning, ignoring")
+		return
+	if new_mode == current_mode:
+		print("Already in mode ", new_mode)
 		return
 	
 	is_transitioning = true
@@ -56,21 +61,28 @@ func change_mode(new_mode: GameMode) -> void:
 	_configure_mode(new_mode)
 	
 	is_transitioning = false
+	print("Mode changed from ", old_mode, " to ", new_mode)
 	mode_changed.emit(old_mode, new_mode)
 
 
 ## Starts recording in either RECORDING or LAYERING mode
 func start_recording() -> void:
+	print("GameStateManager.start_recording() called. Current mode: ", current_mode)
 	match current_mode:
 		GameMode.LIVE:
+			print("In LIVE mode - changing to RECORDING")
 			change_mode(GameMode.RECORDING)
 		GameMode.PLAYBACK:
 			if recorded_layers.size() > 0:
+				print("In PLAYBACK mode with layers - changing to LAYERING")
 				change_mode(GameMode.LAYERING)
 		_:
+			print("In unsupported mode for recording: ", current_mode)
 			return
 	
+	print("Emitting recording_started signal")
 	recording_started.emit()
+	print("Recording started successfully!")
 
 
 ## Stops recording and returns to appropriate mode

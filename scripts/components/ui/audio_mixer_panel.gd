@@ -46,7 +46,6 @@ const BUS_CONFIGS = {
 
 # UI components storage
 var _bus_controls: Dictionary = {}
-var _effect_controls: Dictionary = {}
 var _current_effect_panel: Control = null
 
 const AudioEffectControl = preload("res://scripts/components/ui/audio_effect_control.gd")

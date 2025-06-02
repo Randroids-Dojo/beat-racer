@@ -35,6 +35,10 @@ var visual_effects_container: Node2D
 # Save/Load system
 var composition_save_system: CompositionSaveSystem
 
+# Audio export system
+var composition_recorder: CompositionRecorder
+var export_dialog: ExportDialog
+
 # For testing lane switching
 var last_triggered_lane: int = -1
 var lane_trigger_timer: float = 0.0
@@ -51,6 +55,9 @@ func _ready() -> void:
 func _setup_systems() -> void:
 	# Setup save system
 	_setup_save_system()
+	
+	# Setup audio export system
+	_setup_audio_export()
 	
 	# Create player vehicle
 	_spawn_player_vehicle()
@@ -78,6 +85,26 @@ func _setup_save_system() -> void:
 	
 	composition_save_system.composition_saved.connect(_on_composition_saved)
 	composition_save_system.composition_loaded.connect(_on_composition_loaded)
+
+
+func _setup_audio_export() -> void:
+	# Create composition recorder
+	var recorder_script = preload("res://scripts/systems/composition_recorder.gd")
+	composition_recorder = Node.new()
+	composition_recorder.set_script(recorder_script)
+	composition_recorder.name = "CompositionRecorder"
+	add_child(composition_recorder)
+	
+	# Create export dialog
+	export_dialog = preload("res://scenes/components/ui/export_dialog.tscn").instantiate()
+	ui_layer.add_child(export_dialog)
+	export_dialog.visible = false
+	
+	# Connect signals
+	composition_recorder.recording_started.connect(_on_audio_recording_started)
+	composition_recorder.recording_stopped.connect(_on_audio_recording_stopped)
+	composition_recorder.composition_saved.connect(_on_audio_composition_saved)
+	export_dialog.export_requested.connect(_on_export_dialog_confirmed)
 
 
 func _spawn_player_vehicle() -> void:
@@ -205,6 +232,8 @@ func _connect_signals() -> void:
 			game_ui_panel.load_requested.connect(_on_load_requested)
 		if game_ui_panel.has_signal("composition_loaded"):
 			game_ui_panel.composition_loaded.connect(_on_ui_composition_loaded)
+		if game_ui_panel.has_signal("export_requested"):
+			game_ui_panel.export_requested.connect(_on_export_requested)
 	
 	# Vehicle signals
 	if player_vehicle:
@@ -628,3 +657,117 @@ func _input(event: InputEvent) -> void:
 					enhanced_lane_sound_system.trigger_lane_note(lane_to_trigger)
 					last_triggered_lane = lane_to_trigger
 					lane_trigger_timer = 0.0
+
+
+# Audio export handlers
+func _on_export_requested() -> void:
+	# Check if we have any layers to export
+	if game_state_manager.recorded_layers.is_empty():
+		if game_ui_panel:
+			game_ui_panel.update_status("No layers to export!")
+		return
+	
+	# Check if already recording audio
+	if composition_recorder.is_recording:
+		if game_ui_panel:
+			game_ui_panel.update_status("Already recording audio!")
+		return
+	
+	# Start audio recording of the playback
+	_start_audio_export()
+
+
+func _start_audio_export() -> void:
+	# Get current composition details
+	var composition_name = "Untitled"
+	if game_ui_panel and game_ui_panel.has_method("create_composition_from_current_state"):
+		var comp = game_ui_panel.create_composition_from_current_state()
+		composition_name = comp.composition_name
+	
+	# Set sound bank info
+	if sound_bank_manager:
+		var current_bank = sound_bank_manager.get_current_bank_name()
+		var bank_index = sound_bank_manager.get_current_bank_index()
+		composition_recorder.set_sound_bank_info(current_bank, bank_index)
+	
+	# Start recording with metadata
+	composition_recorder.start_composition_recording(composition_name, game_state_manager.recorded_layers)
+	
+	# Start playback if not already playing
+	if game_state_manager.current_mode != game_state_manager.GameMode.PLAYBACK:
+		game_state_manager.change_mode(game_state_manager.GameMode.PLAYBACK)
+		game_state_manager.start_playback()
+	
+	if game_ui_panel:
+		game_ui_panel.update_status("Recording audio for export...")
+	
+	# Set up a timer to stop recording after one full loop
+	_setup_export_timer()
+
+
+func _setup_export_timer() -> void:
+	# Calculate how long one full loop takes
+	var max_duration = 0.0
+	for layer in game_state_manager.recorded_layers:
+		if layer and layer.has("duration"):
+			max_duration = max(max_duration, layer.duration)
+	
+	# Add a small buffer
+	max_duration += 1.0
+	
+	# Create timer to stop recording
+	var timer = Timer.new()
+	timer.wait_time = max_duration
+	timer.one_shot = true
+	timer.timeout.connect(_on_export_timer_timeout)
+	add_child(timer)
+	timer.start()
+
+
+func _on_export_timer_timeout() -> void:
+	# Stop the audio recording
+	var result = composition_recorder.stop_composition_recording()
+	
+	# Stop playback
+	game_state_manager.stop_playback()
+	
+	# Show export dialog
+	if result.has("audio") and result.audio:
+		var duration = result.audio.get_length()
+		var comp_name = result.metadata.get("track_name", "Untitled")
+		export_dialog.setup(comp_name, duration)
+		export_dialog.popup_centered()
+	else:
+		if game_ui_panel:
+			game_ui_panel.update_status("Export failed - no audio recorded")
+
+
+func _on_audio_recording_started() -> void:
+	print("Audio recording started for export")
+
+
+func _on_audio_recording_stopped(recording: AudioStreamWAV) -> void:
+	print("Audio recording stopped. Duration: ", recording.get_length() if recording else 0)
+
+
+func _on_audio_composition_saved(data: Dictionary) -> void:
+	if data.has("audio_path"):
+		print("Audio composition saved to: ", data.audio_path)
+		if game_ui_panel:
+			game_ui_panel.update_status("Exported: " + data.audio_path.get_file())
+
+
+func _on_export_dialog_confirmed(options: Dictionary) -> void:
+	# Export with the provided options
+	var result = composition_recorder.export_with_options(options)
+	
+	if result.has("audio_path"):
+		if game_ui_panel:
+			game_ui_panel.update_status("Exported: " + result.audio_path.get_file())
+		
+		# Open folder if requested
+		if options.get("open_folder", false):
+			OS.shell_open(ProjectSettings.globalize_path("user://recordings/"))
+	else:
+		if game_ui_panel:
+			game_ui_panel.update_status("Export failed!")

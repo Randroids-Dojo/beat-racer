@@ -1,0 +1,82 @@
+[gd_scene load_steps=2 format=3 uid="uid://bwboei0j11t31"]
+
+[ext_resource type="Script" path="res://scripts/components/ui/export_dialog.gd" id="1_export"]
+
+[node name="ExportDialog" type="AcceptDialog"]
+size = Vector2(450, 300)
+exclusive = true
+script = ExtResource("1_export")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -49.0
+theme_override_constants/separation = 10
+
+[node name="FilenameContainer" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="FilenameLabel" type="Label" parent="VBox/FilenameContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(100, 0)
+text = "Filename:"
+
+[node name="FilenameInput" type="LineEdit" parent="VBox/FilenameContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Enter filename..."
+
+[node name="FormatContainer" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="FormatLabel" type="Label" parent="VBox/FormatContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(100, 0)
+text = "Format:"
+
+[node name="FormatOption" type="OptionButton" parent="VBox/FormatContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(200, 0)
+
+[node name="QualityContainer" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="QualityLabel" type="Label" parent="VBox/QualityContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(100, 0)
+text = "Quality:"
+
+[node name="QualityOption" type="OptionButton" parent="VBox/QualityContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(200, 0)
+
+[node name="HSeparator" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="MetadataCheck" type="CheckBox" parent="VBox"]
+layout_mode = 2
+button_pressed = true
+text = "Include composition metadata (JSON)"
+
+[node name="OpenFolderCheck" type="CheckBox" parent="VBox"]
+layout_mode = 2
+button_pressed = true
+text = "Open folder after export"
+
+[node name="HSeparator2" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="InfoContainer" type="VBoxContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="DurationLabel" type="Label" parent="VBox/InfoContainer"]
+layout_mode = 2
+text = "Duration: 0:00"
+
+[node name="SizeLabel" type="Label" parent="VBox/InfoContainer"]
+layout_mode = 2
+text = "Estimated size: 0 MB"
